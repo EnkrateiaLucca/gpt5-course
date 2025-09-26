@@ -42,6 +42,8 @@ ipython-pygments-lexers==1.1.1
     # via ipython
 jedi==0.19.2
     # via ipython
+jinja2==3.1.6
+    # via -r ./requirements/requirements.in
 jiter==0.11.0
     # via openai
 jupyter-client==8.6.3
@@ -50,16 +52,22 @@ jupyter-core==5.8.1
     # via
     #   ipykernel
     #   jupyter-client
+markupsafe==3.0.2
+    # via jinja2
 matplotlib-inline==0.1.7
     # via
     #   ipykernel
     #   ipython
 nest-asyncio==1.6.0
     # via ipykernel
+numpy==2.3.3
+    # via pandas
 openai==1.109.1
     # via -r ./requirements/requirements.in
 packaging==25.0
     # via ipykernel
+pandas==2.3.2
+    # via -r ./requirements/requirements.in
 parso==0.8.5
     # via jedi
 pexpect==4.9.0
@@ -83,7 +91,11 @@ pygments==2.19.2
     #   ipython
     #   ipython-pygments-lexers
 python-dateutil==2.9.0.post0
-    # via jupyter-client
+    # via
+    #   jupyter-client
+    #   pandas
+pytz==2025.2
+    # via pandas
 pyzmq==27.1.0
     # via
     #   ipykernel
@@ -119,5 +131,7 @@ typing-extensions==4.15.0
     #   typing-inspection
 typing-inspection==0.4.1
     # via pydantic
+tzdata==2025.2
+    # via pandas
 wcwidth==0.2.14
     # via prompt-toolkit

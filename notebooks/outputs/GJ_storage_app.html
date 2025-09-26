@@ -1,0 +1,96 @@
+Here’s a simple first-version concept you can build and test: a minimal “Storage Tracker” app that records containers and the items inside them, with photos, barcodes, and time-in-storage, plus basic search by picture, use, and name.
+
+Core features (v1)
+- Add container
+  - Name/ID (e.g., “Bin A1”)
+  - Location (e.g., “Storage Unit 12”)
+  - Optional barcode/QR code for the container
+- Add item
+  - Item name
+  - Use/category (e.g., “camping,” “kitchen,” “tools”)
+  - Photo (item photo)
+  - Container assignment (which bin it’s in)
+  - Date stored (auto-captured)
+  - Optional item barcode/QR
+- Search and filter
+  - By item name (text)
+  - By use/category (filter)
+  - By image similarity (basic: show items with visually similar thumbnails; toy version: pick from tagged keywords or a simple “looks like” selection)
+- Item age
+  - Show “days in storage” based on date stored
+- Scan view
+  - Scan a container barcode to list its items
+
+Data model (toy version)
+- Container: {id, name, location, barcode, createdAt}
+- Item: {id, name, use, photoUrl, containerId, itemBarcode, storedAt}
+
+Toy example dataset
+Containers:
+- C1: {id: "C1", name: "Bin A1", location: "Storage Unit 12", barcode: "123456", createdAt: 2025-09-01}
+- C2: {id: "C2", name: "Bin B2", location: "Storage Unit 12", barcode: "789012", createdAt: 2025-09-01}
+
+Items:
+- I1: {id: "I1", name: "Camping Stove", use: "camping", photoUrl: "/img/camping_stove.jpg", containerId: "C1", itemBarcode: "STV001", storedAt: 2025-09-10}
+- I2: {id: "I2", name: "Enamel Mugs (x4)", use: "camping", photoUrl: "/img/mugs.jpg", containerId: "C1", itemBarcode: "MUG004", storedAt: 2025-09-10}
+- I3: {id: "I3", name: "Socket Wrench Set", use: "tools", photoUrl: "/img/wrench_set.jpg", containerId: "C2", itemBarcode: "TL002", storedAt: 2025-09-12}
+- I4: {id: "I4", name: "Winter Blanket", use: "household", photoUrl: "/img/blanket.jpg", containerId: "C2", itemBarcode: "BLK001", storedAt: 2025-09-12}
+
+Example user flows
+- Add a container:
+  - Tap “Add Container” → Name: “Bin A1” → Scan/enter barcode “123456” → Save
+- Add an item:
+  - Tap “Add Item” → Name: “Camping Stove” → Use: “camping”
+  - Take photo of the item
+  - Assign container: “Bin A1”
+  - Auto-set storedAt = today
+  - Save
+- Search:
+  - “camping” → returns I1, I2
+  - “wrench” → returns I3
+  - Filter by Use = “household” → returns I4
+  - Scan container barcode “789012” → lists I3, I4
+- See time in storage:
+  - For I1 stored 2025-09-10, if today is 2025-10-05 → 25 days in storage
+
+Toy UI sketch (screens)
+- Home: Search bar; filters (Use); “Scan” button; list of recent items with photo thumbnails and “days in storage.”
+- Containers: List of containers; tap to view items inside; “Scan Container” to jump directly.
+- Add Item: fields for name, use, container picker, photo capture, optional barcode scan.
+- Item Detail: large photo, name, use, container, barcode, stored date, days in storage, move item to another container.
+
+Basic search logic
+- Text search: lowercased contains on name and use.
+- Category filter: exact match on use.
+- Picture search (toy): choose a reference image from your saved items; return items with the same use or with simple tag overlap (e.g., “metal,” “cookware”). For a true image search later, integrate a local/mobile embedding model or a cloud vision API.
+
+Sample JSON seed (you can import into a simple local app or mock server)
+{
+  "containers": [
+    {"id":"C1","name":"Bin A1","location":"Storage Unit 12","barcode":"123456","createdAt":"2025-09-01"},
+    {"id":"C2","name":"Bin B2","location":"Storage Unit 12","barcode":"789012","createdAt":"2025-09-01"}
+  ],
+  "items": [
+    {"id":"I1","name":"Camping Stove","use":"camping","photoUrl":"/img/camping_stove.jpg","containerId":"C1","itemBarcode":"STV001","storedAt":"2025-09-10"},
+    {"id":"I2","name":"Enamel Mugs (x4)","use":"camping","photoUrl":"/img/mugs.jpg","containerId":"C1","itemBarcode":"MUG004","storedAt":"2025-09-10"},
+    {"id":"I3","name":"Socket Wrench Set","use":"tools","photoUrl":"/img/wrench_set.jpg","containerId":"C2","itemBarcode":"TL002","storedAt":"2025-09-12"},
+    {"id":"I4","name":"Winter Blanket","use":"household","photoUrl":"/img/blanket.jpg","containerId":"C2","itemBarcode":"BLK001","storedAt":"2025-09-12"}
+  ]
+}
+
+Minimal implementation path
+- Platform: pick one (Flutter, React Native, SwiftUI, or a low-code tool like Glide/Airtable for a fast prototype).
+- Storage: local (SQLite) or simple backend (Firebase/Firestore or Supabase).
+- Image capture: device camera; store files locally or in cloud storage with public URLs.
+- Barcode: use built-in camera scanning libraries (e.g., MLKit, VisionKit, ZXing).
+- “Days in storage” = floor((today - storedAt) / 86400000).
+
+Stretch ideas (later)
+- True visual search using image embeddings.
+- QR labels printing for containers and items.
+- Multi-location support; move history and audit log.
+- Shareable access and roles.
+- Reminders for items exceeding X days in storage.
+- Offline-first sync.
+
+If you tell me your preferred platform, I can provide starter code and the exact schema/setup for that stack.

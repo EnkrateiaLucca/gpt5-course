@@ -1,0 +1,535 @@
+Here’s a self‑contained, single‑file landing page with a “retro‑arcade noir” vibe. Copy this into an .html file and open it in a browser. All styling and behavior is embedded, no build tools needed.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NOIRCADE — Retro Arcade Noir</title>
+  <meta name="description" content="Curated classics, original hardware, repairs, and tournaments. Retro-arcade noir vibes.">
+  <meta name="theme-color" content="#0a0a10">
+  <meta property="og:title" content="NOIRCADE — Retro Arcade Noir">
+  <meta property="og:description" content="Curated classics, original hardware, repairs, and tournaments.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #0a0a10;
+      --bg-deep: #07070c;
+      --ink: #e6e6f0;
+      --muted: #8e8ea0;
+      --cyan: #00fff0;
+      --mag: #ff00d4;
+      --pink: #ff2a6d;
+      --blue: #08f;
+      --lime: #8aff00;
+      --card: #11111a;
+      --edge: rgba(255,255,255,.06);
+      --shadow: rgba(0,0,0,.5);
+      --glow: 0 0 .6rem var(--cyan), 0 0 1.2rem var(--cyan), 0 0 2.2rem rgba(0,255,255,.35);
+      --glow-mag: 0 0 .6rem var(--mag), 0 0 1.2rem var(--mag), 0 0 2.2rem rgba(255,0,212,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--ink);
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(255,0,212,.06), transparent 60%),
+                  radial-gradient(900px 700px at 10% 10%, rgba(0,255,255,.07), transparent 60%),
+                  linear-gradient(180deg, #0a0a12, #05050a 60%, #040409 100%);
+      font-family: "VT323", ui-monospace, Menlo, Consolas, monospace;
+      letter-spacing:.3px;
+      overflow-x:hidden;
+    }
+    /* CRT scanlines and subtle vignette */
+    body::before{
+      content:"";
+      position:fixed; inset:0; pointer-events:none;
+      background:
+        repeating-linear-gradient(to bottom, rgba(255,255,255,.03) 0 1px, transparent 2px 3px);
+      mix-blend-mode: soft-light;
+      opacity:.35;
+      z-index:1000;
+    }
+    body::after{
+      content:"";
+      position:fixed; inset:0; pointer-events:none;
+      background:
+        radial-gradient(120% 120% at 50% 10%, transparent 60%, rgba(0,0,0,.35) 100%),
+        radial-gradient(80% 60% at 50% 100%, rgba(0,0,0,.35), transparent 60%);
+      z-index:1001;
+    }
+    /* Faux rain */
+    .rain{
+      position:fixed; inset:0; pointer-events:none; z-index:5;
+      background-image: linear-gradient(120deg, rgba(255,255,255,.05) 2px, rgba(0,0,0,0) 2px);
+      background-size: 2px 8px;
+      animation: rain 800ms linear infinite;
+      opacity:.12;
+      transform: skewX(-10deg);
+    }
+    @keyframes rain { from{ background-position:0 0 } to{ background-position:-20px 40px } }
+    /* Navigation */
+    .wrap{max-width:1200px; margin:0 auto; padding:0 20px}
+    header{
+      position:sticky; top:0; z-index:20;
+      background: linear-gradient(to bottom, rgba(5,5,10,.85), rgba(5,5,10,.35));
+      backdrop-filter: blur(6px);
+      border-bottom:1px solid var(--edge);
+    }
+    nav{
+      display:flex; align-items:center; justify-content:space-between;
+      min-height:72px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:.8rem; text-decoration:none; color:var(--ink);
+    }
+    .brand__mark{
+      width:40px; height:40px; display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:6px; position:relative;
+      box-shadow: inset 0 0 20px rgba(0,255,255,.1), 0 0 20px rgba(255,0,212,.15);
+    }
+    .brand__mark svg{width:24px; height:24px; filter: drop-shadow(0 0 6px rgba(0,255,255,.6))}
+    .brand__text{
+      font-family:"Press Start 2P", system-ui;
+      font-size:14px; line-height:1;
+      text-shadow: 0 0 6px rgba(0,255,255,.5), 0 0 16px rgba(255,0,212,.25);
+      letter-spacing:1.5px;
+    }
+    .menu{display:flex; gap:1.2rem; align-items:center}
+    .menu a{
+      color:var(--muted); text-decoration:none; font-size:18px;
+      padding:.4rem .6rem; border-radius:6px; transition:.2s;
+    }
+    .menu a:hover{ color:var(--ink); text-shadow: 0 0 8px rgba(255,0,212,.4) }
+    .btn{
+      appearance:none; border:1px solid var(--edge); color:var(--ink); background:linear-gradient(180deg,#14141e,#0f0f18);
+      padding:.8rem 1.1rem; border-radius:10px; font-size:16px; cursor:pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.06);
+      transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .btn:hover{ border-color: rgba(0,255,255,.35); box-shadow: 0 8px 24px rgba(0,255,255,.12), inset 0 0 0 1px rgba(0,255,255,.12) }
+    .btn:active{ transform: translateY(1px) scale(.99) }
+    .btn--neon{
+      background: radial-gradient(120% 80% at 50% 0%, rgba(0,255,255,.12), rgba(255,0,212,.08)) #0b0b14;
+      border-color: rgba(0,255,255,.35);
+      box-shadow: var(--glow);
+    }
+    .btn--ghost{ background:transparent; border-color: rgba(255,0,212,.35); box-shadow: var(--glow-mag) }
+    /* Hero */
+    .hero{
+      position:relative; padding: clamp(60px, 8vw, 120px) 0 60px;
+    }
+    .hero__grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:40px; align-items:center }
+    @media (max-width:900px){ .hero__grid{ grid-template-columns: 1fr } }
+    .title{
+      font-family:"Press Start 2P", system-ui; line-height:1.3; margin:0 0 16px;
+      font-size: clamp(22px, 4.2vw, 40px);
+      color:#f7fbff; letter-spacing:2px;
+      text-shadow: 0 0 8px rgba(0,255,255,.35), 0 0 24px rgba(255,0,212,.25);
+    }
+    .title .accent{ color:var(--cyan); text-shadow: var(--glow) }
+    .subtitle{
+      color:var(--muted); font-size:22px; margin:0 0 28px; max-width:46ch;
+    }
+    .hero__cta{ display:flex; gap:12px; flex-wrap:wrap }
+    .insert-coin{ position:relative }
+    .insert-coin::after{
+      content:"●"; position:absolute; right:-12px; top:-10px; color:var(--mag);
+      filter: drop-shadow(0 0 6px rgba(255,0,212,.8));
+      animation: blink 1s steps(2,end) infinite;
+    }
+    @keyframes blink { 50%{ opacity:.3 } }
+    .hero__screen{
+      position:relative; aspect-ratio: 4 / 3; border-radius:14px; overflow:hidden;
+      background:
+        radial-gradient(120% 90% at 50% 10%, rgba(0,255,255,.08), rgba(255,0,212,.05) 50%, transparent 90%),
+        linear-gradient(180deg, #0e0e18, #090914);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:
+        inset 0 0 60px rgba(0,255,255,.08),
+        inset 0 0 140px rgba(255,0,212,.06),
+        0 20px 60px rgba(0,0,0,.6);
+      transform: perspective(900px) rotateX(2deg);
+    }
+    .hero__screen .scan{
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(to bottom, rgba(255,255,255,.03) 0 1px, transparent 2px 3px);
+      mix-blend-mode: overlay; opacity:.5; pointer-events:none;
+      animation: roll 9s linear infinite;
+    }
+    @keyframes roll{ 0%{background-position:0 -50px} 100%{background-position:0 0} }
+    .hero__screen .glow{
+      position:absolute; inset:-20% -20% -10% -20%; pointer-events:none;
+      background: radial-gradient(40% 40% at 50% 10%, rgba(0,255,255,.25), transparent 60%),
+                  radial-gradient(60% 40% at 50% 100%, rgba(255,0,212,.2), transparent 70%);
+      filter: blur(20px);
+    }
+    .screen__content{
+      position:absolute; inset:0; display:grid; place-items:center; text-align:center; padding:20px;
+      color:#bfeaff;
+    }
+    .screen__logo{
+      font-family:"Press Start 2P"; font-size: clamp(20px,3.2vw,32px); letter-spacing:2px;
+      text-shadow: var(--glow), 0 0 24px rgba(255,0,212,.25);
+      margin-bottom:16px;
+    }
+    .screen__marquee{
+      width:100%; overflow:hidden; border-top:1px solid rgba(255,255,255,.12); border-bottom:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(0,0,0,.2), rgba(255,0,255,.04));
+      padding:10px 0; color:#ccf7ff;
+    }
+    .marquee-track{
+      display:inline-block; white-space:nowrap; animation: marquee 18s linear infinite;
+    }
+    @keyframes marquee{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
+    /* Sections */
+    section{ padding:60px 0 }
+    .section-title{
+      font-family:"Press Start 2P"; font-size:20px; color:var(--cyan); text-shadow: var(--glow);
+      margin:0 0 24px;
+    }
+    .cards{
+      display:grid; grid-template-columns: repeat(3, 1fr); gap:18px;
+    }
+    @media (max-width:900px){ .cards{ grid-template-columns:1fr } }
+    .card{
+      background: linear-gradient(180deg, #111120, #0c0c18);
+      border:1px solid var(--edge); border-radius:14px; padding:18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.04);
+      position:relative; overflow:hidden;
+    }
+    .card h3{
+      margin:0 0 8px; font-family:"Press Start 2P"; font-size:16px; letter-spacing:1px;
+      color:#f1f6ff; text-shadow: 0 0 8px rgba(0,255,255,.25);
+    }
+    .card p{ margin:0; color:var(--muted); font-size:20px; line-height:1.3 }
+    .card .corner{
+      position:absolute; right:-30px; top:-30px; width:120px; height:120px; transform:rotate(25deg);
+      background: radial-gradient(closest-side, rgba(255,0,212,.08), transparent 65%);
+      pointer-events:none;
+    }
+    /* Grid for collections */
+    .grid{
+      display:grid; gap:14px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .tile{
+      position:relative; border-radius:14px; overflow:hidden; min-height:200px;
+      border:1px solid var(--edge);
+      box-shadow: 0 10px 30px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.04);
+      background: #10101a;
+      cursor:pointer; isolation:isolate;
+    }
+    .tile:hover .img{ transform: scale(1.04) }
+    .tile:hover .glitch{ opacity:.6 }
+    .tile .img{
+      position:absolute; inset:0; background-size:cover; background-position:center;
+      filter: saturate(1.1) contrast(1.05) brightness(.95);
+      transition: transform .5s ease;
+    }
+    .tile .label{
+      position:absolute; left:12px; bottom:12px;
+      font-family:"Press Start 2P"; font-size:12px; letter-spacing:1px;
+      padding:8px 10px; color:#061016; background: linear-gradient(180deg, #9ffffa, #5ff5ff);
+      border-radius:6px; box-shadow: 0 0 14px rgba(0,255,255,.35);
+    }
+    .tile .glitch{
+      position:absolute; inset:-2px; mix-blend-mode:screen; opacity:.25; pointer-events:none;
+      background:
+        repeating-linear-gradient(90deg, rgba(0,255,255,.12) 0 2px, rgba(255,0,212,.12) 2px 4px, transparent 4px 6px);
+      animation: shift 1.3s steps(4,end) infinite;
+    }
+    @keyframes shift{ 50%{ transform:translateX(2px) } }
+    /* Tile layout */
+    .col-6{ grid-column: span 6 }
+    .col-4{ grid-column: span 4 }
+    .col-3{ grid-column: span 3 }
+    .col-8{ grid-column: span 8 }
+    @media (max-width:900px){
+      .col-6,.col-4,.col-3,.col-8{ grid-column: 1 / -1 }
+    }
+    /* Newsletter */
+    .newsletter{
+      background: linear-gradient(180deg, #0f0f1a, #0b0b14);
+      border:1px solid var(--edge); border-radius:14px; padding:24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+    .field{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;
+    }
+    .input{
+      flex:1 1 240px; min-width:200px; background:#0c0c16; color:var(--ink); border:1px solid rgba(255,255,255,.12);
+      padding:.9rem 1rem; border-radius:10px; font-family:inherit; font-size:18px; outline:none;
+      box-shadow: inset 0 0 0 1px rgba(0,255,255,.1);
+    }
+    .input:focus{ border-color: rgba(0,255,255,.45); box-shadow: 0 0 0 3px rgba(0,255,255,.12) }
+    /* Footer */
+    footer{
+      padding:40px 0 80px; color:var(--muted);
+      border-top:1px solid var(--edge);
+      background: linear-gradient(180deg, rgba(0,0,0,.0), rgba(0,0,0,.2));
+    }
+    .foot{
+      display:grid; gap:18px; grid-template-columns: 1.2fr 1fr 1fr;
+    }
+    @media (max-width:900px){ .foot{ grid-template-columns: 1fr } }
+    .social{ display:flex; gap:12px }
+    .soc{
+      width:40px; height:40px; display:grid; place-items:center; border-radius:8px;
+      border:1px solid var(--edge); color:var(--ink); text-decoration:none;
+      background: #0d0d16; transition:.2s;
+    }
+    .soc:hover{ box-shadow: var(--glow) }
+    /* Accessibility helpers */
+    .sr{ position:absolute !important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0 }
+  </style>
+</head>
+<body>
+  <div class="rain" aria-hidden="true"></div>
+  <header>
+    <div class="wrap">
+      <nav>
+        <a class="brand" href="#top" aria-label="NOIRCADE Home">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#00fff0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 8h12v8H6z"></path>
+              <path d="M9 6v4M15 6v4M9 18v-4M15 18v-4"></path>
+            </svg>
+          </span>
+          <span class="brand__text">NOIRCADE</span>
+        </a>
+        <div class="menu">
+          <a href="#collections">Shop</a>
+          <a href="#services">Services</a>
+          <a href="#events">Events</a>
+          <a href="#newsletter" class="btn btn--ghost">Join List</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero__grid">
+        <div>
+          <h1 class="title">
+            Retro-arcade <span class="accent">noir</span> for the discerning player
+          </h1>
+          <p class="subtitle">
+            Curated classics, original hardware, repairs, and tournaments. High contrast, low morals, neon for days.
+          </p>
+          <div class="hero__cta">
+            <a href="#collections" class="btn btn--neon insert-coin">Insert Coin</a>
+            <a href="#services" class="btn">Browse Services</a>
+          </div>
+        </div>
+        <div class="hero__screen" aria-label="CRT preview">
+          <div class="scan" aria-hidden="true"></div>
+          <div class="glow" aria-hidden="true"></div>
+          <div class="screen__content">
+            <div>
+              <div class="screen__logo">NOIRCADE</div>
+              <div class="screen__marquee" aria-label="Now playing">
+                <span class="marquee-track">
+                  Now Playing: Neo City Beat ‘89 • Hyper Alley Fighters II • Neon Drift RX • Dungeon Noir • Ghosts of 16-Bit • —
+                  Now Playing: Neo City Beat ‘89 • Hyper Alley Fighters II • Neon Drift RX • Dungeon Noir • Ghosts of 16-Bit • —
+                </span>
+              </div>
+              <p style="margin-top:14px; color:#cfefff; font-size:20px">
+                Cartridges, cabinets, controllers. Tested. Restored. Ready.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="wrap">
+        <h2 class="section-title">What we do</h2>
+        <div class="cards">
+          <article class="card">
+            <div class="corner" aria-hidden="true"></div>
+            <h3>Curated Classics</h3>
+            <p>From NES to Dreamcast — verified authentic, cleaned, and ready to play.</p>
+          </article>
+          <article class="card">
+            <div class="corner" aria-hidden="true"></div>
+            <h3>Hardware & Repair</h3>
+            <p>Modding, recap, region unlocks, and CRT TLC by veteran techs.</p>
+          </article>
+          <article class="card">
+            <div class="corner" aria-hidden="true"></div>
+            <h3>Community & Events</h3>
+            <p>Weekly high-score nights, tournaments, and midnight mystery drops.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="collections">
+      <div class="wrap">
+        <h2 class="section-title">Shop collections</h2>
+        <div class="grid">
+          <a class="tile col-6" href="#" aria-label="Arcade Boards">
+            <div class="img" style="background-image:url('https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop');"></div>
+            <div class="glitch" aria-hidden="true"></div>
+            <span class="label">Arcade Boards</span>
+          </a>
+          <a class="tile col-6" href="#" aria-label="Consoles">
+            <div class="img" style="background-image:url('https://images.unsplash.com/photo-1589841955219-82c6a0886437?q=80&w=1200&auto=format&fit=crop');"></div>
+            <div class="glitch" aria-hidden="true"></div>
+            <span class="label">Consoles</span>
+          </a>
+          <a class="tile col-4" href="#" aria-label="Cartridges">
+            <div class="img" style="background-image:url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1200&auto=format&fit=crop');"></div>
+            <div class="glitch" aria-hidden="true"></div>
+            <span class="label">Cartridges</span>
+          </a>
+          <a class="tile col-4" href="#" aria-label="Controllers">
+            <div class="img" style="background-image:url('https://images.unsplash.com/photo-1511512578047-7f877c47a3dc?q=80&w=1200&auto=format&fit=crop');"></div>
+            <div class="glitch" aria-hidden="true"></div>
+            <span class="label">Controllers</span>
+          </a>
+          <a class="tile col-4" href="#" aria-label="Merch">
+            <div class="img" style="background-image:url('https://images.unsplash.com/photo-1538480711409-b3c8d1f25672?q=80&w=1200&auto=format&fit=crop');"></div>
+            <div class="glitch" aria-hidden="true"></div>
+            <span class="label">Merch</span>
+          </a>
+          <a class="tile col-8" href="#" aria-label="CRTs & Monitors">
+            <div class="img" style="background-image:url('https://images.unsplash.com/photo-1509347528160-9a9e33742cdb?q=80&w=1600&auto=format&fit=crop');"></div>
+            <div class="glitch" aria-hidden="true"></div>
+            <span class="label">CRTs & Monitors</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="events">
+      <div class="wrap">
+        <h2 class="section-title">Events & drops</h2>
+        <div class="cards">
+          <article class="card">
+            <div class="corner" aria-hidden="true"></div>
+            <h3>High-Score Night</h3>
+            <p>Every Friday, 8pm. Win store credit and eternal glory.</p>
+          </article>
+          <article class="card">
+            <div class="corner" aria-hidden="true"></div>
+            <h3>Noir Mystery Drop</h3>
+            <p>Last Saturday monthly. Limited runs, one-night prices.</p>
+          </article>
+          <article class="card">
+            <div class="corner" aria-hidden="true"></div>
+            <h3>Mod Clinic</h3>
+            <p>Bring your console. We’ll diagnose while you play.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="newsletter">
+      <div class="wrap">
+        <div class="newsletter">
+          <h2 class="section-title">Join the High-Score List</h2>
+          <p style="color:var(--muted); font-size:20px; margin:0 0 10px">
+            Drops, restocks, and tournament signups straight to your inbox.
+          </p>
+          <form class="field" action="#" method="post" onsubmit="event.preventDefault(); subscribe();">
+            <label class="sr" for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" placeholder="you@night.city" required>
+            <button class="btn btn--neon" type="submit">Start</button>
+          </form>
+          <p id="sub-msg" style="margin-top:10px; font-size:18px; color:#9ff; display:none">You’re on the list. See you under the neon.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <div>
+        <a class="brand" href="#top">
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ff00d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 8h12v8H6z"></path>
+              <path d="M9 6v4M15 6v4M9 18v-4M15 18v-4"></path>
+            </svg>
+          </span>
+          <span class="brand__text">NOIRCADE</span>
+        </a>
+        <p style="margin:12px 0 0; max-width:46ch">A little smoke, a lot of glow. Classic games, tuned hardware, and a crew that cares.</p>
+      </div>
+      <div>
+        <h4 style="margin:.2rem 0 10px; font-family:'Press Start 2P'; font-size:14px; color:#c7fff8">Find us</h4>
+        <p style="margin:0 0 6px">123 Neon Alley, Level -1</p>
+        <p style="margin:0 0 6px">Open Tue–Sun, 12–11pm</p>
+        <p style="margin:0">help@noircade.example</p>
+      </div>
+      <div>
+        <h4 style="margin:.2rem 0 10px; font-family:'Press Start 2P'; font-size:14px; color:#c7fff8">Follow</h4>
+        <div class="social">
+          <a class="soc" href="#" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00fff0" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17.5" cy="6.5" r="1"/></svg>
+          </a>
+          <a class="soc" href="#" aria-label="Twitter">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff00d4" stroke-width="2"><path d="M22 5.8c-.7.3-1.4.5-2.2.6.8-.5 1.3-1.2 1.6-2.1-.7.5-1.6.8-2.5 1C18 4.5 16.9 4 15.7 4c-2.2 0-4 1.9-4 4.1 0 .3 0 .6.1.9-3.4-.2-6.4-1.9-8.5-4.4-.4.7-.6 1.4-.6 2.2 0 1.4.7 2.7 1.9 3.5-.6 0-1.2-.2-1.8-.5 0 2 1.4 3.6 3.3 4-.4.1-.8.2-1.2.2-.3 0-.6 0-.9-.1.6 1.7 2.2 2.9 4.1 2.9-1.5 1.2-3.4 1.9-5.4 1.9H2c2 1.2 4.4 1.9 7 1.9 8.4 0 13-7.1 13-13.3v-.6z"/></svg>
+          </a>
+          <a class="soc" href="#" aria-label="YouTube">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9cff00" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="M10 9l5 3-5 3z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const id = a.getAttribute('href').slice(1);
+        const target = document.getElementById(id);
+        if(target){
+          e.preventDefault();
+          target.scrollIntoView({behavior:'smooth', block:'start'});
+        }
+      });
+    });
+
+    // Neon flicker accent on brand
+    const brand = document.querySelector('.brand__text');
+    let flickerTimer;
+    function flicker(){
+      const on = Math.random()*200 + 40;
+      const off = Math.random()*90 + 20;
+      brand.style.opacity = 0.85 + Math.random()*0.15;
+      brand.style.filter = 'drop-shadow(0 0 '+(6+Math.random()*10)+'px rgba(0,255,255,.8))';
+      clearTimeout(flickerTimer);
+      flickerTimer = setTimeout(()=>{ brand.style.opacity = 1; }, off);
+      setTimeout(flicker, on + off);
+    }
+    flicker();
+
+    // Fake subscribe
+    function subscribe(){
+      const email = document.getElementById('email');
+      const msg = document.getElementById('sub-msg');
+      if(!email.checkValidity()) return;
+      msg.style.display = 'block';
+      email.value = '';
+      setTimeout(()=>msg.style.display='none', 4000);
+    }
+    window.subscribe = subscribe;
+  </script>
+</body>
+</html>
+
+Notes for you to customize:
+- Replace NOIRCADE with your store’s name (brand text and <title>).
+- Swap collection images with your product photos; they currently use Unsplash placeholders.
+- Hook the newsletter form to your backend by changing form action/method and removing the onsubmit handler.
+- Colors and glow are controlled by CSS variables near the top; tweak to adjust the neon palette.

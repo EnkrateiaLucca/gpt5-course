@@ -1,0 +1,353 @@
+js
+// Minimal HN RSS aggregator with data-driven sorting
+// Run: npm i express rss-parser && node server.js
+
+const express = require('express');
+const Parser = require('rss-parser');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Feeds (you can add more RSS URLs here)
+const FEEDS = [
+  { id: 'hn-frontpage', title: 'Hacker News Front Page', url: 'https://hnrss.org/frontpage' },
+  { id: 'hn-new',       title: 'Hacker News New',       url: 'https://hnrss.org/newest' },
+  { id: 'hn-show',      title: 'Show HN',               url: 'https://hnrss.org/show' },
+  { id: 'hn-ask',       title: 'Ask HN',                url: 'https://hnrss.org/ask' },
+  { id: 'hn-best',      title: 'Hacker News Best',      url: 'https://hnrss.org/best' }
+];
+
+// RSS parser with HN custom fields
+const parser = new Parser({
+  timeout: 20000,
+  customFields: {
+    item: [
+      ['dc:creator', 'dcCreator'],
+      ['hn:points', 'hnPoints'],
+      ['hn:comments', 'hnComments'],
+      ['hn:link', 'hnDiscussionLink'],
+    ],
+  },
+});
+
+// In-memory store
+let itemsStore = new Map(); // key = normalizedUrl, value = article object
+let lastUpdated = 0;
+
+function normalizeUrl(url) {
+  try {
+    const u = new URL(url);
+    u.hostname = u.hostname.toLowerCase();
+    // strip common tracking params
+    const toDelete = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','utm_id','ref','ref_','source','cid'];
+    toDelete.forEach(p => u.searchParams.delete(p));
+    // remove empty query
+    if ([...u.searchParams.keys()].length === 0) u.search = '';
+    // remove trailing slash on path (but not root)
+    if (u.pathname.length > 1 && u.pathname.endsWith('/')) {
+      u.pathname = u.pathname.slice(0, -1);
+    }
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
+function parseIntSafe(v) {
+  if (v == null) return 0;
+  const n = parseInt(String(v).replace(/[^\d]/g, ''), 10);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function extractDomain(url) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
+function getAgeHours(date) {
+  const d = typeof date === 'string' ? new Date(date) : date;
+  const ms = Date.now() - (d?.getTime?.() || 0);
+  return Math.max(ms / 36e5, 0);
+}
+
+// Hotness formula (tweakable)
+// Combines points and comments, decays by age.
+function computeHotness(points, comments, ageHours) {
+  const score = points + comments * 0.3;
+  return score / Math.pow(ageHours + 2, 1.8);
+}
+
+// Merge or insert an item into the store
+function upsertItem(raw, sourceId) {
+  const url = raw.link || raw.guid || '';
+  if (!url) return;
+
+  const normalized = normalizeUrl(url);
+  const points = parseIntSafe(raw.hnPoints);
+  const comments = parseIntSafe(raw.hnComments);
+  const publishedAt = raw.isoDate || raw.pubDate || new Date().toISOString();
+  const ageHours = getAgeHours(publishedAt);
+
+  const base = {
+    id: normalized,
+    title: raw.title || '(untitled)',
+    url: normalized,
+    domain: extractDomain(normalized),
+    points,
+    comments,
+    publishedAt,
+    by: raw.dcCreator || null,
+    discussionUrl: raw.hnDiscussionLink || raw.comments || null,
+    sources: new Set([sourceId]),
+    ageHours,
+    hotness: computeHotness(points, comments, ageHours),
+  };
+
+  const existing = itemsStore.get(normalized);
+  if (!existing) {
+    itemsStore.set(normalized, base);
+  } else {
+    // Merge: keep max points/comments, union sources, recalc hotness
+    const merged = {
+      ...existing,
+      points: Math.max(existing.points || 0, points),
+      comments: Math.max(existing.comments || 0, comments),
+      publishedAt: existing.publishedAt || publishedAt,
+      sources: new Set([...(existing.sources || []), sourceId]),
+    };
+    merged.ageHours = getAgeHours(merged.publishedAt);
+    merged.hotness = computeHotness(merged.points, merged.comments, merged.ageHours);
+    itemsStore.set(normalized, merged);
+  }
+}
+
+async function fetchFeed(feed) {
+  try {
+    const parsed = await parser.parseURL(feed.url);
+    (parsed.items || []).forEach(item => upsertItem(item, feed.id));
+    return { ok: true, count: (parsed.items || []).length, feed: feed.id };
+  } catch (e) {
+    return { ok: false, error: e?.message || String(e), feed: feed.id };
+  }
+}
+
+async function refreshAll() {
+  const results = await Promise.all(FEEDS.map(fetchFeed));
+  lastUpdated = Date.now();
+  return results;
+}
+
+// Initial load and periodic refresh (every 3 minutes)
+refreshAll().then(() => {
+  console.log('Initial fetch complete:', itemsStore.size, 'items');
+});
+setInterval(refreshAll, 3 * 60 * 1000);
+
+// API: list articles
+// query: sort=hot|score|comments|new, q=search, source=csv, domain=, limit, offset
+app.get('/api/articles', (req, res) => {
+  const sort = (req.query.sort || 'hot').toString();
+  const q = (req.query.q || '').toString().toLowerCase();
+  const sourceFilter = (req.query.source || '').toString().split(',').filter(Boolean);
+  const domainFilter = (req.query.domain || '').toString().toLowerCase();
+  const limit = Math.min(parseInt(req.query.limit) || 50, 200);
+  const offset = Math.max(parseInt(req.query.offset) || 0, 0);
+
+  let arr = Array.from(itemsStore.values());
+
+  if (q) {
+    arr = arr.filter(i =>
+      (i.title || '').toLowerCase().includes(q) ||
+      (i.domain || '').toLowerCase().includes(q)
+    );
+  }
+
+  if (sourceFilter.length) {
+    arr = arr.filter(i => {
+      const srcs = i.sources || new Set();
+      return sourceFilter.some(s => srcs.has(s));
+    });
+  }
+
+  if (domainFilter) {
+    arr = arr.filter(i => (i.domain || '').toLowerCase().includes(domainFilter));
+  }
+
+  // Recompute age and hotness on read (keeps ranking fresh without DB)
+  arr = arr.map(i => {
+    const ageHours = getAgeHours(i.publishedAt);
+    return {
+      ...i,
+      ageHours,
+      hotness: computeHotness(i.points, i.comments, ageHours),
+      sources: Array.from(i.sources || []),
+    };
+  });
+
+  switch (sort) {
+    case 'score':
+      arr.sort((a, b) => (b.points || 0) - (a.points || 0));
+      break;
+    case 'comments':
+      arr.sort((a, b) => (b.comments || 0) - (a.comments || 0));
+      break;
+    case 'new':
+      arr.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+      break;
+    case 'hot':
+    default:
+      arr.sort((a, b) => (b.hotness || 0) - (a.hotness || 0));
+      break;
+  }
+
+  const total = arr.length;
+  const slice = arr.slice(offset, offset + limit);
+
+  res.json({
+    meta: {
+      total,
+      limit,
+      offset,
+      sort,
+      lastUpdated,
+    },
+    items: slice,
+  });
+});
+
+// API: list feeds
+app.get('/api/feeds', (req, res) => {
+  res.json({
+    feeds: FEEDS,
+    lastUpdated,
+  });
+});
+
+// Force refresh
+app.post('/api/refresh', async (req, res) => {
+  const results = await refreshAll();
+  res.json({ ok: true, results, size: itemsStore.size, lastUpdated });
+});
+
+// Minimal UI
+app.get('/', (req, res) => {
+  res.type('html').send(`<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>HN RSS Aggregator (Prototype)</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 0; background: #0b0f19; color: #e8eef8; }
+  header { position: sticky; top: 0; background: #0b0f19; padding: 12px 16px; border-bottom: 1px solid #1a2333; display:flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  header h1 { font-size: 16px; margin: 0 12px 0 0; color: #9ec1ff; }
+  select, input { background: #0f1524; color: #e8eef8; border: 1px solid #1f2a3d; border-radius: 6px; padding: 8px 10px; }
+  button { background: #2563eb; border: none; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+  button:disabled { opacity: 0.6; cursor: default; }
+  main { padding: 12px 16px; max-width: 1100px; margin: 0 auto; }
+  .card { background: #0f1524; border: 1px solid #1a2333; border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+  .title { font-size: 16px; margin: 0 0 6px 0; }
+  .title a { color: #c7dcff; text-decoration: none; }
+  .title a:hover { text-decoration: underline; }
+  .meta { font-size: 13px; color: #9db1cc; display: flex; flex-wrap: wrap; gap: 12px; }
+  .badge { background: #10243e; color: #9ec1ff; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+  .row { display:flex; gap: 8px; flex-wrap: wrap; align-items:center; }
+  .spacer { flex:1; }
+  .dim { color: #7f93ac; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>HN RSS Aggregator</h1>
+    <div class="row">
+      <label class="dim">Sort</label>
+      <select id="sort">
+        <option value="hot">Hot</option>
+        <option value="new">Newest</option>
+        <option value="score">Score</option>
+        <option value="comments">Comments</option>
+      </select>
+    </div>
+    <div class="row">
+      <label class="dim">Filter domain</label>
+      <input id="domain" placeholder="e.g., github.com" />
+    </div>
+    <div class="row">
+      <label class="dim">Search</label>
+      <input id="q" placeholder="title or domain" />
+    </div>
+    <div class="spacer"></div>
+    <button id="refresh">Refresh</button>
+  </header>
+  <main>
+    <div id="stats" class="dim" style="margin: 8px 0 12px 0"></div>
+    <div id="list"></div>
+  </main>
+<script>
+  const list = document.getElementById('list');
+  const stats = document.getElementById('stats');
+  const sortEl = document.getElementById('sort');
+  const qEl = document.getElementById('q');
+  const domainEl = document.getElementById('domain');
+  const refreshBtn = document.getElementById('refresh');
+
+  async function load() {
+    list.innerHTML = '<div class="dim">Loading…</div>';
+    const params = new URLSearchParams();
+    params.set('sort', sortEl.value);
+    if (qEl.value) params.set('q', qEl.value);
+    if (domainEl.value) params.set('domain', domainEl.value);
+    const r = await fetch('/api/articles?' + params.toString());
+    const json = await r.json();
+
+    const dt = json.meta.lastUpdated ? new Date(json.meta.lastUpdated) : null;
+    stats.textContent = json.meta.total + ' items • last updated ' + (dt ? dt.toLocaleString() : '—');
+
+    list.innerHTML = '';
+    for (const it of json.items) {
+      const p = document.createElement('div');
+      p.className = 'card';
+      p.innerHTML = \`
+        <div class="title">
+          <a href="\${it.url}" target="_blank" rel="noopener">\${it.title || '(untitled)'}</a>
+          <span class="dim">(\${it.domain || ''})</span>
+        </div>
+        <div class="meta">
+          <span class="badge">\${it.points || 0} points</span>
+          <span class="badge">\${it.comments || 0} comments</span>
+          <span>\${(it.ageHours || 0).toFixed(1)}h old</span>
+          <span>hotness: \${(it.hotness || 0).toFixed(3)}</span>
+          \${it.by ? '<span>by ' + it.by + '</span>' : ''}
+          \${it.discussionUrl ? '<a href="' + it.discussionUrl + '" target="_blank" rel="noopener">discussion</a>' : ''}
+          <span class="dim">sources: \${(it.sources || []).join(', ')}</span>
+        </div>
+      \`;
+      list.appendChild(p);
+    }
+  }
+
+  sortEl.addEventListener('change', load);
+  qEl.addEventListener('keyup', e => { if (e.key === 'Enter') load(); });
+  domainEl.addEventListener('keyup', e => { if (e.key === 'Enter') load(); });
+  refreshBtn.addEventListener('click', async () => {
+    refreshBtn.disabled = true;
+    try {
+      await fetch('/api/refresh', { method: 'POST' });
+      await load();
+    } finally {
+      refreshBtn.disabled = false;
+    }
+  });
+
+  load();
+</script>
+</body>
+</html>`);
+});
+
+app.listen(PORT, () => {
+  console.log(`HN RSS aggregator running at http://localhost:${PORT}`);
+});

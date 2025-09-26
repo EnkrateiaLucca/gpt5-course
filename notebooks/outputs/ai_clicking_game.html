@@ -1,0 +1,826 @@
+Here’s a complete, single-file web app you can copy into an .html file and open in any browser. It’s an AI-inspired clicker with smart target movement, dodging, adaptive difficulty, and persistent score tracking via localStorage.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NeuroClicker — AI-Inspired Click Game</title>
+<style>
+  :root {
+    --bg: #0a0f1a;
+    --panel: #0e1626;
+    --text: #e7f6ff;
+    --muted: #a7b5c3;
+    --primary: #00ffd0;
+    --primary-2: #00c9ff;
+    --accent: #ff3cc7;
+    --warning: #ffb020;
+    --danger: #ff4d4d;
+
+    --ring: 0 0 0 2px rgba(0,255,208,0.25), 0 0 22px rgba(0,255,208,0.25);
+    --card: 0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  [data-theme="light"] {
+    --bg: #f3f7fb;
+    --panel: #ffffff;
+    --text: #0e1524;
+    --muted: #556072;
+    --primary: #006cff;
+    --primary-2: #00b3ff;
+    --accent: #7a2cff;
+    --warning: #b15a00;
+    --danger: #e03131;
+    --ring: 0 0 0 2px rgba(0,108,255,0.15), 0 0 18px rgba(0,108,255,0.15);
+    --card: 0 8px 24px rgba(16,24,40,0.08), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    background: radial-gradient(1200px 800px at 20% -20%, rgba(0,255,208,0.08), transparent 60%),
+                radial-gradient(1200px 800px at 120% 120%, rgba(0,108,255,0.10), transparent 60%),
+                var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    user-select: none;
+    touch-action: manipulation;
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px;
+    display: grid;
+    gap: 12px;
+    grid-template-rows: auto 1fr auto;
+    height: 100%;
+  }
+  .topbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .brand .logo {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    box-shadow: var(--ring);
+    display: grid; place-items: center;
+    color: #08121b;
+    font-weight: 900;
+    font-size: 14px;
+  }
+  .stats {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  }
+  .stat {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 8px 12px;
+    box-shadow: var(--card);
+    font-size: 14px;
+  }
+  .controls {
+    display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap;
+  }
+  .btn, select, .toggle {
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.00));
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    box-shadow: var(--card);
+    cursor: pointer;
+  }
+  .btn.primary {
+    background: linear-gradient(180deg, var(--primary), var(--primary-2));
+    color: #00151a;
+    border: none;
+    font-weight: 700;
+  }
+  .btn.secondary {
+    background: var(--panel);
+  }
+  select { appearance: none; }
+  .toggle {
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .toggle input { appearance: none; width: 28px; height: 18px; background: rgba(255,255,255,0.2); border-radius: 999px; position: relative; outline: none; }
+  .toggle input:after {
+    content: ""; width: 14px; height: 14px; background: white; border-radius: 50%;
+    position: absolute; top: 2px; left: 2px; transition: transform .15s ease;
+  }
+  .toggle input:checked { background: var(--primary); }
+  .toggle input:checked:after { transform: translateX(10px); }
+
+  .board {
+    position: relative;
+    border-radius: 16px;
+    background:
+      radial-gradient(500px 300px at 70% 30%, rgba(0,255,208,0.09), transparent 60%),
+      radial-gradient(400px 400px at 20% 80%, rgba(0,108,255,0.06), transparent 60%),
+      var(--panel);
+    box-shadow: var(--card);
+    overflow: hidden;
+    min-height: min(70vh, 680px);
+  }
+  .overlay-info {
+    position: absolute; z-index: 2; top: 10px; left: 10px; right: 10px;
+    display: flex; gap: 8px; flex-wrap: wrap; pointer-events: none;
+  }
+  .overlay-info .pill {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 12px;
+    pointer-events: auto;
+  }
+
+  .target {
+    position: absolute;
+    width: 68px; height: 68px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    background: radial-gradient(circle at 35% 35%, #fff 0%, #dff 45%, #b6ecff 70%),
+                conic-gradient(from 0deg, rgba(255,255,255,0.1), rgba(255,255,255,0) 60%);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.65) inset, 0 6px 22px rgba(0,0,0,0.25), var(--ring);
+    cursor: crosshair;
+    user-select: none;
+    touch-action: none;
+  }
+  .target .face {
+    font-size: 26px;
+    filter: drop-shadow(0 2px 1px rgba(0,0,0,0.15));
+  }
+  .target.small { width: 56px; height: 56px; }
+  .target.tiny { width: 46px; height: 46px; }
+
+  .center-msg {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    pointer-events: none; z-index: 1;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .center-msg .big {
+    font-size: clamp(18px, 3.6vw, 28px);
+    opacity: 0.85;
+  }
+
+  .coach {
+    position: absolute; bottom: 10px; left: 10px; z-index: 2;
+    max-width: 60%;
+    display: flex; align-items: flex-end; gap: 8px;
+  }
+  .coach .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    box-shadow: var(--ring);
+    display: grid; place-items: center; color: #00151a; font-weight: 900;
+  }
+  .coach .bubble {
+    background: rgba(10, 16, 30, 0.72);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    font-size: 13px;
+    max-width: 100%;
+    box-shadow: var(--card);
+  }
+
+  .float {
+    position: absolute;
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+    transform: translate(-50%, -50%);
+    animation: pop 700ms ease-out forwards;
+    pointer-events: none;
+    z-index: 5;
+  }
+  @keyframes pop {
+    0% { opacity: 0; transform: translate(-50%, -30%) scale(0.7); }
+    15% { opacity: 1; transform: translate(-50%, -60%) scale(1.05); }
+    100% { opacity: 0; transform: translate(-50%, -150%) scale(0.95); }
+  }
+
+  .footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .kbd {
+    display: inline-block; min-width: 1.4em; text-align: center;
+    padding: 2px 6px; border-radius: 6px; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    font-weight: 700; color: var(--text);
+  }
+
+  .link {
+    color: var(--primary);
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 640px) {
+    .board { min-height: 64vh; }
+    .stats { justify-content: center; }
+    .controls { justify-content: center; }
+    .coach { max-width: 86%; }
+    .target { width: 72px; height: 72px; } /* a bit larger on mobile */
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app" data-theme="dark">
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">AI</div>
+      NeuroClicker
+    </div>
+    <div class="stats">
+      <div class="stat">Score: <b id="score">0</b></div>
+      <div class="stat">Time: <b id="time">60</b>s</div>
+      <div class="stat">Streak: <b id="streak">0</b></div>
+      <div class="stat">Best: <b id="best">0</b></div>
+    </div>
+    <div class="controls">
+      <select id="difficulty" title="Difficulty">
+        <option value="easy">Easy</option>
+        <option value="normal" selected>Normal</option>
+        <option value="hard">Hard</option>
+      </select>
+      <select id="duration" title="Round length">
+        <option value="30">30s</option>
+        <option value="60" selected>60s</option>
+        <option value="90">90s</option>
+      </select>
+      <label class="toggle" title="Sound effects">
+        <input id="sfx" type="checkbox" checked>
+        SFX
+      </label>
+      <label class="toggle" title="Theme">
+        <input id="theme" type="checkbox">
+        Light
+      </label>
+      <button id="start" class="btn primary">Start</button>
+    </div>
+  </div>
+
+  <div id="board" class="board" aria-label="Game board">
+    <div class="overlay-info">
+      <div class="pill">Accuracy: <b id="acc">100%</b></div>
+      <div class="pill">Level brain: <b id="lvl">1</b></div>
+    </div>
+    <div id="centerMsg" class="center-msg">
+      <div class="big">Tap Start to play. Hit the bot. Misses reset streak.</div>
+    </div>
+    <div id="target" class="target" role="button" aria-label="Target"><div class="face">🤖</div></div>
+    <div class="coach">
+      <div class="avatar">AI</div>
+      <div id="coachText" class="bubble">I will learn your clicks… and dodge them.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>Pro tip: the bot dodges your pointer. Corner it. Press <span class="kbd">Space</span> to start/stop.</div>
+    <div>Total hits: <b id="totalHits">0</b> • Best streak: <b id="bestStreak">0</b></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // Storage keys
+  const LS = {
+    hi: 'aiClicker_highScore_v1',
+    totals: 'aiClicker_totals_v1',
+    settings: 'aiClicker_settings_v1'
+  };
+
+  function clamp(n, a, b){ return Math.min(b, Math.max(a, n)); }
+  function rand(a=0,b=1){ return a + Math.random()*(b-a); }
+  function now(){ return performance.now(); }
+
+  // Small WebAudio beep
+  let audioCtx = null;
+  function beep(type='hit', vol=0.12){
+    if(!state.sfx) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = type==='miss' ? 'sawtooth' : 'square';
+      let f1=880, t=0.075;
+      if (type==='miss'){ f1=220; t=0.08; }
+      if (type==='level'){ f1=1200; t=0.15; }
+      o.frequency.setValueAtTime(f1, audioCtx.currentTime);
+      if (type==='level'){
+        o.frequency.exponentialRampToValueAtTime(1700, audioCtx.currentTime + t);
+      }
+      g.gain.value = vol;
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + t);
+      o.connect(g).connect(audioCtx.destination);
+      o.start();
+      o.stop(audioCtx.currentTime + t);
+    } catch(e){}
+  }
+
+  // Haptics
+  function vibe(ms=10){
+    if (!state.sfx) return;
+    if ('vibrate' in navigator) navigator.vibrate(ms);
+  }
+
+  // DOM
+  const board = document.getElementById('board');
+  const target = document.getElementById('target');
+  const scoreEl = document.getElementById('score');
+  const timeEl = document.getElementById('time');
+  const streakEl = document.getElementById('streak');
+  const bestEl = document.getElementById('best');
+  const accEl = document.getElementById('acc');
+  const lvlEl = document.getElementById('lvl');
+  const centerMsg = document.getElementById('centerMsg');
+  const coachText = document.getElementById('coachText');
+  const btnStart = document.getElementById('start');
+  const selDifficulty = document.getElementById('difficulty');
+  const selDuration = document.getElementById('duration');
+  const inputSfx = document.getElementById('sfx');
+  const inputTheme = document.getElementById('theme');
+  const totalHitsEl = document.getElementById('totalHits');
+  const bestStreakEl = document.getElementById('bestStreak');
+
+  const app = document.getElementById('app');
+
+  // State
+  const state = {
+    running: false,
+    prepped: false,
+    score: 0,
+    hits: 0,
+    misses: 0,
+    streak: 0,
+    bestStreak: 0,
+    startAt: 0,
+    remainingMs: 60000,
+    moveTimer: null,
+    moveEvery: 1000,
+    lastHitAt: 0,
+    lastMoveAt: 0,
+    difficulty: 'normal',
+    durationSec: 60,
+    sfx: true,
+    pointer: {x: 0.5, y:0.5, inside: false, lastDodge: 0},
+    size: 68,
+    level: 1, // AI brain level
+    hiScore: 0,
+    totals: { totalHits: 0, totalClicks: 0, bestStreak: 0 },
+    heat: null, // 2D grid of click density
+    heatW: 18, heatH: 12,
+    lastPos: {x:0.5, y:0.5},
+  };
+
+  // Load settings
+  function loadSettings(){
+    try {
+      const s = JSON.parse(localStorage.getItem(LS.settings)||'{}');
+      if (s.difficulty) state.difficulty = s.difficulty;
+      if (s.durationSec) state.durationSec = s.durationSec;
+      if (s.sfx !== undefined) state.sfx = !!s.sfx;
+      if (s.theme) app.dataset.theme = s.theme;
+      selDifficulty.value = state.difficulty;
+      selDuration.value = String(state.durationSec);
+      inputSfx.checked = state.sfx;
+      inputTheme.checked = (app.dataset.theme === 'light');
+    } catch(e){}
+    try { state.hiScore = +(localStorage.getItem(LS.hi)||0); } catch(e){}
+    try { const t = JSON.parse(localStorage.getItem(LS.totals)||'{}'); Object.assign(state.totals, t); } catch(e){}
+    bestEl.textContent = state.hiScore;
+    totalHitsEl.textContent = state.totals.totalHits||0;
+    bestStreakEl.textContent = state.totals.bestStreak||0;
+  }
+  function saveSettings(){
+    localStorage.setItem(LS.settings, JSON.stringify({
+      difficulty: state.difficulty,
+      durationSec: state.durationSec,
+      sfx: state.sfx,
+      theme: app.dataset.theme || 'dark'
+    }));
+  }
+  function saveTotals(){
+    localStorage.setItem(LS.totals, JSON.stringify(state.totals));
+  }
+  function saveHigh(){
+    if (state.score > state.hiScore){
+      state.hiScore = state.score;
+      localStorage.setItem(LS.hi, String(state.hiScore));
+      bestEl.textContent = state.hiScore;
+      speak("New high score! Your clicks are evolving.");
+      beep('level', 0.18);
+    }
+  }
+
+  function speak(text){
+    coachText.textContent = text;
+  }
+
+  // Heatmap brain
+  function makeHeat(w,h){
+    const grid = new Array(h);
+    for(let y=0;y<h;y++){ grid[y] = new Float32Array(w); }
+    return grid;
+  }
+  function decayHeat(grid, factor=0.996){
+    for(let y=0;y<grid.length;y++){
+      const row = grid[y];
+      for(let x=0;x<row.length;x++){
+        row[x] *= factor;
+      }
+    }
+  }
+  function addHeat(x, y, amount=1){
+    const gx = clamp(Math.floor(x * state.heatW), 0, state.heatW-1);
+    const gy = clamp(Math.floor(y * state.heatH), 0, state.heatH-1);
+    // Spread to neighbors (small gaussian-ish)
+    for(let dy=-1; dy<=1; dy++){
+      for(let dx=-1; dx<=1; dx++){
+        const xx = gx+dx, yy = gy+dy;
+        if (xx>=0 && xx<state.heatW && yy>=0 && yy<state.heatH){
+          const w = (dx===0 && dy===0) ? 1.0 : 0.5;
+          state.heat[yy][xx] += amount * w;
+        }
+      }
+    }
+  }
+  function sampleHeat(x, y){
+    const gx = clamp(Math.floor(x * state.heatW), 0, state.heatW-1);
+    const gy = clamp(Math.floor(y * state.heatH), 0, state.heatH-1);
+    let s = 0;
+    for(let dy=-1; dy<=1; dy++){
+      for(let dx=-1; dx<=1; dx++){
+        const xx = gx+dx, yy = gy+dy;
+        if (xx>=0 && xx<state.heatW && yy>=0 && yy<state.heatH){
+          s += state.heat[yy][xx];
+        }
+      }
+    }
+    return s;
+  }
+
+  // Position helpers
+  function boardRect(){ return board.getBoundingClientRect(); }
+  function toPct(x, y, rect){
+    return { x: (x-rect.left)/rect.width, y: (y-rect.top)/rect.height };
+  }
+  function applyTargetPos(px, py){
+    state.lastPos.x = px; state.lastPos.y = py;
+    const rect = boardRect();
+    const r = targetRadius();
+    const x = clamp(px*rect.width, r, rect.width - r);
+    const y = clamp(py*rect.height, r, rect.height - r);
+    target.style.left = x + 'px';
+    target.style.top = y + 'px';
+  }
+  function targetRadius(){
+    const size = parseFloat(getComputedStyle(target).width);
+    return size/2;
+  }
+
+  function setTargetSize(){
+    // Base sizes by difficulty + small dynamic reduction with level
+    const base = (state.difficulty==='easy') ? 72 : (state.difficulty==='hard') ? 52 : 60;
+    const dyn = clamp(base - (state.level-1)*2, 42, 84);
+    target.style.width = dyn+'px';
+    target.style.height = dyn+'px';
+    if (dyn<=52) target.classList.add('tiny'); else target.classList.remove('tiny');
+    if (dyn<=60 && dyn>52) target.classList.add('small'); else target.classList.remove('small');
+  }
+
+  function resetGame(){
+    state.score = 0; state.hits = 0; state.misses=0; state.streak = 0; state.bestStreak=0;
+    state.level = 1;
+    state.remainingMs = state.durationSec*1000;
+    state.lastHitAt = 0;
+    state.moveEvery = baseMoveRate();
+    if (!state.heat) state.heat = makeHeat(state.heatW, state.heatH);
+    // Light decay on start
+    decayHeat(state.heat, 0.95);
+    setTargetSize();
+    updateUI();
+    centerMsg.style.display = 'grid';
+    speak("Round loaded. Outsmart me if you can.");
+    applyTargetPos(0.5, 0.5);
+  }
+
+  function baseMoveRate(){
+    switch(state.difficulty){
+      case 'easy': return 1100;
+      case 'hard': return 700;
+      default: return 900;
+    }
+  }
+
+  function startGame(){
+    if (state.running) return;
+    state.running = true;
+    state.startAt = now();
+    centerMsg.style.display = 'none';
+    scheduleMove('start');
+    tick();
+    speak("Analyzing your strategy…");
+    beep('level', 0.12);
+  }
+
+  function stopGame(endReason='stop'){
+    if (!state.running) return;
+    state.running = false;
+    if (state.moveTimer) { clearTimeout(state.moveTimer); state.moveTimer = null; }
+    saveHigh();
+    state.totals.totalHits += state.hits;
+    state.totals.bestStreak = Math.max(state.totals.bestStreak, state.bestStreak);
+    saveTotals();
+    totalHitsEl.textContent = state.totals.totalHits;
+    bestStreakEl.textContent = state.totals.bestStreak;
+    centerMsg.style.display = 'grid';
+    centerMsg.querySelector('.big').textContent = `Time! Score ${state.score} — Accuracy ${accuracyPct()} — Best Streak ${state.bestStreak}`;
+    speak(endReason==='time' ? "Session complete. Uploading your greatness to the cloud. Kidding." : "Paused. The bot is plotting.");
+  }
+
+  function tick(){
+    if (!state.running) return;
+    const elapsed = now() - state.startAt;
+    state.remainingMs = Math.max(0, state.durationSec*1000 - elapsed);
+    timeEl.textContent = Math.ceil(state.remainingMs/1000);
+    accEl.textContent = accuracyPct();
+    lvlEl.textContent = state.level;
+    // decay heat slowly
+    decayHeat(state.heat, 0.999);
+    // progress difficulty based on performance
+    adaptDifficulty();
+    if (state.remainingMs <= 0){
+      stopGame('time');
+      return;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function accuracyPct(){
+    const total = Math.max(1, state.hits + state.misses);
+    return Math.round((state.hits/total)*100) + '%';
+  }
+
+  function updateUI(){
+    scoreEl.textContent = state.score;
+    streakEl.textContent = state.streak;
+    bestEl.textContent = state.hiScore;
+    timeEl.textContent = Math.ceil(state.remainingMs/1000);
+    accEl.textContent = accuracyPct();
+    lvlEl.textContent = state.level;
+  }
+
+  function adaptDifficulty(){
+    const acc = state.hits + state.misses > 0 ? (state.hits/(state.hits+state.misses)) : 1;
+    // Level increases with streaks and good accuracy
+    const desired = 1 + Math.floor(state.streak / 7) + (acc > 0.7 ? 1 : 0);
+    const capped = clamp(desired, 1, 12);
+    if (capped !== state.level){
+      state.level = capped;
+      setTargetSize();
+    }
+    // Move rate adjusts by level and accuracy; ensure min/max
+    const base = baseMoveRate();
+    const speedUp = 1 - (state.level-1)*0.06; // faster with level
+    const accFactor = acc >= 0.75 ? 0.85 : acc <= 0.45 ? 1.15 : 1.0;
+    state.moveEvery = clamp(base * speedUp * accFactor, 380, 1400);
+  }
+
+  function scheduleMove(reason='tick'){
+    if (!state.running) return;
+    if (state.moveTimer) clearTimeout(state.moveTimer);
+    const delay = state.moveEvery * (0.75 + Math.random()*0.5);
+    state.moveTimer = setTimeout(()=>{
+      smartMove(reason);
+      scheduleMove('loop');
+    }, delay);
+  }
+
+  function smartMove(reason='auto'){
+    const rect = boardRect();
+    const r = targetRadius();
+    const marginX = r/rect.width, marginY = r/rect.height;
+    let best = {score: Infinity, x: state.lastPos.x, y: state.lastPos.y};
+    const tries = 32 + state.level*4;
+    const cursor = state.pointer;
+
+    for (let i=0;i<tries;i++){
+      let x = rand(marginX, 1 - marginX);
+      let y = rand(marginY, 1 - marginY);
+
+      // Slightly prefer edges sometimes to make it trickier
+      if (Math.random() < 0.1){
+        x = (Math.random()<0.5) ? marginX+rand(0,0.1) : 1 - marginX - rand(0,0.1);
+      }
+      const h = sampleHeat(x, y);
+      const dCursor = Math.hypot(x - cursor.x, y - cursor.y); // 0..~1.4
+      const dLast = Math.hypot(x - state.lastPos.x, y - state.lastPos.y);
+      // Score combines risk (heat), pointer distance, movement variety
+      const heatW = 1.0 + state.level*0.15;
+      const pointerW = 1.0 + state.level*0.25;
+      const travelW = 0.15;
+      const jitter = rand(-0.05, 0.05);
+
+      // Lower is better
+      const score = h*heatW - dCursor*pointerW - dLast*travelW + jitter;
+
+      if (score < best.score){
+        best = {score, x, y};
+      }
+    }
+    applyTargetPos(best.x, best.y);
+    state.lastMoveAt = now();
+  }
+
+  function dodgePointer(px, py){
+    if (!state.running) return;
+    // Only dodge if pointer is close
+    const rect = boardRect();
+    const r = targetRadius();
+    const tx = state.lastPos.x * rect.width;
+    const ty = state.lastPos.y * rect.height;
+    const dx = px - tx;
+    const dy = py - ty;
+    const dist = Math.hypot(dx, dy);
+
+    if (dist < Math.max(120, r*2.2) && now() - state.pointer.lastDodge > 220){
+      state.pointer.lastDodge = now();
+
+      // Move opposite direction with a bit of smart reposition through heatmap
+      const awayX = clamp((tx - dx*0.9)/rect.width, r/rect.width, 1 - r/rect.width);
+      const awayY = clamp((ty - dy*0.9)/rect.height, r/rect.height, 1 - r/rect.height);
+
+      // Evaluate a few options around the away vector using heat
+      let best = {score: Infinity, x: awayX, y: awayY};
+      for (let i=0;i<10;i++){
+        const jitterX = awayX + rand(-0.08, 0.08);
+        const jitterY = awayY + rand(-0.08, 0.08);
+        const x = clamp(jitterX, r/rect.width, 1 - r/rect.width);
+        const y = clamp(jitterY, r/rect.height, 1 - r/rect.height);
+        const s = sampleHeat(x,y) - Math.hypot(x-state.pointer.x, y-state.pointer.y)*1.2 + rand(-0.05, 0.05);
+        if (s < best.score) best = {score:s, x, y};
+      }
+      applyTargetPos(best.x, best.y);
+    }
+  }
+
+  function floatingText(x, y, text, color='#fff'){
+    const el = document.createElement('div');
+    el.className = 'float';
+    el.textContent = text;
+    el.style.left = x+'px';
+    el.style.top = y+'px';
+    el.style.color = color;
+    board.appendChild(el);
+    setTimeout(()=>el.remove(), 800);
+  }
+
+  // Hit / Miss
+  function onHit(xpix, ypix){
+    state.hits++;
+    state.streak++;
+    state.bestStreak = Math.max(state.bestStreak, state.streak);
+    const mult = 1 + Math.floor(state.streak/5);
+    const gain = 1 * mult;
+    state.score += gain;
+    state.totals.totalHits += 1;
+    saveTotals();
+
+    addHeat(state.lastPos.x, state.lastPos.y, 0.5); // target location
+    // Positive reinforcement: mark around pointer too (the click came from here)
+    const rect = boardRect();
+    const pct = toPct(xpix, ypix, rect);
+    addHeat(pct.x, pct.y, 1.0);
+
+    updateUI();
+    floatingText(xpix, ypix, `+${gain}${mult>1?' x'+mult:''}`, mult>1 ? '#00ffd0' : '#ffffff');
+    beep('hit', 0.09);
+    vibe(8);
+
+    // Quick move after hit to keep pace
+    smartMove('afterHit');
+
+    if (state.streak === 5) speak("Streak 5! Predictable… speeding up.");
+    if (state.streak === 10) { speak("10 in a row? Respect."); beep('level', 0.15); }
+  }
+
+  function onMiss(xpix, ypix){
+    if (!state.running) return;
+    state.misses++;
+    state.streak = 0;
+    updateUI();
+    floatingText(xpix, ypix, 'miss', '#ff5d6c');
+    beep('miss', 0.06);
+
+    const rect = boardRect();
+    const pct = toPct(xpix, ypix, rect);
+    addHeat(pct.x, pct.y, 0.8);
+
+    if (Math.random() < 0.3) speak("Nice try. My weights shifted slightly.");
+  }
+
+  // Events
+  board.addEventListener('pointermove', (e)=>{
+    const rect = boardRect();
+    const inside =
+      e.clientX >= rect.left && e.clientX <= rect.right &&
+      e.clientY >= rect.top && e.clientY <= rect.bottom;
+    state.pointer.inside = inside;
+    const pct = toPct(e.clientX, e.clientY, rect);
+    state.pointer.x = clamp(pct.x, 0, 1);
+    state.pointer.y = clamp(pct.y, 0, 1);
+    if (inside) dodgePointer(e.clientX, e.clientY);
+  });
+
+  // Stop board clicks from selecting text on long-press mobile
+  board.addEventListener('contextmenu', (e)=> e.preventDefault());
+
+  target.addEventListener('pointerdown', (e)=>{
+    e.stopPropagation();
+    if (!state.running) return;
+    onHit(e.clientX, e.clientY);
+  });
+
+  board.addEventListener('pointerdown', (e)=>{
+    if (!state.running) return;
+    // If click target, target handler already handled
+    if (e.target === target || target.contains(e.target)) return;
+    onMiss(e.clientX, e.clientY);
+  });
+
+  // Controls
+  btnStart.addEventListener('click', ()=>{
+    if (state.running){ stopGame('stop'); btnStart.textContent='Start'; return; }
+    resetGame(); startGame(); btnStart.textContent='Pause';
+  });
+
+  selDifficulty.addEventListener('change', ()=>{
+    state.difficulty = selDifficulty.value;
+    setTargetSize();
+    saveSettings();
+  });
+  selDuration.addEventListener('change', ()=>{
+    state.durationSec = +selDuration.value;
+    saveSettings();
+    if (!state.running) { resetGame(); }
+  });
+  inputSfx.addEventListener('change', ()=>{ state.sfx = inputSfx.checked; saveSettings(); });
+  inputTheme.addEventListener('change', ()=>{
+    app.dataset.theme = inputTheme.checked ? 'light' : 'dark';
+    saveSettings();
+  });
+
+  // Space toggles game
+  window.addEventListener('keydown', (e)=>{
+    if (e.code === 'Space'){
+      e.preventDefault();
+      if (!state.running){ resetGame(); startGame(); btnStart.textContent='Pause'; }
+      else { stopGame('stop'); btnStart.textContent='Start'; }
+    }
+  });
+
+  // Init
+  function init(){
+    loadSettings();
+    resetGame();
+    // Position target centered initially
+    applyTargetPos(0.5, 0.5);
+    speak("I will learn your clicks… and dodge them.");
+    window.addEventListener('resize', ()=>applyTargetPos(state.lastPos.x, state.lastPos.y));
+  }
+
+  init();
+
+})();
+</script>
+</body>
+</html>
+
+Notes:
+- AI-inspired behavior: The bot uses a heatmap that “learns” where you click, and it chooses future positions to avoid those hot zones. It also actively dodges your pointer if you get close. Difficulty adapts to your streak and accuracy.
+- Score tracking: High score, total hits, and best streak persist via localStorage.
+- Controls: Choose difficulty and duration, toggle SFX and theme. Press Space to start/pause.
+- Mobile-friendly: Larger default target size and haptics (vibration) when supported.
+
+Want this as a PWA with an install button and offline support? I can add a manifest and service worker.

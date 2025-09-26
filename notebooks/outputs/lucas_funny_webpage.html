@@ -1,0 +1,298 @@
+Here’s a lightweight, ready-to-deploy pancake-themed landing page for an AI instructor teaching people to build silly procrastination apps with AI. Save as index.html and open in a browser. It’s pure HTML/CSS with a dash of vanilla JS for the email form.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pancake Procrastination Lab — Build Silly AI Apps</title>
+  <meta name="description" content="Learn to build delightfully silly procrastination apps with AI. Syrupy lessons, stackable skills, and buttery community vibes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --syrup:#7a3d1a;
+      --butter:#ffd34d;
+      --butter-dark:#f2b600;
+      --plate:#f6f4f2;
+      --blueberry:#3f4bd9;
+      --cream:#fff9f0;
+      --text:#2a201b;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--cream);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.5}
+    a{color:var(--blueberry);text-decoration:none}
+    .wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+    header{
+      background:linear-gradient(180deg,#fff, var(--cream) 70%);
+      position:relative; overflow:hidden;
+    }
+    .hero{
+      display:grid; grid-template-columns:1.1fr 0.9fr; gap:36px; align-items:center;
+      padding:72px 0 36px;
+    }
+    @media (max-width: 920px){ .hero{grid-template-columns:1fr; padding-top:40px} }
+    .brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .logo{
+      width:48px;height:48px;border-radius:50%;
+      background: radial-gradient(circle at 40% 35%, #c87b3d 0%, #a65a2a 45%, #7a3d1a 100%);
+      position:relative; box-shadow: var(--shadow);
+    }
+    .logo:after{
+      content:""; position:absolute; left:10px; top:12px; width:28px; height:10px; border-radius:50%;
+      background:rgba(255,255,255,0.28); transform:rotate(-12deg);
+    }
+    .title{
+      font-family:Fredoka, Inter, sans-serif; font-weight:800; font-size:44px; line-height:1.05; margin:0;
+    }
+    .subtitle{font-size:18px; color:#5b4a42; margin:14px 0 26px}
+    .cta-row{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+    .btn{
+      background:var(--butter); color:#3b2a1e; border:none; padding:14px 20px; font-weight:700; border-radius:14px; box-shadow: var(--shadow);
+      transition: transform .05s ease, background .2s; cursor:pointer
+    }
+    .btn:hover{transform:translateY(-1px); background:var(--butter-dark)}
+    .btn.outline{
+      background:#fff; border:2px solid #e7dacf; font-weight:600
+    }
+    .hint{font-size:13px; color:#6b5a52}
+
+    .pancake-stack{
+      position:relative; aspect-ratio:1/1; max-width:520px; margin:0 auto;
+      filter: drop-shadow(0 30px 50px rgba(122,61,26,0.25));
+    }
+    .plate{
+      position:absolute; inset:auto 12% 0 12%; height:18%; background: radial-gradient(ellipse at 50% 30%, #ffffff 0%, #f0ece8 60%, #e6dfda 100%);
+      border-radius:50% / 40%; transform: translateY(18px);
+    }
+    .cake{ position:absolute; left:10%; right:10%; bottom:18%; height:58%;}
+    .layer{
+      position:absolute; left:0; right:0; height:20%; border-radius:30px;
+      background:radial-gradient(circle at 50% 30%, #e9b27d 0%, #d8945f 40%, #b86c3a 100%);
+      box-shadow: inset 0 4px 0 rgba(255,255,255,0.35), 0 6px 0 rgba(95,52,23,0.18);
+    }
+    .layer:nth-child(1){ bottom:2% }
+    .layer:nth-child(2){ bottom:22% }
+    .layer:nth-child(3){ bottom:42% }
+    .syrup{
+      position:absolute; left:8%; right:8%; bottom:46%;
+      height:16%; background: radial-gradient(circle at 50% 0%, #8a441d 0%, #6b3417 70%, #532710 100%);
+      border-bottom-left-radius:28px; border-bottom-right-radius:28px;
+      box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2);
+    }
+    .drip{ position:absolute; width:14%; height:28%; background:linear-gradient(#6b3417, #532710); border-bottom-left-radius:18px; border-bottom-right-radius:18px; bottom:-18%; }
+    .drip.d1{ left:14% } .drip.d2{ left:44%; height:34% } .drip.d3{ right:16%; width:10% }
+    .butter{
+      position:absolute; width:26%; aspect-ratio: 4/3; background:linear-gradient(#ffe37a, #ffc72e);
+      border-radius:8px; left:50%; transform:translateX(-50%); bottom:60%;
+      box-shadow: inset 0 2px 0 rgba(255,255,255,0.6), 0 6px 0 rgba(0,0,0,0.12);
+    }
+    .blue{
+      position:absolute; width:8.5%; aspect-ratio:1/1; background: radial-gradient(circle at 40% 35%, #7b87ff, #4853d6 55%, #2d39a8 90%);
+      border-radius:50%; box-shadow: inset 0 2px 0 rgba(255,255,255,0.35);
+    }
+    .blue.b1{ left:22%; bottom:52% } .blue.b2{ right:18%; bottom:58% } .blue.b3{ left:32%; bottom:28% } .blue.b4{ right:30%; bottom:24% }
+
+    .meta{display:flex; gap:18px; align-items:center; margin-top:18px}
+    .pill{background:#fff; border:1px solid #efdfd4; padding:8px 12px; border-radius:999px; font-size:13px}
+
+    section{padding:56px 0}
+    .sec-title{font-family:Fredoka, Inter, sans-serif; font-weight:800; font-size:32px; margin:0 0 18px}
+    .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px }
+    @media (max-width:920px){ .grid-3{grid-template-columns:1fr} }
+    .card{
+      background:#fff; border:1px solid #efdfd4; border-radius:16px; padding:20px; box-shadow: var(--shadow)
+    }
+    .emoji{font-size:26px; margin-bottom:8px}
+    .small{color:#6b5a52; font-size:14px}
+
+    .lesson-card{
+      display:flex; align-items:center; gap:14px; padding:14px; background:#fff; border:1px solid #efdfd4; border-radius:12px
+    }
+    .badge{font-size:12px; background:var(--plate); color:#5b4a42; padding:4px 8px; border-radius:999px; border:1px solid #e7dacf}
+
+    .cta{
+      background:linear-gradient(180deg, #fff 0%, #fff6e2 100%);
+      border:1px solid #efdfd4; border-radius:18px; padding:28px; box-shadow: var(--shadow)
+    }
+    form{display:flex; gap:10px; flex-wrap:wrap}
+    input[type="email"]{
+      flex:1 1 280px; padding:14px 16px; border:1px solid #e6d7ca; border-radius:12px; font-size:16px; background:#fff
+    }
+    footer{padding:40px 0; color:#6b5a52; font-size:14px}
+    .footer-row{display:flex; justify-content:space-between; gap:18px; flex-wrap:wrap}
+    .foot-links a{margin-right:14px; color:#6b5a52}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap hero">
+      <div>
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <strong>Pancake Procrastination Lab</strong>
+        </div>
+        <h1 class="title">Build silly AI procrastination apps that stack like pancakes</h1>
+        <p class="subtitle">Learn from an AI instructor who thinks buttered motivation and blueberry feedback loops are a perfectly valid curriculum. Bite-sized lessons, syrupy demos, and community cook-alongs.</p>
+        <div class="cta-row">
+          <a href="#join" class="btn">Join the waitlist</a>
+          <a href="#how" class="btn outline">How it works</a>
+        </div>
+        <div class="meta">
+          <span class="pill">Beginner-friendly</span>
+          <span class="pill">Live + async</span>
+          <span class="pill">No math, just maple</span>
+        </div>
+      </div>
+
+      <div class="pancake-stack" aria-hidden="true">
+        <div class="plate"></div>
+        <div class="cake">
+          <div class="layer"></div>
+          <div class="layer"></div>
+          <div class="layer"></div>
+          <div class="syrup">
+            <div class="drip d1"></div>
+            <div class="drip d2"></div>
+            <div class="drip d3"></div>
+          </div>
+          <div class="butter"></div>
+          <div class="blue b1"></div>
+          <div class="blue b2"></div>
+          <div class="blue b3"></div>
+          <div class="blue b4"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="how">
+      <h2 class="sec-title">What you’ll build (and probably show your friends)</h2>
+      <div class="grid-3">
+        <div class="card">
+          <div class="emoji">🧇</div>
+          <h3>Waffle-ly Focus Timer</h3>
+          <p class="small">An AI timer that roasts you lovingly if you touch your phone. Uses localStorage, a tiny LLM prompt, and some cheeky copy.</p>
+        </div>
+        <div class="card">
+          <div class="emoji">🥞</div>
+          <h3>Stack Tracker</h3>
+          <p class="small">Gamified to-do list where tasks become pancakes. AI renames boring tasks into delightful stacks you actually want to flip.</p>
+        </div>
+        <div class="card">
+          <div class="emoji">🫐</div>
+          <h3>Blueberry Brainstorm</h3>
+          <p class="small">Press a button, get 20 ridiculous app ideas with prompts, components, and a “syrup score” for fun factor.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec-title">How the Lab works</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h4>1) Short, stackable lessons</h4>
+          <p class="small">10–20 minute videos with copy-paste snippets. You’ll ship something small every session.</p>
+        </div>
+        <div class="card">
+          <h4>2) Live cook-alongs</h4>
+          <p class="small">Weekly streams where we flip ideas into tiny apps. Bring syrup. Or questions. Both fine.</p>
+        </div>
+        <div class="card">
+          <h4>3) Community pantry</h4>
+          <p class="small">Templates, prompts, and assets so you don’t start from scratch. Share your silliest creations.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec-title">Sample lessons</h2>
+      <div class="grid-3">
+        <div class="lesson-card">
+          <span class="badge">Prompting</span>
+          <div>
+            <strong>Sass-but-kind feedback</strong>
+            <div class="small">Tune tone without getting mean. Maple-sweet, not molasses-heavy.</div>
+          </div>
+        </div>
+        <div class="lesson-card">
+          <span class="badge">Frontend</span>
+          <div>
+            <strong>One-file web apps</strong>
+            <div class="small">HTML + JS only. No build step, no excuses.</div>
+          </div>
+        </div>
+        <div class="lesson-card">
+          <span class="badge">APIs</span>
+          <div>
+            <strong>LLM calls in 15 lines</strong>
+            <div class="small">Environment keys, fetch patterns, streaming responses.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="join">
+      <div class="cta">
+        <h2 class="sec-title">Join the waitlist</h2>
+        <p class="small">Get early access, free starter templates, and a coupon for your first stack.</p>
+        <form id="waitlist-form">
+          <input type="email" name="email" placeholder="you@stack.club" required>
+          <button class="btn" type="submit">Get on the list</button>
+          <span class="hint" id="form-hint">No spam. Only syrup.</span>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    <div class="footer-row">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <strong>Pancake Procrastination Lab</strong>
+      </div>
+      <div class="foot-links">
+        <a href="#how">How it works</a>
+        <a href="#join">Join</a>
+        <a href="mailto:hello@pancakelab.ai">Contact</a>
+      </div>
+    </div>
+    <div class="small" style="margin-top:14px">© <span id="year"></span> Pancake Procrastination Lab. Powered by maple and mildly chaotic energy.</div>
+  </footer>
+
+  <script>
+    const year = document.getElementById('year');
+    if(year) year.textContent = new Date().getFullYear();
+
+    const form = document.getElementById('waitlist-form');
+    const hint = document.getElementById('form-hint');
+
+    form?.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const data = new FormData(form);
+      const email = data.get('email');
+      const btn = form.querySelector('button');
+      btn.disabled = true; btn.textContent = 'Mixing...';
+
+      try{
+        // Replace with your endpoint (ConvertKit, Beehiiv, Mailchimp, or serverless)
+        // Example: const res = await fetch('/api/waitlist', {method:'POST', body: JSON.stringify({email}), headers:{'Content-Type':'application/json'}});
+        await new Promise(r=>setTimeout(r,900)); // demo delay
+        hint.textContent = 'You’re in! Check your inbox for goodies. 🥞';
+        form.reset();
+      }catch(err){
+        hint.textContent = 'Oops, the batter was lumpy. Try again?';
+      }finally{
+        btn.disabled = false; btn.textContent = 'Get on the list';
+      }
+    });
+  </script>
+</body>
+</html>
+
+Customization tips:
+- Replace the dummy waitlist submission in the JS with your real endpoint.
+- Swap colors by adjusting CSS variables at the top.
+- Add a real logo by replacing the .logo div with an <img> tag.

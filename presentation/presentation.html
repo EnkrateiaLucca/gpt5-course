@@ -5,9 +5,6 @@
   <title>GPT-5: The Complete Guide to OpenAI's Latest Model</title>
   <meta charset="utf-8">
 
-  <!-- ============================================= -->
-  <!-- STANDARD REMARK STYLES - Most Common Setup -->
-  <!-- ============================================= -->
   <style>
     @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
     @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
@@ -34,13 +31,7 @@
   <!-- CUSTOM STYLES -->
   <!-- ============================================= -->
   <style>
-    /* Background image support */
-    .remark-slide-content {
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: contain;
-    }
-
+    
     /* Footnote styles */
     .footnote {
       position: absolute;
@@ -88,42 +79,35 @@
       color: white;
     }
 
-    .section-title {
-      background: white;
-      color: black;
-    }
-
     /* Highlighting */
     .highlight {
       background-color: yellow;
       padding: 2px 4px;
     }
 
-    /* Grid layouts */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
+    /* Ensure the raw markdown source is never visible when using remark with `source:` */
+    #source { display: none; }
+
+    /* Better PDF printing */
+    @page { size: 1280px 720px; margin: 0; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @media print {
+      .remark-slide-scaler {
+        box-shadow: none !important;
+        transform: scale(1) !important;
+        width: 100% !important;
+        height: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+      }
+      .remark-slide-number { display: none !important; }
+      img, video { max-width: 100% !important; }
     }
 
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 20px;
-      align-items: center;
-      justify-items: center;
-    }
   </style>
 </head>
 <body>
-  <textarea id="source">
+  <textarea id="source" style="display: none">
 
     class: inverse, center, middle
 
@@ -138,46 +122,30 @@
 
     --
 
-    **1. GPT-5 Overview & Release Timeline**
+    **1. GPT-5 Overview & Timeline**
 
     --
 
-    **2. Model Comparison & Performance Benchmarks**
+    **2. Model Comparison & Performance**
 
     --
 
-    **3. GPT-5 System Card & Architecture**
+    **3. Ok, great the model does well on a lot of benchmarks, but what is new about it?**
 
     --
 
-    **4. Router Architecture Deep Dive**
+    **4. GPT-5 System Card**
 
     --
 
-    **5. Preparedness Framework & Safety**
+    **5. Building with GPT-5: API & Integration**
 
     --
 
     **6. GPT-5 Prompting Guide Complete Breakdown**
 
-    --
-
-    **7. New Parameters & Tools**
-
-    --
-
-    **8. GPT-5 Coding Capabilities**
-
-    --
-
-    **9. Building with GPT-5: API & Integration**
-
-    --
-
-    **10. Demo: Personal GPT-5 Experiments**
-
     ---
-    class: center, middle, section-title
+    class: center, middle
 
     # GPT-5 Overview & Timeline
 
@@ -238,7 +206,7 @@
       - Native text, image, audio, and video support
 
     ---
-    class: center, middle, section-title
+    class: center, middle
 
     <!-- ============================================= -->
     <!-- MODEL COMPARISON AND PERFORMANCE -->
@@ -355,13 +323,13 @@
 
     ---
 
-    class: center, middle, section-title
+    class: center, middle
 
     # Ok, great the model does well on a lot of benchmarks, but what is new about it?
 
     ---
 
-    class: center, middle, section-title
+    class: center, middle
 
     # GPT-5 System Card
 
@@ -495,7 +463,7 @@
     .footnote[Source: https://openai.com/index/gpt-5-system-card/#:~:text=The%20safety-helpfulness%20optimization%20technique,are%20tuned%20to%20the%20system.]
 
     ---
-    class: center, middle, section-title
+    class: center, middle
 
     <h1>
     <span style="background-color: lightgreen">
@@ -547,7 +515,7 @@
     - [**Melting App Fail**](https://chatgpt.com/share/68953808-7b00-8004-8a0f-557ceb889375) - Physical simulation errors
 
     ---
-    class: center, middle, section-title
+    class: center, middle
 
     # Building with GPT-5: API & Integration
 
@@ -632,7 +600,7 @@
     - Implement smart caching strategies
 
     ---
-    class: center, middle, section-title
+    class: center, middle
 
     <h1>
     <span style="background-color: lightgreen">
@@ -641,12 +609,12 @@
     </h1>
 
     ---
-    class: center, middle, section-title
+    class: center, middle
 
     # Q&A & Break
 
     ---
-    class: center, middle, section-title
+    class: center, middle
 
     # GPT-5 Prompting Guide Complete Breakdown
 
@@ -855,6 +823,33 @@
 
     ---
 
+    # Ecosystem Support
+
+    .pull-left[
+    - **GitHub Copilot**:
+    Available across all paid plans
+    VS Code, GitHub.com, GitHub Mobile
+    Enhanced multi-file changes/refactors
+
+    - **Cursor Feedback**:
+    "Smartest coding model we've used"
+    Optimized for interactive development
+    ]
+
+    .pull-right[
+    - **Third-Party Tools**:
+    Windsurf integration
+    Codex CLI optimization
+    Fine-tuned for agentic coding
+
+    - **GPT-5 Codex**:
+    Specialized for software engineering
+    Real-world task training
+    Complex independent task handling
+    ]
+
+    ---
+
     # Recommended Prompting Patterns
 
     --
@@ -938,7 +933,7 @@
     .footnote[Source: [GPT-5 Prompting Guide - Metaprompting](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#metaprompting)]
 
     ---
-    class: center, middle, section-title
+    class: center, middle
 
     <h1>
       <span style="background-color: lightgreen">
@@ -965,71 +960,11 @@
     ---
     class: center, middle
 
-    # Developer Tool Integration
-
-    ## Ecosystem Support
-
-    .pull-left[
-    **GitHub Copilot**:
-    - Available across all paid plans
-    - VS Code, GitHub.com, GitHub Mobile
-    - Enhanced multi-file changes/refactors
-
-    **Cursor Feedback**:
-    - "Smartest coding model we've used"
-    - Optimized for interactive development
-    ]
-
-    .pull-right[
-    **Third-Party Tools**:
-    - Windsurf integration
-    - Codex CLI optimization
-    - Fine-tuned for agentic coding
-
-    **GPT-5 Codex**:
-    - Specialized for software engineering
-    - Real-world task training
-    - Complex independent task handling
-    ]
-
-    ---
-
-    # Real-World Developer Impact
-
-    ## Transforming Software Development
-
-    --
-
-    **Developer Testimonials**: "Best coding model in the world"
-
-    --
-
-    **Automation Leap**: From 65% to 72% software engineering automation
-
-    --
-
-    **Advanced Debugging**:
-    - Catches deeply-hidden bugs
-    - Runs complex multi-turn background agents
-    - Sees problems through to completion
-
-    --
-
-    **Complex Task Completion**:
-    - Handles tasks where other models get stuck
-    - Full project builds and large-scale refactors
-    - Feature additions with architectural awareness
-
-    ---
-    class: center, middle
-
     <h1>
       <span style="background-color: lightgreen">
         Demo: Building GPT-5 Powered Apps
       </span>
     </h1>
-
-    ### Frontend Example from OpenAI Cookbook
 
     ---
     class: center, middle
@@ -1042,7 +977,7 @@
 
     --
 
-    1. **Revolutionary Architecture**: GPT-5's unified system with router intelligence represents a paradigm shift
+    1. **Innovative Architecture**: GPT-5's unified system with router intelligence represents a paradigm shift
 
     --
 
@@ -1082,22 +1017,13 @@
 
     ---
 
-    # Thank You!
-
-    ## Connect & Continue Learning
-
-    ### **Course Materials**
-    - 📚 [GitHub Repository](https://github.com/your-repo-link)
-    - 📋 [Slides & Code Examples](presentation-link)
-
-    ### **Stay Connected**
-    - 🐦 Follow for updates on AI developments
-    - 💼 LinkedIn for professional discussions
-    - 📺 YouTube for more AI tutorials
-
-    ### **Questions?**
-    **Let's continue the conversation!**
-
+    # Connect With Me
+    
+    ## 📚 [Course materials](https://github.com/EnkrateiaLucca/gpt5-course.git)
+    ## 🔗 [LinkedIn](https://www.linkedin.com/in/lucas-soares-969044167/)
+    ## 🐦 [Twitter/X - @LucasEnkrateia](https://x.com/LucasEnkrateia)
+    ## 📺 [YouTube - @automatalearninglab](https://www.youtube.com/@automatalearninglab)
+    ## 📧 Email: lucasenkrateia@gmail.com
     ---
 
     </textarea>

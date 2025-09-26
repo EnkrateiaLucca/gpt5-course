@@ -21,93 +21,32 @@
       font-weight: normal;
     }
 
+    .inverse {
+      background-color: #272822;
+      color: #f8f8f2;
+    }
+
+    .footnote {
+      font-size: 14px;
+      color: gray;
+      position: absolute;
+      bottom: 30px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+    }
+
+    
+
     .remark-code,
     .remark-inline-code {
       font-family: 'Ubuntu Mono';
     }
   </style>
 
-  <!-- ============================================= -->
-  <!-- CUSTOM STYLES -->
-  <!-- ============================================= -->
-  <style>
-    
-    /* Footnote styles */
-    .footnote {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      font-size: 14px;
-    }
-
-    /* Pull left/right for columns */
-    .pull-left {
-      float: left;
-      width: 47%;
-    }
-
-    .pull-right {
-      float: right;
-      width: 47%;
-    }
-
-    /* Small code style */
-    .small-code {
-      font-size: 0.8em;
-    }
-
-    .medium-code {
-      font-size: 0.9em;
-    }
-
-    /* Inverse slide styles */
-    .inverse {
-      background: #272822;
-      color: #777872;
-      text-shadow: 0 0 20px #333;
-    }
-
-    .inverse h1,
-    .inverse h2 {
-      color: #f3f3f3;
-      line-height: 0.8em;
-    }
-
-    /* Custom slide types */
-    .title-slide {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-    }
-
-    /* Highlighting */
-    .highlight {
-      background-color: yellow;
-      padding: 2px 4px;
-    }
-
-    /* Ensure the raw markdown source is never visible when using remark with `source:` */
-    #source { display: none; }
-
-    /* Better PDF printing */
-    @page { size: 1280px 720px; margin: 0; }
-    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    @media print {
-      .remark-slide-scaler {
-        box-shadow: none !important;
-        transform: scale(1) !important;
-        width: 100% !important;
-        height: 100% !important;
-        left: 0 !important;
-        top: 0 !important;
-      }
-      .remark-slide-number { display: none !important; }
-      img, video { max-width: 100% !important; }
-    }
-
-  </style>
 </head>
 <body>
-  <textarea id="source" style="display: none">
+  <textarea id="source">
 
     class: inverse, center, middle
 
@@ -143,6 +82,10 @@
     --
 
     **6. GPT-5 Prompting Guide Complete Breakdown**
+
+    --
+
+
 
     ---
     class: center, middle
@@ -228,9 +171,9 @@
 
     <div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
       <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; width: 100%;">
-        <img src="../assets/aider-polyglot-multilang-code-editing-results.png" style="width: 50%; min-width: 180px; margin: 0 16px;">
-        <img src="../assets/aime-2025-competition-math-results.png" style="width: 83%; min-width: 180px; margin: 0 16px;">
-        <img src="../assets/frontiermath-tier1-3-expert-math-results.png" style="width: 63%; min-width: 180px; margin: 0 16px;">
+        <img src="../assets/aider-polyglot-multilang-code-editing-results.png" style="width: 70%; min-width: 180px; margin: 0 8px;">
+        <img src="../assets/aime-2025-competition-math-results.png" style="width: 120%; min-width: 180px; margin: 0 8px;">
+        <img src="../assets/frontiermath-tier1-3-expert-math-results.png" style="width: 90%; min-width: 180px; margin: 0 8px;">
       </div>
     </div>
 
@@ -386,12 +329,16 @@
       <p style="font-size: 14px; color: gray;">Kind of Good Output Token Speed for GPT-5 Mini & GPT-5 High</p>
     </div>
 
+    .footnote[Source: https://artificialanalysis.ai/]
+
     ---
 
     <div style="justify-content: center; align-items: center; height: 70vh;">
       <img src="../assets/speed-end-to-end-response-time.png" width="100%" style="margin-top: 70px;">
       <p style="font-size: 14px; color: gray;">Good End-to-End Response Time for GPT-5 Mini</p>
     </div>
+
+    .footnote[Source: https://artificialanalysis.ai/]
 
     ---
 
@@ -417,17 +364,18 @@
 
     --
 
-    .pull-left[
+    
     ## Traditional Safety Approach
     - Binary refusal (allow/deny)
     - Overly cautious, often blocks helpful answers
-    - Lacks nuance for complex or dual-use queries]
+    - Lacks nuance for complex or dual-use queries
 
-    .pull-right[
+    --
+
     ## GPT-5 Safety-Helpfulness
     - Nuanced, context-aware responses
     - Balances safety with helpfulness
-    - Enables more informative answers while respecting policy]
+    - Enables more informative answers while respecting policy
 
     .footnote[Source: https://cdn.openai.com/pdf/be60c07b-6bc2-4f54-bcee-4141e1d6c69a/gpt-5-safe_completions.pdf]
 
@@ -587,9 +535,17 @@
     --
 
     ### **Pricing Tiers**:
-    - **GPT-5**: Premium pricing for maximum capability
-    - **GPT-5-mini**: 83% cost reduction vs GPT-4
-    - **GPT-5-nano**: Ultra-low cost for high-throughput
+    - **Premium pricing** for maximum capability 
+    - **GPT-5**: 1.25$/M input tokens; 10$/M output tokens
+    - **GPT-5-mini**: $0.25/M input tokens ; $2.0/M output tokens
+    - **GPT-5-nano**: $0.05/M input tokens ; $0.4/M output tokens
+    
+
+    ---
+
+    # GPT-5 Pricing Considerations
+
+    ## Cost-Performance Analysis
 
     --
 
@@ -757,29 +713,36 @@
 
     --
 
-    .pull-left[
-    **Frontend Frameworks:**
-    - Next.js (TypeScript)
-    - React
-    - HTML
-
-    **Styling/UI:**
-    - Tailwind CSS
-    - shadcn/ui
-    - Radix Themes
-    ]
-
-    .pull-right[
-    **Icons & Animation:**
-    - Material Symbols
-    - Heroicons, Lucide
-    - Motion library
-
-    **Typography:**
-    - Sans Serif, Inter
-    - Geist, Mona Sans
-    - IBM Plex Sans, Manrope
-    ]
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+      <div>
+        <strong>Frontend Frameworks:</strong>
+        <ul>
+          <li>Next.js (TypeScript)</li>
+          <li>React</li>
+          <li>HTML</li>
+        </ul>
+        <strong>Styling/UI:</strong>
+        <ul>
+          <li>Tailwind CSS</li>
+          <li>shadcn/ui</li>
+          <li>Radix Themes</li>
+        </ul>
+      </div>
+      <div>
+        <strong>Icons &amp; Animation:</strong>
+        <ul>
+          <li>Material Symbols</li>
+          <li>Heroicons, Lucide</li>
+          <li>Motion library</li>
+        </ul>
+        <strong>Typography:</strong>
+        <ul>
+          <li>Sans Serif, Inter</li>
+          <li>Geist, Mona Sans</li>
+          <li>IBM Plex Sans, Manrope</li>
+        </ul>
+      </div>
+    </div>
 
     ---
 
@@ -825,28 +788,31 @@
 
     # Ecosystem Support
 
-    .pull-left[
+    
     - **GitHub Copilot**:
-    Available across all paid plans
-    VS Code, GitHub.com, GitHub Mobile
-    Enhanced multi-file changes/refactors
+      
+      - Available across all paid plans
+      - VS Code, GitHub.com, GitHub Mobile
+      - Enhanced multi-file changes/refactors
+
+    --
 
     - **Cursor Feedback**:
-    "Smartest coding model we've used"
-    Optimized for interactive development
-    ]
-
-    .pull-right[
+      - "Smartest coding model we've used"
+      - Optimized for interactive development
+    
+    --
+    
     - **Third-Party Tools**:
-    Windsurf integration
-    Codex CLI optimization
-    Fine-tuned for agentic coding
-
+      - Windsurf integration Codex CLI optimization
+      - Fine-tuned for agentic coding
+    
+    --
+    
     - **GPT-5 Codex**:
-    Specialized for software engineering
-    Real-world task training
-    Complex independent task handling
-    ]
+      - Specialized for software engineering.
+      - Real-world task training.
+      - Complex independent task handling
 
     ---
 
@@ -855,7 +821,7 @@
     --
 
     **1. Brief Thought Process Summary**
-    ```
+    ```markdown
     "Start your response with 2-3 bullet points summarizing
     your reasoning approach before the full answer"
     ```
@@ -863,7 +829,7 @@
     --
 
     **2. Thorough Tool-Calling Preambles**
-    ```
+    ```markdown
     "Before each tool use, explain: what you're doing,
     why, and what you expect to find"
     ```
@@ -871,7 +837,7 @@
     --
 
     **3. Disambiguated Tool Instructions**
-    ```
+    ```markdown
     "Search for 'class UserAuth' in authentication files only,
     stop after finding the implementation, not just imports"
     ```
@@ -879,7 +845,7 @@
     --
 
     **4. Planned Execution at Minimal Reasoning**
-    ```
+    ```markdown
     "First, outline your approach in 3 steps.
     Then execute each step completely before moving on."
     ```
@@ -977,27 +943,29 @@
 
     --
 
-    1. **Innovative Architecture**: GPT-5's unified system with router intelligence represents a paradigm shift
+    - **GPT-5's unified system** with routering intelligence represents a paradigm shift
 
     --
 
-    2. **Safety Leadership**: Preparedness Framework and safe-completions training set new industry standards
+    - **Preparedness Framework** and safe-completions training set new industry standards
 
     --
 
-    3. **Developer Excellence**: State-of-the-art coding capabilities with 74.9% on SWE-bench
+    - **State-of-the-art coding capabilities** with 74.9% on SWE-bench
 
     --
 
-    4. **Practical Innovation**: New parameters (verbosity, reasoning effort) provide unprecedented control
+    - **New parameters** (verbosity, reasoning effort) provide unprecedented control
+
+    --
+    
+    - **Native support** across text, image, audio, and video modalities
 
     --
 
-    5. **Multimodal Integration**: Native support across text, image, audio, and video modalities
+    - **Comprehensive API ecosystem** with built-in tools and MCP integration
 
     --
-
-    6. **Enterprise Ready**: Comprehensive API ecosystem with built-in tools and MCP integration
 
     ---
 
@@ -1031,38 +999,9 @@
   <!-- For Remark.js -->
   <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
   <script>
-    // Normalize indentation inside the textarea and pass it directly to Remark
-    var __dedentedSource = (function () {
-      var sourceEl = document.getElementById('source');
-      if (!sourceEl) return undefined;
-      var text = sourceEl.value || sourceEl.textContent || '';
-      var lines = text.split('\n');
-      var indents = [];
-      for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        if (line.trim().length === 0) continue;
-        var m = line.match(/^ +/);
-        indents.push(m ? m[0].length : 0);
-      }
-      var minIndent = indents.length ? Math.min.apply(null, indents) : 0;
-      if (minIndent > 0) {
-        var re = new RegExp('^ {' + minIndent + '}', 'gm');
-        text = text.replace(re, '');
-      }
-      return text;
-    })();
-
-    var slideshow = remark.create({
-      source: __dedentedSource,
-      // Configuration options
-      ratio: "16:9",  // or "4:3"
-      highlightStyle: 'monokai',
-      highlightLanguage: 'python',
-      highlightLines: true,
-      countIncrementalSlides: false,
-      slideNumberFormat: '%current% / %total%'
-    });
+    var slideshow = remark.create();
   </script>
+  
 </body>
 
 </html>

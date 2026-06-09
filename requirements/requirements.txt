@@ -9,6 +9,8 @@ anyio==4.11.0
     #   openai
     #   sse-starlette
     #   starlette
+appnope==0.1.4
+    # via ipykernel
 asttokens==3.0.0
     # via stack-data
 attrs==26.1.0
@@ -174,7 +176,9 @@ referencing==0.37.0
     #   jsonschema
     #   jsonschema-specifications
 requests==2.34.2
-    # via openai-agents
+    # via
+    #   -r ./requirements/requirements.in
+    #   openai-agents
 rpds-py==2026.5.1
     # via
     #   jsonschema

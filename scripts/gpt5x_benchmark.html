@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GPT-5.x API Benchmark</title>
+<style>
+  :root {
+    --bg: #0b0d12; --card: #141923; --card2: #10151e; --text: #edf2ff;
+    --muted: #9aa7bd; --line: #263041; --accent: #8fb3ff; --accent2: #c6d7ff;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: radial-gradient(circle at top left, #1d2942 0, #0b0d12 35%); color: var(--text); }
+  main { max-width: 1180px; margin: 0 auto; padding: 40px 20px 72px; }
+  header { margin-bottom: 28px; }
+  h1 { font-size: clamp(2rem, 4vw, 4rem); margin: 0 0 8px; letter-spacing: -0.05em; }
+  h2 { margin: 0 0 12px; font-size: 1.05rem; }
+  p { line-height: 1.55; }
+  code { background: #0b1020; border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; }
+  pre { white-space: pre-wrap; word-break: break-word; background: #090c12; border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .muted { color: var(--muted); }
+  .small { font-size: .78rem; margin-top: 4px; }
+  .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 22px 0; }
+  .metric { background: linear-gradient(180deg, rgba(143,179,255,.12), rgba(143,179,255,.04)); border: 1px solid var(--line); border-radius: 20px; padding: 18px; }
+  .metric .label { color: var(--muted); font-size: .82rem; }
+  .metric .value { font-size: 1.6rem; font-weight: 750; margin-top: 6px; }
+  .card { background: rgba(20,25,35,.86); border: 1px solid var(--line); border-radius: 22px; padding: 18px; margin: 16px 0; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+  .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bar-row { display: grid; grid-template-columns: 150px 1fr 118px; gap: 10px; align-items: center; margin: 12px 0; }
+  .bar-label { font-size: .88rem; color: var(--accent2); overflow: hidden; text-overflow: ellipsis; }
+  .bar-wrap { height: 12px; background: #080b11; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .bar { height: 100%; background: linear-gradient(90deg, #6f9dff, #d8e3ff); border-radius: 999px; }
+  .bar-value { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; font-size: .86rem; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+  th, td { border-bottom: 1px solid var(--line); padding: 10px 8px; text-align: left; vertical-align: top; }
+  th { color: var(--muted); font-weight: 650; white-space: nowrap; }
+  details { margin: 10px 0; }
+  summary { cursor: pointer; color: var(--accent2); }
+  .footer { margin-top: 28px; color: var(--muted); font-size: .88rem; }
+  @media (max-width: 900px) { .grid, .charts { grid-template-columns: 1fr; } .bar-row { grid-template-columns: 110px 1fr 95px; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>GPT-5.x API benchmark</h1>
+    <p class="muted">Generated 2026-06-09T13:21:13+00:00. Prompt: one tiny JSON task per model. Budget cap: $1.0000. Results JSON: <code>gpt5x_benchmark_results.json</code>.</p>
+  </header>
+
+  <section class="grid">
+    <div class="metric"><div class="label">Total estimated API cost</div><div class="value">$0.0362</div></div>
+    <div class="metric"><div class="label">Fastest observed</div><div class="value"><code>gpt-5.4-nano</code></div></div>
+    <div class="metric"><div class="label">Cheapest observed</div><div class="value"><code>gpt-5.4-nano</code></div></div>
+    <div class="metric"><div class="label">Best micro-score</div><div class="value"><code>gpt-5.5</code></div></div>
+  </section>
+
+  <section class="charts">
+    
+    <section class="card">
+      <h2>Observed end-to-end latency</h2>
+      <p class="muted">Lower is better.</p>
+      
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-nano</div>
+          <div class="bar-wrap"><div class="bar" style="width:3.53%"></div></div>
+          <div class="bar-value">1.06 s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-mini</div>
+          <div class="bar-wrap"><div class="bar" style="width:5.31%"></div></div>
+          <div class="bar-value">1.60 s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4</div>
+          <div class="bar-wrap"><div class="bar" style="width:5.76%"></div></div>
+          <div class="bar-value">1.73 s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.5</div>
+          <div class="bar-wrap"><div class="bar" style="width:10.36%"></div></div>
+          <div class="bar-value">3.12 s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.5-pro</div>
+          <div class="bar-wrap"><div class="bar" style="width:37.05%"></div></div>
+          <div class="bar-value">11.16 s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-pro</div>
+          <div class="bar-wrap"><div class="bar" style="width:100.00%"></div></div>
+          <div class="bar-value">30.11 s</div>
+        </div>
+    </section>
+    
+    <section class="card">
+      <h2>Estimated cost for this run</h2>
+      <p class="muted">Lower is better.</p>
+      
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-nano</div>
+          <div class="bar-wrap"><div class="bar" style="width:2.00%"></div></div>
+          <div class="bar-value">$0.000058 </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-mini</div>
+          <div class="bar-wrap"><div class="bar" style="width:2.00%"></div></div>
+          <div class="bar-value">$0.00021 </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4</div>
+          <div class="bar-wrap"><div class="bar" style="width:4.09%"></div></div>
+          <div class="bar-value">$0.00069 </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.5</div>
+          <div class="bar-wrap"><div class="bar" style="width:8.17%"></div></div>
+          <div class="bar-value">$0.00138 </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.5-pro</div>
+          <div class="bar-wrap"><div class="bar" style="width:100.00%"></div></div>
+          <div class="bar-value">$0.0169 </div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-pro</div>
+          <div class="bar-wrap"><div class="bar" style="width:100.00%"></div></div>
+          <div class="bar-value">$0.0169 </div>
+        </div>
+    </section>
+    
+    <section class="card">
+      <h2>Output tokens per second</h2>
+      <p class="muted">Higher is better.</p>
+      
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-nano</div>
+          <div class="bar-wrap"><div class="bar" style="width:100.00%"></div></div>
+          <div class="bar-value">31.02 tok/s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-mini</div>
+          <div class="bar-wrap"><div class="bar" style="width:64.47%"></div></div>
+          <div class="bar-value">20.00 tok/s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4</div>
+          <div class="bar-wrap"><div class="bar" style="width:59.48%"></div></div>
+          <div class="bar-value">18.45 tok/s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.5</div>
+          <div class="bar-wrap"><div class="bar" style="width:33.06%"></div></div>
+          <div class="bar-value">10.25 tok/s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.5-pro</div>
+          <div class="bar-wrap"><div class="bar" style="width:23.12%"></div></div>
+          <div class="bar-value">7.17 tok/s</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-pro</div>
+          <div class="bar-wrap"><div class="bar" style="width:8.57%"></div></div>
+          <div class="bar-value">2.66 tok/s</div>
+        </div>
+    </section>
+    
+    <section class="card">
+      <h2>Tiny instruction-following score</h2>
+      <p class="muted">Higher is better.</p>
+      
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.5</div>
+          <div class="bar-wrap"><div class="bar" style="width:100.00%"></div></div>
+          <div class="bar-value">100.00 /100</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4</div>
+          <div class="bar-wrap"><div class="bar" style="width:100.00%"></div></div>
+          <div class="bar-value">100.00 /100</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-mini</div>
+          <div class="bar-wrap"><div class="bar" style="width:100.00%"></div></div>
+          <div class="bar-value">100.00 /100</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-nano</div>
+          <div class="bar-wrap"><div class="bar" style="width:100.00%"></div></div>
+          <div class="bar-value">100.00 /100</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.5-pro</div>
+          <div class="bar-wrap"><div class="bar" style="width:2.00%"></div></div>
+          <div class="bar-value">0.00 /100</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">gpt-5.4-pro</div>
+          <div class="bar-wrap"><div class="bar" style="width:2.00%"></div></div>
+          <div class="bar-value">0.00 /100</div>
+        </div>
+    </section>
+  </section>
+
+  <section class="card">
+    <h2>Detailed results</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Model</th><th>OK</th><th>Latency s</th><th>Out tok/s</th><th>Cost</th><th>In / out tokens</th><th>Reasoning</th><th>Score</th><th>Docs speed</th><th>Docs reasoning</th><th>Input / output MTok</th><th>Context</th><th>Error</th>
+        </tr></thead>
+        <tbody>
+        <tr>
+          <td><code>gpt-5.5</code><div class="muted small">Flagship GPT-5.5 model.</div></td>
+          <td>✅</td>
+          <td>3.12</td>
+          <td>10.25</td>
+          <td>$0.00138</td>
+          <td>85 / 32</td>
+          <td>none</td>
+          <td>100</td>
+          <td>Fast</td>
+          <td>Highest</td>
+          <td>$5.0000 / $30.0000</td>
+          <td>1,050,000</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>gpt-5.5-pro</code><div class="muted small">Pro model; can be much slower. Use --skip-pro to avoid it.</div></td>
+          <td>✅</td>
+          <td>11.16</td>
+          <td>7.17</td>
+          <td>$0.0169</td>
+          <td>85 / 80</td>
+          <td>medium</td>
+          <td>0</td>
+          <td>Slowest</td>
+          <td>Highest</td>
+          <td>$30.0000 / $180.0000</td>
+          <td>1,050,000</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>gpt-5.4</code><div class="muted small">More affordable frontier model.</div></td>
+          <td>✅</td>
+          <td>1.73</td>
+          <td>18.45</td>
+          <td>$0.00069</td>
+          <td>85 / 32</td>
+          <td>none</td>
+          <td>100</td>
+          <td>Medium</td>
+          <td>Highest</td>
+          <td>$2.5000 / $15.0000</td>
+          <td>1,050,000</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>gpt-5.4-pro</code><div class="muted small">Pro model; Responses API only; can be slow.</div></td>
+          <td>✅</td>
+          <td>30.11</td>
+          <td>2.66</td>
+          <td>$0.0169</td>
+          <td>85 / 80</td>
+          <td>medium</td>
+          <td>0</td>
+          <td>Slowest</td>
+          <td>Highest</td>
+          <td>$30.0000 / $180.0000</td>
+          <td>1,050,000</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>gpt-5.4-mini</code><div class="muted small">Lower-cost model for high-volume workloads.</div></td>
+          <td>✅</td>
+          <td>1.60</td>
+          <td>20.00</td>
+          <td>$0.00021</td>
+          <td>85 / 32</td>
+          <td>none</td>
+          <td>100</td>
+          <td>Fast</td>
+          <td>Higher</td>
+          <td>$0.7500 / $4.5000</td>
+          <td>400,000</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><code>gpt-5.4-nano</code><div class="muted small">Cheapest GPT-5.4-class model for simple tasks.</div></td>
+          <td>✅</td>
+          <td>1.06</td>
+          <td>31.02</td>
+          <td>$0.000058</td>
+          <td>85 / 33</td>
+          <td>none</td>
+          <td>100</td>
+          <td>Fast</td>
+          <td>High</td>
+          <td>$0.2000 / $1.2500</td>
+          <td>400,000</td>
+          <td></td>
+        </tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Raw model outputs</h2>
+    
+        <details>
+          <summary><code>gpt-5.5</code> output</summary>
+          <pre>{&quot;reverse&quot;:&quot;desserts&quot;,&quot;letter_count&quot;:8,&quot;valid_parentheses&quot;:true,&quot;six_word_summary&quot;:&quot;Fast reliable AI tools boost productivity&quot;}</pre>
+        </details>
+        <details>
+          <summary><code>gpt-5.5-pro</code> output</summary>
+          <pre></pre>
+        </details>
+        <details>
+          <summary><code>gpt-5.4</code> output</summary>
+          <pre>{&quot;reverse&quot;:&quot;desserts&quot;,&quot;letter_count&quot;:8,&quot;valid_parentheses&quot;:true,&quot;six_word_summary&quot;:&quot;Fast reliable AI tools boost productivity&quot;}</pre>
+        </details>
+        <details>
+          <summary><code>gpt-5.4-pro</code> output</summary>
+          <pre></pre>
+        </details>
+        <details>
+          <summary><code>gpt-5.4-mini</code> output</summary>
+          <pre>{&quot;reverse&quot;:&quot;desserts&quot;,&quot;letter_count&quot;:8,&quot;valid_parentheses&quot;:true,&quot;six_word_summary&quot;:&quot;Fast reliable AI tools save time&quot;}</pre>
+        </details>
+        <details>
+          <summary><code>gpt-5.4-nano</code> output</summary>
+          <pre>{&quot;reverse&quot;:&quot;desserts&quot;,&quot;letter_count&quot;:8,&quot;valid_parentheses&quot;:true,&quot;six_word_summary&quot;:&quot;Fast, reliable AI tools for developers&quot;}</pre>
+        </details>
+  </section>
+
+  <section class="card">
+    <h2>Embedded JSON results</h2>
+    <pre>[
+  {
+    &quot;model&quot;: &quot;gpt-5.5&quot;,
+    &quot;ok&quot;: true,
+    &quot;error&quot;: null,
+    &quot;reasoning_effort_used&quot;: &quot;none&quot;,
+    &quot;latency_s&quot;: 3.1205429999972694,
+    &quot;output_tokens_per_second&quot;: 10.25462555716361,
+    &quot;total_tokens_per_second&quot;: 37.49347469337945,
+    &quot;estimated_cost_usd&quot;: 0.001385,
+    &quot;output_text&quot;: &quot;{\&quot;reverse\&quot;:\&quot;desserts\&quot;,\&quot;letter_count\&quot;:8,\&quot;valid_parentheses\&quot;:true,\&quot;six_word_summary\&quot;:\&quot;Fast reliable AI tools boost productivity\&quot;}&quot;,
+    &quot;input_tokens&quot;: 85,
+    &quot;cached_input_tokens&quot;: 0,
+    &quot;output_tokens&quot;: 32,
+    &quot;reasoning_tokens&quot;: 0,
+    &quot;total_tokens&quot;: 117,
+    &quot;quality_score&quot;: 100,
+    &quot;parsed_json&quot;: {
+      &quot;reverse&quot;: &quot;desserts&quot;,
+      &quot;letter_count&quot;: 8,
+      &quot;valid_parentheses&quot;: true,
+      &quot;six_word_summary&quot;: &quot;Fast reliable AI tools boost productivity&quot;
+    },
+    &quot;score_errors&quot;: []
+  },
+  {
+    &quot;model&quot;: &quot;gpt-5.5-pro&quot;,
+    &quot;ok&quot;: true,
+    &quot;error&quot;: null,
+    &quot;reasoning_effort_used&quot;: &quot;medium&quot;,
+    &quot;latency_s&quot;: 11.156982582993805,
+    &quot;output_tokens_per_second&quot;: 7.170397498149829,
+    &quot;total_tokens_per_second&quot;: 14.788944839934022,
+    &quot;estimated_cost_usd&quot;: 0.01695,
+    &quot;output_text&quot;: &quot;&quot;,
+    &quot;input_tokens&quot;: 85,
+    &quot;cached_input_tokens&quot;: 0,
+    &quot;output_tokens&quot;: 80,
+    &quot;reasoning_tokens&quot;: 80,
+    &quot;total_tokens&quot;: 165,
+    &quot;quality_score&quot;: 0,
+    &quot;parsed_json&quot;: null,
+    &quot;score_errors&quot;: [
+      &quot;Invalid JSON: Expecting value: line 1 column 1 (char 0)&quot;
+    ]
+  },
+  {
+    &quot;model&quot;: &quot;gpt-5.4&quot;,
+    &quot;ok&quot;: true,
+    &quot;error&quot;: null,
+    &quot;reasoning_effort_used&quot;: &quot;none&quot;,
+    &quot;latency_s&quot;: 1.7344767920149025,
+    &quot;output_tokens_per_second&quot;: 18.44936764061647,
+    &quot;total_tokens_per_second&quot;: 67.45550043600396,
+    &quot;estimated_cost_usd&quot;: 0.0006925,
+    &quot;output_text&quot;: &quot;{\&quot;reverse\&quot;:\&quot;desserts\&quot;,\&quot;letter_count\&quot;:8,\&quot;valid_parentheses\&quot;:true,\&quot;six_word_summary\&quot;:\&quot;Fast reliable AI tools boost productivity\&quot;}&quot;,
+    &quot;input_tokens&quot;: 85,
+    &quot;cached_input_tokens&quot;: 0,
+    &quot;output_tokens&quot;: 32,
+    &quot;reasoning_tokens&quot;: 0,
+    &quot;total_tokens&quot;: 117,
+    &quot;quality_score&quot;: 100,
+    &quot;parsed_json&quot;: {
+      &quot;reverse&quot;: &quot;desserts&quot;,
+      &quot;letter_count&quot;: 8,
+      &quot;valid_parentheses&quot;: true,
+      &quot;six_word_summary&quot;: &quot;Fast reliable AI tools boost productivity&quot;
+    },
+    &quot;score_errors&quot;: []
+  },
+  {
+    &quot;model&quot;: &quot;gpt-5.4-pro&quot;,
+    &quot;ok&quot;: true,
+    &quot;error&quot;: null,
+    &quot;reasoning_effort_used&quot;: &quot;medium&quot;,
+    &quot;latency_s&quot;: 30.11128887499217,
+    &quot;output_tokens_per_second&quot;: 2.656810883523524,
+    &quot;total_tokens_per_second&quot;: 5.4796724472672675,
+    &quot;estimated_cost_usd&quot;: 0.01695,
+    &quot;output_text&quot;: &quot;&quot;,
+    &quot;input_tokens&quot;: 85,
+    &quot;cached_input_tokens&quot;: 0,
+    &quot;output_tokens&quot;: 80,
+    &quot;reasoning_tokens&quot;: 80,
+    &quot;total_tokens&quot;: 165,
+    &quot;quality_score&quot;: 0,
+    &quot;parsed_json&quot;: null,
+    &quot;score_errors&quot;: [
+      &quot;Invalid JSON: Expecting value: line 1 column 1 (char 0)&quot;
+    ]
+  },
+  {
+    &quot;model&quot;: &quot;gpt-5.4-mini&quot;,
+    &quot;ok&quot;: true,
+    &quot;error&quot;: null,
+    &quot;reasoning_effort_used&quot;: &quot;none&quot;,
+    &quot;latency_s&quot;: 1.6003957909997553,
+    &quot;output_tokens_per_second&quot;: 19.995053836032547,
+    &quot;total_tokens_per_second&quot;: 73.106915587994,
+    &quot;estimated_cost_usd&quot;: 0.00020775,
+    &quot;output_text&quot;: &quot;{\&quot;reverse\&quot;:\&quot;desserts\&quot;,\&quot;letter_count\&quot;:8,\&quot;valid_parentheses\&quot;:true,\&quot;six_word_summary\&quot;:\&quot;Fast reliable AI tools save time\&quot;}&quot;,
+    &quot;input_tokens&quot;: 85,
+    &quot;cached_input_tokens&quot;: 0,
+    &quot;output_tokens&quot;: 32,
+    &quot;reasoning_tokens&quot;: 0,
+    &quot;total_tokens&quot;: 117,
+    &quot;quality_score&quot;: 100,
+    &quot;parsed_json&quot;: {
+      &quot;reverse&quot;: &quot;desserts&quot;,
+      &quot;letter_count&quot;: 8,
+      &quot;valid_parentheses&quot;: true,
+      &quot;six_word_summary&quot;: &quot;Fast reliable AI tools save time&quot;
+    },
+    &quot;score_errors&quot;: []
+  },
+  {
+    &quot;model&quot;: &quot;gpt-5.4-nano&quot;,
+    &quot;ok&quot;: true,
+    &quot;error&quot;: null,
+    &quot;reasoning_effort_used&quot;: &quot;none&quot;,
+    &quot;latency_s&quot;: 1.0639914999774192,
+    &quot;output_tokens_per_second&quot;: 31.015285367129675,
+    &quot;total_tokens_per_second&quot;: 110.90314161579701,
+    &quot;estimated_cost_usd&quot;: 5.825e-05,
+    &quot;output_text&quot;: &quot;{\&quot;reverse\&quot;:\&quot;desserts\&quot;,\&quot;letter_count\&quot;:8,\&quot;valid_parentheses\&quot;:true,\&quot;six_word_summary\&quot;:\&quot;Fast, reliable AI tools for developers\&quot;}&quot;,
+    &quot;input_tokens&quot;: 85,
+    &quot;cached_input_tokens&quot;: 0,
+    &quot;output_tokens&quot;: 33,
+    &quot;reasoning_tokens&quot;: 0,
+    &quot;total_tokens&quot;: 118,
+    &quot;quality_score&quot;: 100,
+    &quot;parsed_json&quot;: {
+      &quot;reverse&quot;: &quot;desserts&quot;,
+      &quot;letter_count&quot;: 8,
+      &quot;valid_parentheses&quot;: true,
+      &quot;six_word_summary&quot;: &quot;Fast, reliable AI tools for developers&quot;
+    },
+    &quot;score_errors&quot;: []
+  }
+]</pre>
+  </section>
+
+  <p class="footer">Cost is estimated from returned token usage and the hardcoded model registry in the script. It does not include non-token tools because this benchmark does not call any tools.</p>
+</main>
+</body>
+</html>

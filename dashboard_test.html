@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sales Insights Dashboard — Donuts & Battery Chargers</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --panel: #171a23;
+      --panel-2: #1d2230;
+      --panel-3: #11141d;
+      --text: #f5f7fb;
+      --muted: #a6adbb;
+      --subtle: #6f7788;
+      --accent: #ffd166;
+      --accent-2: #6ee7b7;
+      --accent-3: #93c5fd;
+      --accent-4: #fca5a5;
+      --accent-5: #c4b5fd;
+      --line: rgba(255,255,255,.09);
+      --line-strong: rgba(255,255,255,.16);
+      --shadow: 0 18px 55px rgba(0,0,0,.28);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 14% 6%, rgba(255,209,102,.20), transparent 28%),
+        radial-gradient(circle at 86% 10%, rgba(147,197,253,.16), transparent 30%),
+        linear-gradient(135deg, #0b0d12 0%, var(--bg) 42%, #111827 100%);
+      color: var(--text);
+      font-family: var(--font);
+      letter-spacing: -0.01em;
+    }
+
+    .shell { max-width: 1440px; margin: 0 auto; padding: 32px; }
+
+    header.hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      margin-bottom: 22px;
+    }
+
+    .hero-main, .hero-side, .card, .filters {
+      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.028));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-main { padding: 30px; position: relative; overflow: hidden; }
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 999px;
+      right: -100px;
+      top: -120px;
+      background: rgba(255,209,102,.12);
+      filter: blur(2px);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: .14em;
+      margin: 0 0 12px;
+    }
+    h1 { margin: 0; font-size: clamp(34px, 5vw, 66px); line-height: .95; max-width: 920px; }
+    .subtitle { color: var(--muted); max-width: 860px; font-size: 17px; line-height: 1.55; margin: 18px 0 0; }
+    .hero-meta { display:flex; flex-wrap:wrap; gap:10px; margin-top: 22px; }
+    .pill {
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--line-strong);
+      background:rgba(255,255,255,.045);
+      color:var(--muted);
+      border-radius:999px; padding:8px 12px; font-size:13px;
+    }
+    .dot { width:8px; height:8px; border-radius:999px; background:var(--accent); display:inline-block; }
+
+    .hero-side { padding: 22px; display: grid; gap: 14px; align-content: start; }
+    .mini-title { color: var(--muted); font-size: 13px; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; }
+    .insight-list { display:grid; gap:12px; margin-top:2px; }
+    .insight {
+      display:grid; grid-template-columns: 10px 1fr; gap:12px; align-items:start;
+      padding: 13px 14px; background: rgba(0,0,0,.18); border:1px solid var(--line); border-radius: 16px;
+      color: #d9deea; line-height:1.35; font-size:14px;
+    }
+    .insight span:first-child { margin-top: 6px; width:8px; height:8px; border-radius:999px; background:var(--accent-2); }
+
+    .filters { padding: 18px; margin-bottom: 22px; }
+    .filter-grid {
+      display:grid; grid-template-columns: repeat(6, minmax(145px, 1fr)); gap: 12px; align-items:end;
+    }
+    label { display:block; color:var(--muted); font-size:12px; font-weight:800; text-transform: uppercase; letter-spacing:.1em; margin-bottom:7px; }
+    select, input[type="search"] {
+      width:100%; background: rgba(0,0,0,.26); color:var(--text); border:1px solid var(--line-strong);
+      border-radius: 12px; padding: 11px 12px; outline:none; font: inherit; font-size:14px;
+    }
+    select:focus, input:focus { border-color: rgba(255,209,102,.65); box-shadow:0 0 0 4px rgba(255,209,102,.08); }
+    .button-row { display:flex; gap:10px; }
+    button {
+      border:0; cursor:pointer; font: inherit; font-weight:800;
+      border-radius: 12px; padding: 11px 13px;
+      color:#10131b; background: var(--accent);
+    }
+    button.secondary { background: rgba(255,255,255,.08); color: var(--text); border:1px solid var(--line-strong); }
+
+    .kpis { display:grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin-bottom: 22px; }
+    .kpi {
+      background: linear-gradient(180deg, rgba(255,255,255,.065), rgba(255,255,255,.03));
+      border:1px solid var(--line); border-radius: 18px; padding: 18px;
+    }
+    .kpi .label { color:var(--muted); font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.11em; margin-bottom:8px; }
+    .kpi .value { font-size: clamp(24px, 2.6vw, 35px); font-weight: 900; letter-spacing:-.04em; }
+    .kpi .hint { color:var(--subtle); font-size:12px; margin-top:7px; }
+
+    .grid { display:grid; gap: 18px; }
+    .grid.two { grid-template-columns: 1.1fr .9fr; }
+    .grid.three { grid-template-columns: repeat(3, 1fr); }
+    .card { padding: 20px; min-height: 360px; overflow:hidden; }
+    .card-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; margin-bottom: 10px; }
+    h2 { margin:0; font-size: 18px; letter-spacing:-.02em; }
+    .card p { color:var(--muted); margin:6px 0 0; font-size:13px; line-height:1.45; }
+    .chart { width: 100%; min-height: 292px; }
+    .chart svg { width:100%; height: 292px; overflow: visible; }
+    .axis, .tick { stroke: rgba(255,255,255,.15); stroke-width:1; }
+    .tick-label { fill: var(--muted); font-size: 11px; }
+    .bar-label { fill: var(--text); font-size: 12px; font-weight: 700; }
+    .bar-value { fill: var(--muted); font-size: 12px; }
+    .line-path { fill:none; stroke: var(--accent); stroke-width: 3; stroke-linecap:round; stroke-linejoin:round; }
+    .area-path { opacity:.17; fill: var(--accent); }
+    .point { fill: var(--accent); stroke: #11141d; stroke-width: 2; }
+    .tooltip {
+      position: fixed; pointer-events:none; opacity:0; transform: translate(-50%, -120%);
+      background:#0b0d12; color:var(--text); border:1px solid var(--line-strong); border-radius: 12px;
+      padding:8px 10px; font-size:12px; box-shadow: var(--shadow); z-index: 10; white-space:nowrap;
+    }
+
+    .donut-wrap { display:grid; grid-template-columns: 180px 1fr; gap: 20px; align-items:center; min-height: 292px; }
+    .donut {
+      width: 178px; height: 178px; border-radius:50%;
+      background: conic-gradient(var(--accent) 0 0deg, var(--accent-3) 0deg 360deg);
+      position:relative; box-shadow: inset 0 0 0 1px var(--line-strong), 0 20px 40px rgba(0,0,0,.25);
+    }
+    .donut::after { content:""; position:absolute; inset: 34px; border-radius:50%; background: #171a23; border:1px solid var(--line); }
+    .donut-center { position:absolute; inset:0; display:grid; place-items:center; text-align:center; z-index:2; font-weight:900; font-size:24px; }
+    .donut-center small { display:block; color:var(--muted); font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.11em; margin-top:3px; }
+    .legend { display:grid; gap: 10px; }
+    .legend-row { display:grid; grid-template-columns: 12px 1fr auto; gap:10px; align-items:center; color:#dfe3ec; font-size:13px; }
+    .swatch { width:10px; height:10px; border-radius:3px; }
+    .legend-row strong { font-weight:800; }
+
+    .table-card { margin-top: 18px; }
+    .table-wrap { overflow:auto; border:1px solid var(--line); border-radius: 16px; max-height: 520px; }
+    table { width:100%; border-collapse: collapse; min-width: 1120px; }
+    th, td { padding: 11px 12px; border-bottom:1px solid var(--line); text-align:left; font-size: 13px; }
+    th { position:sticky; top:0; z-index:1; background:#161a24; color:var(--muted); font-size:11px; text-transform: uppercase; letter-spacing:.1em; cursor:pointer; }
+    td { color:#e8ebf2; }
+    tr:hover td { background: rgba(255,255,255,.035); }
+    .status { padding:5px 8px; border-radius:999px; font-size:12px; font-weight:800; display:inline-flex; }
+    .status.Delivered { background:rgba(110,231,183,.14); color:#9ef3d0; }
+    .status.Shipped { background:rgba(147,197,253,.14); color:#b7d6ff; }
+    .status.Pending { background:rgba(255,209,102,.14); color:#ffe2a3; }
+    .status.Returned { background:rgba(252,165,165,.14); color:#ffc3c3; }
+
+    .footer { color: var(--subtle); margin: 22px 0 4px; font-size: 12px; text-align:center; }
+    .empty { color:var(--muted); display:grid; place-items:center; min-height:240px; border:1px dashed var(--line-strong); border-radius:16px; }
+
+    @media (max-width: 1180px) {
+      header.hero, .grid.two, .grid.three { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: repeat(3, 1fr); }
+      .filter-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 760px) {
+      .shell { padding: 18px; }
+      .kpis, .filter-grid { grid-template-columns: 1fr; }
+      .donut-wrap { grid-template-columns: 1fr; justify-items:center; }
+      .hero-main { padding: 22px; }
+      .button-row { flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <section class="hero-main">
+        <p class="eyebrow">Interactive sales dashboard</p>
+        <h1>Donuts meet battery chargers.</h1>
+        <p class="subtitle">Explore revenue, unit volume, discounts, fulfillment health, and the channels, products, regions, reps, and customer segments driving this mixed sales dataset.</p>
+        <div class="hero-meta">
+          <span class="pill"><span class="dot"></span><span id="dateRange">2026-01-03 → 2026-06-10</span></span>
+          <span class="pill">Embedded CSV rows: <strong id="rowCount">100</strong></span>
+          <span class="pill">No external libraries required</span>
+        </div>
+      </section>
+      <aside class="hero-side">
+        <div class="mini-title">Auto insights</div>
+        <div class="insight-list" id="insights"></div>
+      </aside>
+    </header>
+
+    <section class="filters">
+      <div class="filter-grid">
+        <div>
+          <label for="categoryFilter">Category</label>
+          <select id="categoryFilter"></select>
+        </div>
+        <div>
+          <label for="regionFilter">Region</label>
+          <select id="regionFilter"></select>
+        </div>
+        <div>
+          <label for="channelFilter">Channel</label>
+          <select id="channelFilter"></select>
+        </div>
+        <div>
+          <label for="segmentFilter">Segment</label>
+          <select id="segmentFilter"></select>
+        </div>
+        <div>
+          <label for="statusFilter">Fulfillment</label>
+          <select id="statusFilter"></select>
+        </div>
+        <div>
+          <label for="searchBox">Search</label>
+          <input id="searchBox" type="search" placeholder="Product, SKU, rep, order…" />
+        </div>
+      </div>
+      <div class="button-row" style="margin-top: 14px;">
+        <button id="resetBtn" class="secondary">Reset filters</button>
+        <button id="exportBtn">Download filtered CSV</button>
+      </div>
+    </section>
+
+    <section class="kpis">
+      <div class="kpi"><div class="label">Net sales</div><div class="value" id="kpiRevenue">$0</div><div class="hint">After discounts</div></div>
+      <div class="kpi"><div class="label">Orders</div><div class="value" id="kpiOrders">0</div><div class="hint">Filtered order count</div></div>
+      <div class="kpi"><div class="label">Units sold</div><div class="value" id="kpiUnits">0</div><div class="hint">Total quantity</div></div>
+      <div class="kpi"><div class="label">Avg order</div><div class="value" id="kpiAov">$0</div><div class="hint">Net sales / orders</div></div>
+      <div class="kpi"><div class="label">Discount drag</div><div class="value" id="kpiDiscount">0%</div><div class="hint">Discount / gross sales</div></div>
+      <div class="kpi"><div class="label">Return rate</div><div class="value" id="kpiReturn">0%</div><div class="hint">Returned / orders</div></div>
+    </section>
+
+    <main class="grid">
+      <section class="grid two">
+        <article class="card">
+          <div class="card-head"><div><h2>Monthly net sales trend</h2><p>Track how revenue evolves over time under the current filters.</p></div></div>
+          <div id="monthlyChart" class="chart"></div>
+        </article>
+        <article class="card">
+          <div class="card-head"><div><h2>Revenue mix by product category</h2><p>Shows whether donuts or chargers are contributing more net sales.</p></div></div>
+          <div id="categoryDonut"></div>
+        </article>
+      </section>
+
+      <section class="grid three">
+        <article class="card">
+          <div class="card-head"><div><h2>Top products</h2><p>Ranked by net sales.</p></div></div>
+          <div id="productChart" class="chart"></div>
+        </article>
+        <article class="card">
+          <div class="card-head"><div><h2>Revenue by region</h2><p>Compare territory performance.</p></div></div>
+          <div id="regionChart" class="chart"></div>
+        </article>
+        <article class="card">
+          <div class="card-head"><div><h2>Channel performance</h2><p>Compare sales channels by net sales.</p></div></div>
+          <div id="channelChart" class="chart"></div>
+        </article>
+      </section>
+
+      <section class="grid two">
+        <article class="card">
+          <div class="card-head"><div><h2>Customer segment value</h2><p>Which segment contributes the most revenue?</p></div></div>
+          <div id="segmentChart" class="chart"></div>
+        </article>
+        <article class="card">
+          <div class="card-head"><div><h2>Sales rep leaderboard</h2><p>Net sales and order volume by rep.</p></div></div>
+          <div id="repChart" class="chart"></div>
+        </article>
+      </section>
+
+      <article class="card table-card">
+        <div class="card-head">
+          <div><h2>Order drill-down</h2><p>Click column headers to sort. The table reflects all active filters.</p></div>
+          <p id="tableSummary"></p>
+        </div>
+        <div class="table-wrap">
+          <table id="ordersTable">
+            <thead>
+              <tr>
+                <th data-sort="order_date">Date</th>
+                <th data-sort="order_id">Order</th>
+                <th data-sort="product_name">Product</th>
+                <th data-sort="product_category">Category</th>
+                <th data-sort="region">Region</th>
+                <th data-sort="sales_channel">Channel</th>
+                <th data-sort="customer_segment">Segment</th>
+                <th data-sort="units_sold">Units</th>
+                <th data-sort="net_sales">Net sales</th>
+                <th data-sort="discount_pct">Discount</th>
+                <th data-sort="sales_rep">Rep</th>
+                <th data-sort="fulfillment_status">Status</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </article>
+    </main>
+    <div class="footer">Generated from <strong>mock_donut_battery_charger_sales(1).csv</strong>. Values are computed client-side from the embedded dataset.</div>
+  </div>
+  <div class="tooltip" id="tooltip"></div>
+
+  <script>
+  const salesData = [{"order_id": "ORD-00001", "order_date": "2026-03-12", "customer_segment": "Family", "region": "North", "sales_channel": "Corporate Account", "product_category": "Battery Chargers", "sku": "CHG-USB-020", "product_name": "USB-C Fast Charger 20W", "units_sold": 4, "unit_price": 14.68, "discount_pct": 0.0, "gross_sales": 58.72, "discount_amount": 0.0, "net_sales": 58.72, "payment_method": "Mobile Wallet", "sales_rep": "Ana Costa", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00002", "order_date": "2026-05-10", "customer_segment": "Family", "region": "West", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 20, "unit_price": 2.0, "discount_pct": 0.0, "gross_sales": 40.0, "discount_amount": 0.0, "net_sales": 40.0, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00003", "order_date": "2026-02-10", "customer_segment": "Small Business", "region": "East", "sales_channel": "Retail Store", "product_category": "Battery Chargers", "sku": "CHG-USB-020", "product_name": "USB-C Fast Charger 20W", "units_sold": 7, "unit_price": 14.9, "discount_pct": 0.0, "gross_sales": 104.3, "discount_amount": 0.0, "net_sales": 104.3, "payment_method": "Card", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00004", "order_date": "2026-06-04", "customer_segment": "Family", "region": "North", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 9, "unit_price": 3.38, "discount_pct": 10.0, "gross_sales": 30.42, "discount_amount": 3.04, "net_sales": 27.38, "payment_method": "Card", "sales_rep": "Emma Johnson", "fulfillment_status": "Delivered", "month": "Jun 2026", "month_sort": "2026-06"}, {"order_id": "ORD-00005", "order_date": "2026-04-03", "customer_segment": "Small Business", "region": "East", "sales_channel": "Retail Store", "product_category": "Battery Chargers", "sku": "CHG-PWR-010", "product_name": "Portable Power Bank Charger", "units_sold": 4, "unit_price": 31.24, "discount_pct": 0.0, "gross_sales": 124.96, "discount_amount": 0.0, "net_sales": 124.96, "payment_method": "Cash", "sales_rep": "Ana Costa", "fulfillment_status": "Shipped", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00006", "order_date": "2026-02-11", "customer_segment": "Walk-in", "region": "Central", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 12, "unit_price": 3.19, "discount_pct": 5.0, "gross_sales": 38.28, "discount_amount": 1.91, "net_sales": 36.37, "payment_method": "Cash", "sales_rep": "Ben Miller", "fulfillment_status": "Shipped", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00007", "order_date": "2026-02-26", "customer_segment": "Small Business", "region": "North", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 22, "unit_price": 17.86, "discount_pct": 0.0, "gross_sales": 392.92, "discount_amount": 0.0, "net_sales": 392.92, "payment_method": "Mobile Wallet", "sales_rep": "Carla Silva", "fulfillment_status": "Delivered", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00008", "order_date": "2026-03-22", "customer_segment": "Student", "region": "South", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 7, "unit_price": 18.63, "discount_pct": 10.0, "gross_sales": 130.41, "discount_amount": 13.04, "net_sales": 117.37, "payment_method": "Cash", "sales_rep": "Ben Miller", "fulfillment_status": "Returned", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00009", "order_date": "2026-05-30", "customer_segment": "Corporate", "region": "South", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 14, "unit_price": 3.41, "discount_pct": 10.0, "gross_sales": 47.74, "discount_amount": 4.77, "net_sales": 42.97, "payment_method": "Mobile Wallet", "sales_rep": "Ana Costa", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00010", "order_date": "2026-06-10", "customer_segment": "Family", "region": "North", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-USB-065", "product_name": "USB-C Laptop Charger 65W", "units_sold": 3, "unit_price": 42.11, "discount_pct": 10.0, "gross_sales": 126.33, "discount_amount": 12.63, "net_sales": 113.7, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Shipped", "month": "Jun 2026", "month_sort": "2026-06"}, {"order_id": "ORD-00011", "order_date": "2026-01-03", "customer_segment": "Corporate", "region": "East", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 22, "unit_price": 18.79, "discount_pct": 15.0, "gross_sales": 413.38, "discount_amount": 62.01, "net_sales": 351.37, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00012", "order_date": "2026-05-09", "customer_segment": "Corporate", "region": "Central", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 6, "unit_price": 3.25, "discount_pct": 0.0, "gross_sales": 19.5, "discount_amount": 0.0, "net_sales": 19.5, "payment_method": "Cash", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00013", "order_date": "2026-05-16", "customer_segment": "Walk-in", "region": "North", "sales_channel": "Wholesale", "product_category": "Battery Chargers", "sku": "CHG-PWR-010", "product_name": "Portable Power Bank Charger", "units_sold": 1, "unit_price": 30.83, "discount_pct": 10.0, "gross_sales": 30.83, "discount_amount": 3.08, "net_sales": 27.75, "payment_method": "Bank Transfer", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00014", "order_date": "2026-01-21", "customer_segment": "Family", "region": "South", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 3, "unit_price": 18.81, "discount_pct": 0.0, "gross_sales": 56.43, "discount_amount": 0.0, "net_sales": 56.43, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Delivered", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00015", "order_date": "2026-04-19", "customer_segment": "Corporate", "region": "West", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 7, "unit_price": 19.27, "discount_pct": 0.0, "gross_sales": 134.89, "discount_amount": 0.0, "net_sales": 134.89, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Shipped", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00016", "order_date": "2026-01-17", "customer_segment": "Small Business", "region": "Central", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 11, "unit_price": 2.0, "discount_pct": 15.0, "gross_sales": 22.0, "discount_amount": 3.3, "net_sales": 18.7, "payment_method": "Card", "sales_rep": "Ana Costa", "fulfillment_status": "Returned", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00017", "order_date": "2026-01-18", "customer_segment": "Family", "region": "South", "sales_channel": "Wholesale", "product_category": "Battery Chargers", "sku": "CHG-USB-065", "product_name": "USB-C Laptop Charger 65W", "units_sold": 1, "unit_price": 42.46, "discount_pct": 0.0, "gross_sales": 42.46, "discount_amount": 0.0, "net_sales": 42.46, "payment_method": "Mobile Wallet", "sales_rep": "Ben Miller", "fulfillment_status": "Pending", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00018", "order_date": "2026-05-28", "customer_segment": "Student", "region": "South", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 16, "unit_price": 17.67, "discount_pct": 10.0, "gross_sales": 282.72, "discount_amount": 28.27, "net_sales": 254.45, "payment_method": "Card", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00019", "order_date": "2026-01-14", "customer_segment": "Walk-in", "region": "West", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 22, "unit_price": 2.69, "discount_pct": 0.0, "gross_sales": 59.18, "discount_amount": 0.0, "net_sales": 59.18, "payment_method": "Card", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00020", "order_date": "2026-02-05", "customer_segment": "Small Business", "region": "North", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 14, "unit_price": 2.53, "discount_pct": 10.0, "gross_sales": 35.42, "discount_amount": 3.54, "net_sales": 31.88, "payment_method": "Card", "sales_rep": "Ana Costa", "fulfillment_status": "Returned", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00021", "order_date": "2026-01-24", "customer_segment": "Student", "region": "South", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-USB-020", "product_name": "USB-C Fast Charger 20W", "units_sold": 4, "unit_price": 14.56, "discount_pct": 10.0, "gross_sales": 58.24, "discount_amount": 5.82, "net_sales": 52.42, "payment_method": "Card", "sales_rep": "Ben Miller", "fulfillment_status": "Shipped", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00022", "order_date": "2026-03-09", "customer_segment": "Student", "region": "South", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 15, "unit_price": 2.57, "discount_pct": 15.0, "gross_sales": 38.55, "discount_amount": 5.78, "net_sales": 32.77, "payment_method": "Bank Transfer", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00023", "order_date": "2026-01-16", "customer_segment": "Family", "region": "West", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 24, "unit_price": 17.83, "discount_pct": 0.0, "gross_sales": 427.92, "discount_amount": 0.0, "net_sales": 427.92, "payment_method": "Cash", "sales_rep": "Ana Costa", "fulfillment_status": "Pending", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00024", "order_date": "2026-01-18", "customer_segment": "Student", "region": "North", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 20, "unit_price": 2.01, "discount_pct": 0.0, "gross_sales": 40.2, "discount_amount": 0.0, "net_sales": 40.2, "payment_method": "Cash", "sales_rep": "Emma Johnson", "fulfillment_status": "Pending", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00025", "order_date": "2026-04-18", "customer_segment": "Corporate", "region": "East", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 22, "unit_price": 1.85, "discount_pct": 15.0, "gross_sales": 40.7, "discount_amount": 6.11, "net_sales": 34.59, "payment_method": "Bank Transfer", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00026", "order_date": "2026-04-28", "customer_segment": "Walk-in", "region": "West", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 11, "unit_price": 3.43, "discount_pct": 0.0, "gross_sales": 37.73, "discount_amount": 0.0, "net_sales": 37.73, "payment_method": "Card", "sales_rep": "Ana Costa", "fulfillment_status": "Pending", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00027", "order_date": "2026-02-03", "customer_segment": "Corporate", "region": "East", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 12, "unit_price": 3.41, "discount_pct": 0.0, "gross_sales": 40.92, "discount_amount": 0.0, "net_sales": 40.92, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Returned", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00028", "order_date": "2026-01-03", "customer_segment": "Walk-in", "region": "South", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 22, "unit_price": 19.01, "discount_pct": 5.0, "gross_sales": 418.22, "discount_amount": 20.91, "net_sales": 397.31, "payment_method": "Card", "sales_rep": "Ana Costa", "fulfillment_status": "Returned", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00029", "order_date": "2026-03-14", "customer_segment": "Small Business", "region": "East", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 20, "unit_price": 3.13, "discount_pct": 5.0, "gross_sales": 62.6, "discount_amount": 3.13, "net_sales": 59.47, "payment_method": "Mobile Wallet", "sales_rep": "Carla Silva", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00030", "order_date": "2026-03-12", "customer_segment": "Corporate", "region": "South", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 2, "unit_price": 2.47, "discount_pct": 0.0, "gross_sales": 4.94, "discount_amount": 0.0, "net_sales": 4.94, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00031", "order_date": "2026-05-20", "customer_segment": "Family", "region": "South", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 2, "unit_price": 2.22, "discount_pct": 15.0, "gross_sales": 4.44, "discount_amount": 0.67, "net_sales": 3.77, "payment_method": "Cash", "sales_rep": "Ana Costa", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00032", "order_date": "2026-04-02", "customer_segment": "Corporate", "region": "Central", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 7, "unit_price": 1.87, "discount_pct": 0.0, "gross_sales": 13.09, "discount_amount": 0.0, "net_sales": 13.09, "payment_method": "Cash", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00033", "order_date": "2026-04-16", "customer_segment": "Student", "region": "South", "sales_channel": "Wholesale", "product_category": "Battery Chargers", "sku": "CHG-USB-065", "product_name": "USB-C Laptop Charger 65W", "units_sold": 1, "unit_price": 38.92, "discount_pct": 5.0, "gross_sales": 38.92, "discount_amount": 1.95, "net_sales": 36.97, "payment_method": "Cash", "sales_rep": "Ana Costa", "fulfillment_status": "Shipped", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00034", "order_date": "2026-02-26", "customer_segment": "Corporate", "region": "East", "sales_channel": "Online", "product_category": "Battery Chargers", "sku": "CHG-WRL-015", "product_name": "Wireless Charging Pad", "units_sold": 4, "unit_price": 26.39, "discount_pct": 10.0, "gross_sales": 105.56, "discount_amount": 10.56, "net_sales": 95.0, "payment_method": "Cash", "sales_rep": "Ana Costa", "fulfillment_status": "Returned", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00035", "order_date": "2026-03-13", "customer_segment": "Corporate", "region": "Central", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 3, "unit_price": 3.44, "discount_pct": 5.0, "gross_sales": 10.32, "discount_amount": 0.52, "net_sales": 9.8, "payment_method": "Bank Transfer", "sales_rep": "Ana Costa", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00036", "order_date": "2026-02-15", "customer_segment": "Student", "region": "East", "sales_channel": "Wholesale", "product_category": "Battery Chargers", "sku": "CHG-CAR-030", "product_name": "Dual Port Car Charger", "units_sold": 5, "unit_price": 19.09, "discount_pct": 15.0, "gross_sales": 95.45, "discount_amount": 14.32, "net_sales": 81.13, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Pending", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00037", "order_date": "2026-02-18", "customer_segment": "Walk-in", "region": "Central", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 9, "unit_price": 17.2, "discount_pct": 10.0, "gross_sales": 154.8, "discount_amount": 15.48, "net_sales": 139.32, "payment_method": "Cash", "sales_rep": "Carla Silva", "fulfillment_status": "Shipped", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00038", "order_date": "2026-06-09", "customer_segment": "Corporate", "region": "Central", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 11, "unit_price": 3.32, "discount_pct": 0.0, "gross_sales": 36.52, "discount_amount": 0.0, "net_sales": 36.52, "payment_method": "Mobile Wallet", "sales_rep": "Carla Silva", "fulfillment_status": "Shipped", "month": "Jun 2026", "month_sort": "2026-06"}, {"order_id": "ORD-00039", "order_date": "2026-02-02", "customer_segment": "Small Business", "region": "Central", "sales_channel": "Corporate Account", "product_category": "Battery Chargers", "sku": "CHG-PWR-010", "product_name": "Portable Power Bank Charger", "units_sold": 4, "unit_price": 30.13, "discount_pct": 10.0, "gross_sales": 120.52, "discount_amount": 12.05, "net_sales": 108.47, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Pending", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00040", "order_date": "2026-03-15", "customer_segment": "Family", "region": "East", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-CAR-030", "product_name": "Dual Port Car Charger", "units_sold": 4, "unit_price": 20.11, "discount_pct": 15.0, "gross_sales": 80.44, "discount_amount": 12.07, "net_sales": 68.37, "payment_method": "Mobile Wallet", "sales_rep": "Diego Santos", "fulfillment_status": "Returned", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00041", "order_date": "2026-02-13", "customer_segment": "Family", "region": "East", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 22, "unit_price": 2.5, "discount_pct": 15.0, "gross_sales": 55.0, "discount_amount": 8.25, "net_sales": 46.75, "payment_method": "Cash", "sales_rep": "Carla Silva", "fulfillment_status": "Delivered", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00042", "order_date": "2026-01-07", "customer_segment": "Family", "region": "North", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-USB-065", "product_name": "USB-C Laptop Charger 65W", "units_sold": 1, "unit_price": 39.26, "discount_pct": 10.0, "gross_sales": 39.26, "discount_amount": 3.93, "net_sales": 35.33, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Delivered", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00043", "order_date": "2026-05-07", "customer_segment": "Walk-in", "region": "West", "sales_channel": "Online", "product_category": "Battery Chargers", "sku": "CHG-WRL-015", "product_name": "Wireless Charging Pad", "units_sold": 7, "unit_price": 24.53, "discount_pct": 0.0, "gross_sales": 171.71, "discount_amount": 0.0, "net_sales": 171.71, "payment_method": "Cash", "sales_rep": "Emma Johnson", "fulfillment_status": "Shipped", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00044", "order_date": "2026-02-01", "customer_segment": "Family", "region": "Central", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 15, "unit_price": 2.03, "discount_pct": 10.0, "gross_sales": 30.45, "discount_amount": 3.04, "net_sales": 27.41, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Pending", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00045", "order_date": "2026-04-20", "customer_segment": "Student", "region": "East", "sales_channel": "Online", "product_category": "Battery Chargers", "sku": "CHG-PWR-010", "product_name": "Portable Power Bank Charger", "units_sold": 8, "unit_price": 31.99, "discount_pct": 10.0, "gross_sales": 255.92, "discount_amount": 25.59, "net_sales": 230.33, "payment_method": "Bank Transfer", "sales_rep": "Emma Johnson", "fulfillment_status": "Shipped", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00046", "order_date": "2026-04-23", "customer_segment": "Corporate", "region": "East", "sales_channel": "Wholesale", "product_category": "Battery Chargers", "sku": "CHG-CAR-030", "product_name": "Dual Port Car Charger", "units_sold": 2, "unit_price": 20.84, "discount_pct": 0.0, "gross_sales": 41.68, "discount_amount": 0.0, "net_sales": 41.68, "payment_method": "Card", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00047", "order_date": "2026-02-24", "customer_segment": "Family", "region": "West", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 3, "unit_price": 2.11, "discount_pct": 5.0, "gross_sales": 6.33, "discount_amount": 0.32, "net_sales": 6.01, "payment_method": "Card", "sales_rep": "Ben Miller", "fulfillment_status": "Shipped", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00048", "order_date": "2026-01-06", "customer_segment": "Corporate", "region": "East", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 19, "unit_price": 17.99, "discount_pct": 0.0, "gross_sales": 341.81, "discount_amount": 0.0, "net_sales": 341.81, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Returned", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00049", "order_date": "2026-02-26", "customer_segment": "Student", "region": "North", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-PWR-010", "product_name": "Portable Power Bank Charger", "units_sold": 8, "unit_price": 29.35, "discount_pct": 10.0, "gross_sales": 234.8, "discount_amount": 23.48, "net_sales": 211.32, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Returned", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00050", "order_date": "2026-02-02", "customer_segment": "Family", "region": "Central", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 20, "unit_price": 2.65, "discount_pct": 10.0, "gross_sales": 53.0, "discount_amount": 5.3, "net_sales": 47.7, "payment_method": "Card", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00051", "order_date": "2026-01-13", "customer_segment": "Student", "region": "East", "sales_channel": "Wholesale", "product_category": "Battery Chargers", "sku": "CHG-USB-065", "product_name": "USB-C Laptop Charger 65W", "units_sold": 5, "unit_price": 39.96, "discount_pct": 0.0, "gross_sales": 199.8, "discount_amount": 0.0, "net_sales": 199.8, "payment_method": "Mobile Wallet", "sales_rep": "Carla Silva", "fulfillment_status": "Shipped", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00052", "order_date": "2026-05-01", "customer_segment": "Corporate", "region": "South", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 1, "unit_price": 1.89, "discount_pct": 0.0, "gross_sales": 1.89, "discount_amount": 0.0, "net_sales": 1.89, "payment_method": "Card", "sales_rep": "Ana Costa", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00053", "order_date": "2026-06-09", "customer_segment": "Walk-in", "region": "Central", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 5, "unit_price": 1.77, "discount_pct": 10.0, "gross_sales": 8.85, "discount_amount": 0.89, "net_sales": 7.96, "payment_method": "Mobile Wallet", "sales_rep": "Carla Silva", "fulfillment_status": "Delivered", "month": "Jun 2026", "month_sort": "2026-06"}, {"order_id": "ORD-00054", "order_date": "2026-01-30", "customer_segment": "Family", "region": "North", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 6, "unit_price": 19.36, "discount_pct": 0.0, "gross_sales": 116.16, "discount_amount": 0.0, "net_sales": 116.16, "payment_method": "Mobile Wallet", "sales_rep": "Diego Santos", "fulfillment_status": "Returned", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00055", "order_date": "2026-06-10", "customer_segment": "Family", "region": "North", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 8, "unit_price": 17.34, "discount_pct": 5.0, "gross_sales": 138.72, "discount_amount": 6.94, "net_sales": 131.78, "payment_method": "Card", "sales_rep": "Carla Silva", "fulfillment_status": "Pending", "month": "Jun 2026", "month_sort": "2026-06"}, {"order_id": "ORD-00056", "order_date": "2026-01-18", "customer_segment": "Student", "region": "West", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 17, "unit_price": 3.31, "discount_pct": 0.0, "gross_sales": 56.27, "discount_amount": 0.0, "net_sales": 56.27, "payment_method": "Mobile Wallet", "sales_rep": "Carla Silva", "fulfillment_status": "Returned", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00057", "order_date": "2026-02-09", "customer_segment": "Corporate", "region": "Central", "sales_channel": "Corporate Account", "product_category": "Battery Chargers", "sku": "CHG-WRL-015", "product_name": "Wireless Charging Pad", "units_sold": 7, "unit_price": 24.31, "discount_pct": 15.0, "gross_sales": 170.17, "discount_amount": 25.53, "net_sales": 144.64, "payment_method": "Mobile Wallet", "sales_rep": "Diego Santos", "fulfillment_status": "Shipped", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00058", "order_date": "2026-03-10", "customer_segment": "Corporate", "region": "West", "sales_channel": "Online", "product_category": "Battery Chargers", "sku": "CHG-PWR-010", "product_name": "Portable Power Bank Charger", "units_sold": 6, "unit_price": 31.81, "discount_pct": 0.0, "gross_sales": 190.86, "discount_amount": 0.0, "net_sales": 190.86, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Pending", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00059", "order_date": "2026-01-08", "customer_segment": "Student", "region": "South", "sales_channel": "Wholesale", "product_category": "Battery Chargers", "sku": "CHG-CAR-030", "product_name": "Dual Port Car Charger", "units_sold": 8, "unit_price": 21.2, "discount_pct": 0.0, "gross_sales": 169.6, "discount_amount": 0.0, "net_sales": 169.6, "payment_method": "Bank Transfer", "sales_rep": "Carla Silva", "fulfillment_status": "Delivered", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00060", "order_date": "2026-05-23", "customer_segment": "Walk-in", "region": "South", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-CAR-030", "product_name": "Dual Port Car Charger", "units_sold": 1, "unit_price": 20.33, "discount_pct": 0.0, "gross_sales": 20.33, "discount_amount": 0.0, "net_sales": 20.33, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00061", "order_date": "2026-04-25", "customer_segment": "Student", "region": "South", "sales_channel": "Wholesale", "product_category": "Battery Chargers", "sku": "CHG-WRL-015", "product_name": "Wireless Charging Pad", "units_sold": 1, "unit_price": 24.04, "discount_pct": 0.0, "gross_sales": 24.04, "discount_amount": 0.0, "net_sales": 24.04, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Pending", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00062", "order_date": "2026-05-21", "customer_segment": "Corporate", "region": "East", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 11, "unit_price": 2.59, "discount_pct": 10.0, "gross_sales": 28.49, "discount_amount": 2.85, "net_sales": 25.64, "payment_method": "Cash", "sales_rep": "Ana Costa", "fulfillment_status": "Returned", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00063", "order_date": "2026-05-18", "customer_segment": "Student", "region": "East", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 23, "unit_price": 1.75, "discount_pct": 0.0, "gross_sales": 40.25, "discount_amount": 0.0, "net_sales": 40.25, "payment_method": "Bank Transfer", "sales_rep": "Ana Costa", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00064", "order_date": "2026-02-15", "customer_segment": "Small Business", "region": "East", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 10, "unit_price": 3.05, "discount_pct": 15.0, "gross_sales": 30.5, "discount_amount": 4.58, "net_sales": 25.92, "payment_method": "Card", "sales_rep": "Emma Johnson", "fulfillment_status": "Delivered", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00065", "order_date": "2026-05-06", "customer_segment": "Corporate", "region": "West", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-USB-065", "product_name": "USB-C Laptop Charger 65W", "units_sold": 2, "unit_price": 42.53, "discount_pct": 15.0, "gross_sales": 85.06, "discount_amount": 12.76, "net_sales": 72.3, "payment_method": "Mobile Wallet", "sales_rep": "Carla Silva", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00066", "order_date": "2026-05-03", "customer_segment": "Student", "region": "North", "sales_channel": "Corporate Account", "product_category": "Battery Chargers", "sku": "CHG-CAR-030", "product_name": "Dual Port Car Charger", "units_sold": 2, "unit_price": 21.13, "discount_pct": 10.0, "gross_sales": 42.26, "discount_amount": 4.23, "net_sales": 38.03, "payment_method": "Card", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00067", "order_date": "2026-01-22", "customer_segment": "Family", "region": "Central", "sales_channel": "Corporate Account", "product_category": "Battery Chargers", "sku": "CHG-CAR-030", "product_name": "Dual Port Car Charger", "units_sold": 4, "unit_price": 19.3, "discount_pct": 10.0, "gross_sales": 77.2, "discount_amount": 7.72, "net_sales": 69.48, "payment_method": "Cash", "sales_rep": "Emma Johnson", "fulfillment_status": "Shipped", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00068", "order_date": "2026-03-18", "customer_segment": "Family", "region": "Central", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 19, "unit_price": 2.8, "discount_pct": 5.0, "gross_sales": 53.2, "discount_amount": 2.66, "net_sales": 50.54, "payment_method": "Card", "sales_rep": "Ben Miller", "fulfillment_status": "Returned", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00069", "order_date": "2026-02-10", "customer_segment": "Small Business", "region": "North", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 8, "unit_price": 1.75, "discount_pct": 0.0, "gross_sales": 14.0, "discount_amount": 0.0, "net_sales": 14.0, "payment_method": "Mobile Wallet", "sales_rep": "Emma Johnson", "fulfillment_status": "Shipped", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00070", "order_date": "2026-03-15", "customer_segment": "Walk-in", "region": "South", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 23, "unit_price": 2.07, "discount_pct": 10.0, "gross_sales": 47.61, "discount_amount": 4.76, "net_sales": 42.85, "payment_method": "Cash", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00071", "order_date": "2026-03-10", "customer_segment": "Corporate", "region": "Central", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 5, "unit_price": 2.01, "discount_pct": 0.0, "gross_sales": 10.05, "discount_amount": 0.0, "net_sales": 10.05, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00072", "order_date": "2026-04-14", "customer_segment": "Student", "region": "North", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 9, "unit_price": 3.25, "discount_pct": 10.0, "gross_sales": 29.25, "discount_amount": 2.93, "net_sales": 26.32, "payment_method": "Card", "sales_rep": "Diego Santos", "fulfillment_status": "Returned", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00073", "order_date": "2026-01-07", "customer_segment": "Family", "region": "North", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 3, "unit_price": 3.14, "discount_pct": 15.0, "gross_sales": 9.42, "discount_amount": 1.41, "net_sales": 8.01, "payment_method": "Card", "sales_rep": "Ben Miller", "fulfillment_status": "Shipped", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00074", "order_date": "2026-03-13", "customer_segment": "Student", "region": "North", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 6, "unit_price": 2.81, "discount_pct": 10.0, "gross_sales": 16.86, "discount_amount": 1.69, "net_sales": 15.17, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00075", "order_date": "2026-02-11", "customer_segment": "Corporate", "region": "West", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 11, "unit_price": 1.81, "discount_pct": 10.0, "gross_sales": 19.91, "discount_amount": 1.99, "net_sales": 17.92, "payment_method": "Card", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00076", "order_date": "2026-01-30", "customer_segment": "Family", "region": "West", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 13, "unit_price": 3.4, "discount_pct": 0.0, "gross_sales": 44.2, "discount_amount": 0.0, "net_sales": 44.2, "payment_method": "Card", "sales_rep": "Ben Miller", "fulfillment_status": "Pending", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00077", "order_date": "2026-06-10", "customer_segment": "Corporate", "region": "Central", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 15, "unit_price": 2.73, "discount_pct": 0.0, "gross_sales": 40.95, "discount_amount": 0.0, "net_sales": 40.95, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Returned", "month": "Jun 2026", "month_sort": "2026-06"}, {"order_id": "ORD-00078", "order_date": "2026-06-05", "customer_segment": "Family", "region": "North", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 8, "unit_price": 1.88, "discount_pct": 5.0, "gross_sales": 15.04, "discount_amount": 0.75, "net_sales": 14.29, "payment_method": "Mobile Wallet", "sales_rep": "Ana Costa", "fulfillment_status": "Delivered", "month": "Jun 2026", "month_sort": "2026-06"}, {"order_id": "ORD-00079", "order_date": "2026-04-29", "customer_segment": "Student", "region": "East", "sales_channel": "Corporate Account", "product_category": "Battery Chargers", "sku": "CHG-USB-020", "product_name": "USB-C Fast Charger 20W", "units_sold": 2, "unit_price": 15.5, "discount_pct": 0.0, "gross_sales": 31.0, "discount_amount": 0.0, "net_sales": 31.0, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Shipped", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00080", "order_date": "2026-04-27", "customer_segment": "Family", "region": "South", "sales_channel": "Retail Store", "product_category": "Battery Chargers", "sku": "CHG-USB-065", "product_name": "USB-C Laptop Charger 65W", "units_sold": 3, "unit_price": 39.98, "discount_pct": 15.0, "gross_sales": 119.94, "discount_amount": 17.99, "net_sales": 101.95, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00081", "order_date": "2026-03-10", "customer_segment": "Family", "region": "Central", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-PWR-010", "product_name": "Portable Power Bank Charger", "units_sold": 1, "unit_price": 29.59, "discount_pct": 5.0, "gross_sales": 29.59, "discount_amount": 1.48, "net_sales": 28.11, "payment_method": "Cash", "sales_rep": "Diego Santos", "fulfillment_status": "Pending", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00082", "order_date": "2026-05-22", "customer_segment": "Small Business", "region": "South", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 18, "unit_price": 3.2, "discount_pct": 5.0, "gross_sales": 57.6, "discount_amount": 2.88, "net_sales": 54.72, "payment_method": "Mobile Wallet", "sales_rep": "Ben Miller", "fulfillment_status": "Shipped", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00083", "order_date": "2026-04-08", "customer_segment": "Student", "region": "North", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 13, "unit_price": 2.8, "discount_pct": 0.0, "gross_sales": 36.4, "discount_amount": 0.0, "net_sales": 36.4, "payment_method": "Bank Transfer", "sales_rep": "Ana Costa", "fulfillment_status": "Shipped", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00084", "order_date": "2026-01-04", "customer_segment": "Walk-in", "region": "West", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 24, "unit_price": 2.52, "discount_pct": 0.0, "gross_sales": 60.48, "discount_amount": 0.0, "net_sales": 60.48, "payment_method": "Bank Transfer", "sales_rep": "Emma Johnson", "fulfillment_status": "Returned", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00085", "order_date": "2026-03-26", "customer_segment": "Corporate", "region": "West", "sales_channel": "Corporate Account", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 22, "unit_price": 1.91, "discount_pct": 10.0, "gross_sales": 42.02, "discount_amount": 4.2, "net_sales": 37.82, "payment_method": "Card", "sales_rep": "Emma Johnson", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00086", "order_date": "2026-02-28", "customer_segment": "Walk-in", "region": "West", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-MPL-003", "product_name": "Maple Bacon Donut", "units_sold": 24, "unit_price": 3.08, "discount_pct": 0.0, "gross_sales": 73.92, "discount_amount": 0.0, "net_sales": 73.92, "payment_method": "Bank Transfer", "sales_rep": "Ana Costa", "fulfillment_status": "Delivered", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00087", "order_date": "2026-03-17", "customer_segment": "Small Business", "region": "Central", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 12, "unit_price": 1.8, "discount_pct": 0.0, "gross_sales": 21.6, "discount_amount": 0.0, "net_sales": 21.6, "payment_method": "Cash", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00088", "order_date": "2026-06-08", "customer_segment": "Small Business", "region": "South", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 22, "unit_price": 2.55, "discount_pct": 15.0, "gross_sales": 56.1, "discount_amount": 8.41, "net_sales": 47.69, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Jun 2026", "month_sort": "2026-06"}, {"order_id": "ORD-00089", "order_date": "2026-03-15", "customer_segment": "Family", "region": "East", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-WRL-015", "product_name": "Wireless Charging Pad", "units_sold": 3, "unit_price": 23.98, "discount_pct": 5.0, "gross_sales": 71.94, "discount_amount": 3.6, "net_sales": 68.34, "payment_method": "Bank Transfer", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00090", "order_date": "2026-05-04", "customer_segment": "Corporate", "region": "Central", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 4, "unit_price": 2.55, "discount_pct": 15.0, "gross_sales": 10.2, "discount_amount": 1.53, "net_sales": 8.67, "payment_method": "Bank Transfer", "sales_rep": "Ana Costa", "fulfillment_status": "Returned", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00091", "order_date": "2026-05-25", "customer_segment": "Family", "region": "West", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-GLZ-001", "product_name": "Classic Glazed Donut", "units_sold": 22, "unit_price": 1.89, "discount_pct": 0.0, "gross_sales": 41.58, "discount_amount": 0.0, "net_sales": 41.58, "payment_method": "Cash", "sales_rep": "Emma Johnson", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00092", "order_date": "2026-06-08", "customer_segment": "Walk-in", "region": "North", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 9, "unit_price": 2.18, "discount_pct": 0.0, "gross_sales": 19.62, "discount_amount": 0.0, "net_sales": 19.62, "payment_method": "Mobile Wallet", "sales_rep": "Ana Costa", "fulfillment_status": "Pending", "month": "Jun 2026", "month_sort": "2026-06"}, {"order_id": "ORD-00093", "order_date": "2026-01-24", "customer_segment": "Small Business", "region": "South", "sales_channel": "Online", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 10, "unit_price": 2.08, "discount_pct": 10.0, "gross_sales": 20.8, "discount_amount": 2.08, "net_sales": 18.72, "payment_method": "Bank Transfer", "sales_rep": "Emma Johnson", "fulfillment_status": "Pending", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00094", "order_date": "2026-03-07", "customer_segment": "Corporate", "region": "North", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-USB-065", "product_name": "USB-C Laptop Charger 65W", "units_sold": 8, "unit_price": 43.02, "discount_pct": 5.0, "gross_sales": 344.16, "discount_amount": 17.21, "net_sales": 326.95, "payment_method": "Card", "sales_rep": "Ben Miller", "fulfillment_status": "Delivered", "month": "Mar 2026", "month_sort": "2026-03"}, {"order_id": "ORD-00095", "order_date": "2026-05-23", "customer_segment": "Walk-in", "region": "East", "sales_channel": "Corporate Account", "product_category": "Battery Chargers", "sku": "CHG-WRL-015", "product_name": "Wireless Charging Pad", "units_sold": 6, "unit_price": 24.03, "discount_pct": 10.0, "gross_sales": 144.18, "discount_amount": 14.42, "net_sales": 129.76, "payment_method": "Card", "sales_rep": "Diego Santos", "fulfillment_status": "Delivered", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00096", "order_date": "2026-05-30", "customer_segment": "Walk-in", "region": "South", "sales_channel": "Pop-up Stand", "product_category": "Battery Chargers", "sku": "CHG-CAR-030", "product_name": "Dual Port Car Charger", "units_sold": 7, "unit_price": 21.13, "discount_pct": 5.0, "gross_sales": 147.91, "discount_amount": 7.4, "net_sales": 140.51, "payment_method": "Card", "sales_rep": "Emma Johnson", "fulfillment_status": "Pending", "month": "May 2026", "month_sort": "2026-05"}, {"order_id": "ORD-00097", "order_date": "2026-02-26", "customer_segment": "Corporate", "region": "West", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-BOX-012", "product_name": "Assorted Donut Box 12-Pack", "units_sold": 21, "unit_price": 17.25, "discount_pct": 10.0, "gross_sales": 362.25, "discount_amount": 36.23, "net_sales": 326.02, "payment_method": "Cash", "sales_rep": "Ana Costa", "fulfillment_status": "Delivered", "month": "Feb 2026", "month_sort": "2026-02"}, {"order_id": "ORD-00098", "order_date": "2026-01-30", "customer_segment": "Small Business", "region": "West", "sales_channel": "Pop-up Stand", "product_category": "Donuts", "sku": "DNT-JAM-004", "product_name": "Raspberry Jam Donut", "units_sold": 4, "unit_price": 2.55, "discount_pct": 15.0, "gross_sales": 10.2, "discount_amount": 1.53, "net_sales": 8.67, "payment_method": "Bank Transfer", "sales_rep": "Emma Johnson", "fulfillment_status": "Shipped", "month": "Jan 2026", "month_sort": "2026-01"}, {"order_id": "ORD-00099", "order_date": "2026-04-17", "customer_segment": "Family", "region": "West", "sales_channel": "Wholesale", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 21, "unit_price": 2.02, "discount_pct": 10.0, "gross_sales": 42.42, "discount_amount": 4.24, "net_sales": 38.18, "payment_method": "Card", "sales_rep": "Carla Silva", "fulfillment_status": "Delivered", "month": "Apr 2026", "month_sort": "2026-04"}, {"order_id": "ORD-00100", "order_date": "2026-04-03", "customer_segment": "Family", "region": "East", "sales_channel": "Retail Store", "product_category": "Donuts", "sku": "DNT-CHC-002", "product_name": "Chocolate Frosted Donut", "units_sold": 4, "unit_price": 2.26, "discount_pct": 5.0, "gross_sales": 9.04, "discount_amount": 0.45, "net_sales": 8.59, "payment_method": "Mobile Wallet", "sales_rep": "Carla Silva", "fulfillment_status": "Delivered", "month": "Apr 2026", "month_sort": "2026-04"}];
+  const colors = ["#ffd166", "#93c5fd", "#6ee7b7", "#fca5a5", "#c4b5fd", "#fdba74", "#67e8f9", "#f0abfc"];
+  const state = { sortKey: "order_date", sortDir: "desc" };
+  const fields = {
+    categoryFilter: "product_category",
+    regionFilter: "region",
+    channelFilter: "sales_channel",
+    segmentFilter: "customer_segment",
+    statusFilter: "fulfillment_status"
+  };
+  const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+  const money2 = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const number = new Intl.NumberFormat("en-US");
+  const pct = (x) => `${(x || 0).toFixed(1)}%`;
+  const tooltip = document.getElementById("tooltip");
+
+  function uniqueValues(key) {
+    return [...new Set(salesData.map(d => d[key]))].sort((a,b) => String(a).localeCompare(String(b)));
+  }
+
+  function setupFilters() {
+    Object.entries(fields).forEach(([id, key]) => {
+      const select = document.getElementById(id);
+      select.innerHTML = `<option value="__ALL__">All</option>` + uniqueValues(key).map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join("");
+      select.addEventListener("change", update);
+    });
+    document.getElementById("searchBox").addEventListener("input", update);
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      Object.keys(fields).forEach(id => document.getElementById(id).value = "__ALL__");
+      document.getElementById("searchBox").value = "";
+      update();
+    });
+    document.getElementById("exportBtn").addEventListener("click", () => exportCSV(getFilteredRows()));
+    document.querySelectorAll("th[data-sort]").forEach(th => th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (state.sortKey === key) state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+      else { state.sortKey = key; state.sortDir = "asc"; }
+      update();
+    }));
+  }
+
+  function getFilteredRows() {
+    const query = document.getElementById("searchBox").value.trim().toLowerCase();
+    return salesData.filter(row => {
+      for (const [id, key] of Object.entries(fields)) {
+        const v = document.getElementById(id).value;
+        if (v !== "__ALL__" && row[key] !== v) return false;
+      }
+      if (!query) return true;
+      const hay = [row.order_id, row.sku, row.product_name, row.product_category, row.region, row.sales_channel, row.customer_segment, row.sales_rep, row.payment_method, row.fulfillment_status].join(" ").toLowerCase();
+      return hay.includes(query);
+    });
+  }
+
+  function sum(rows, key) { return rows.reduce((acc, d) => acc + Number(d[key] || 0), 0); }
+  function groupBy(rows, key, valueKey = "net_sales") {
+    const map = new Map();
+    rows.forEach(row => {
+      const name = row[key];
+      if (!map.has(name)) map.set(name, { name, value: 0, orders: 0, units: 0, discount: 0, gross: 0 });
+      const item = map.get(name);
+      item.value += Number(row[valueKey] || 0);
+      item.orders += 1;
+      item.units += Number(row.units_sold || 0);
+      item.discount += Number(row.discount_amount || 0);
+      item.gross += Number(row.gross_sales || 0);
+    });
+    return [...map.values()].sort((a,b) => b.value - a.value);
+  }
+
+  function groupByMonth(rows) {
+    const map = new Map();
+    rows.forEach(row => {
+      const key = row.month_sort;
+      if (!map.has(key)) map.set(key, { name: row.month, sort: key, value: 0, orders: 0 });
+      const item = map.get(key);
+      item.value += row.net_sales;
+      item.orders += 1;
+    });
+    return [...map.values()].sort((a,b) => a.sort.localeCompare(b.sort));
+  }
+
+  function update() {
+    const rows = getFilteredRows();
+    updateKpis(rows);
+    updateInsights(rows);
+    renderLineChart("monthlyChart", groupByMonth(rows));
+    renderDonut("categoryDonut", groupBy(rows, "product_category"));
+    renderBarChart("productChart", groupBy(rows, "product_name").slice(0, 7), { valueLabel: money });
+    renderBarChart("regionChart", groupBy(rows, "region"), { valueLabel: money });
+    renderBarChart("channelChart", groupBy(rows, "sales_channel"), { valueLabel: money });
+    renderBarChart("segmentChart", groupBy(rows, "customer_segment"), { valueLabel: money });
+    renderBarChart("repChart", groupBy(rows, "sales_rep"), { valueLabel: money, secondary: d => `${d.orders} orders` });
+    renderTable(rows);
+  }
+
+  function updateKpis(rows) {
+    const revenue = sum(rows, "net_sales");
+    const gross = sum(rows, "gross_sales");
+    const discounts = sum(rows, "discount_amount");
+    const returns = rows.filter(r => r.fulfillment_status === "Returned").length;
+    document.getElementById("kpiRevenue").textContent = money.format(revenue);
+    document.getElementById("kpiOrders").textContent = number.format(rows.length);
+    document.getElementById("kpiUnits").textContent = number.format(sum(rows, "units_sold"));
+    document.getElementById("kpiAov").textContent = money.format(rows.length ? revenue / rows.length : 0);
+    document.getElementById("kpiDiscount").textContent = pct(gross ? discounts / gross * 100 : 0);
+    document.getElementById("kpiReturn").textContent = pct(rows.length ? returns / rows.length * 100 : 0);
+    document.getElementById("rowCount").textContent = number.format(rows.length);
+  }
+
+  function updateInsights(rows) {
+    const container = document.getElementById("insights");
+    if (!rows.length) {
+      container.innerHTML = `<div class="insight"><span></span><div>No rows match the current filters. Try clearing a filter or search term.</div></div>`;
+      return;
+    }
+    const revenue = sum(rows, "net_sales");
+    const gross = sum(rows, "gross_sales");
+    const topProduct = groupBy(rows, "product_name")[0];
+    const topRegion = groupBy(rows, "region")[0];
+    const topChannel = groupBy(rows, "sales_channel")[0];
+    const category = groupBy(rows, "product_category")[0];
+    const delivered = rows.filter(r => r.fulfillment_status === "Delivered").length;
+    const discountDrag = gross ? sum(rows, "discount_amount") / gross * 100 : 0;
+    const items = [
+      `<strong>${escapeHtml(category.name)}</strong> contributes ${pct(revenue ? category.value / revenue * 100 : 0)} of filtered net sales.`,
+      `<strong>${escapeHtml(topProduct.name)}</strong> is the top product at ${money.format(topProduct.value)} across ${topProduct.orders} orders.`,
+      `<strong>${escapeHtml(topRegion.name)}</strong> is the strongest region, producing ${money.format(topRegion.value)}.`,
+      `<strong>${escapeHtml(topChannel.name)}</strong> is the strongest channel, producing ${money.format(topChannel.value)}.`,
+      `Fulfillment health: ${pct(rows.length ? delivered / rows.length * 100 : 0)} delivered and discount drag is ${pct(discountDrag)}.`
+    ];
+    container.innerHTML = items.map(text => `<div class="insight"><span></span><div>${text}</div></div>`).join("");
+  }
+
+  function renderEmpty(id) {
+    document.getElementById(id).innerHTML = `<div class="empty">No matching data</div>`;
+  }
+
+  function renderBarChart(id, data, opts = {}) {
+    const el = document.getElementById(id);
+    if (!data.length) return renderEmpty(id);
+    const width = 760, height = 292, left = 150, right = 82, top = 18, bottom = 24;
+    const chartW = width - left - right;
+    const chartH = height - top - bottom;
+    const max = Math.max(...data.map(d => d.value), 1);
+    const barH = Math.min(24, chartH / data.length * .62);
+    const gap = (chartH - barH * data.length) / Math.max(data.length - 1, 1);
+    const fmt = opts.valueLabel || ((v) => String(v));
+    const rows = data.map((d, i) => {
+      const y = top + i * (barH + gap);
+      const w = Math.max(2, d.value / max * chartW);
+      const label = truncate(d.name, 22);
+      const secondary = opts.secondary ? ` · ${opts.secondary(d)}` : "";
+      return `<g class="bar-row" data-label="${escapeHtml(d.name)}" data-value="${escapeHtml(fmt.format ? fmt.format(d.value) : fmt(d.value))}${escapeHtml(secondary)}">
+        <text x="0" y="${y + barH * .68}" class="bar-label">${escapeHtml(label)}</text>
+        <rect x="${left}" y="${y}" width="${w}" height="${barH}" rx="8" fill="${colors[i % colors.length]}" opacity=".9"></rect>
+        <text x="${left + w + 8}" y="${y + barH * .68}" class="bar-value">${escapeHtml(fmt.format ? fmt.format(d.value) : fmt(d.value))}</text>
+      </g>`;
+    }).join("");
+    el.innerHTML = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Bar chart">${rows}</svg>`;
+    attachTooltips(el);
+  }
+
+  function renderLineChart(id, data) {
+    const el = document.getElementById(id);
+    if (!data.length) return renderEmpty(id);
+    const width = 850, height = 292, left = 56, right = 22, top = 20, bottom = 46;
+    const chartW = width - left - right, chartH = height - top - bottom;
+    const max = Math.max(...data.map(d => d.value), 1);
+    const x = (i) => left + (data.length === 1 ? chartW / 2 : i / (data.length - 1) * chartW);
+    const y = (v) => top + chartH - (v / max * chartH);
+    const points = data.map((d,i) => `${x(i)},${y(d.value)}`).join(" ");
+    const area = `${left},${top + chartH} ${points} ${left + chartW},${top + chartH}`;
+    const grid = [0,.25,.5,.75,1].map(t => {
+      const gy = top + chartH - t * chartH;
+      return `<line x1="${left}" y1="${gy}" x2="${left + chartW}" y2="${gy}" class="tick"/><text x="${left - 10}" y="${gy + 4}" text-anchor="end" class="tick-label">${money.format(max * t)}</text>`;
+    }).join("");
+    const labels = data.map((d,i) => `<text x="${x(i)}" y="${height - 15}" text-anchor="middle" class="tick-label">${escapeHtml(d.name.replace(' 2026',''))}</text>`).join("");
+    const circles = data.map((d,i) => `<circle class="point" cx="${x(i)}" cy="${y(d.value)}" r="5" data-label="${escapeHtml(d.name)}" data-value="${escapeHtml(money2.format(d.value) + ' · ' + d.orders + ' orders')}"></circle>`).join("");
+    el.innerHTML = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-label="Monthly sales line chart">
+      ${grid}
+      <polyline points="${area}" class="area-path"></polyline>
+      <polyline points="${points}" class="line-path"></polyline>
+      ${circles}
+      ${labels}
+    </svg>`;
+    attachTooltips(el);
+  }
+
+  function renderDonut(id, data) {
+    const el = document.getElementById(id);
+    if (!data.length) return renderEmpty(id);
+    const total = data.reduce((a,d) => a + d.value, 0) || 1;
+    let cursor = 0;
+    const gradient = data.map((d,i) => {
+      const start = cursor;
+      const end = cursor + d.value / total * 360;
+      cursor = end;
+      return `${colors[i % colors.length]} ${start}deg ${end}deg`;
+    }).join(", ");
+    const legend = data.map((d,i) => `<div class="legend-row"><span class="swatch" style="background:${colors[i % colors.length]}"></span><span>${escapeHtml(d.name)} <strong>${pct(d.value / total * 100)}</strong></span><span>${money.format(d.value)}</span></div>`).join("");
+    el.innerHTML = `<div class="donut-wrap"><div class="donut" style="background: conic-gradient(${gradient});"><div class="donut-center">${money.format(total)}<small>Total</small></div></div><div class="legend">${legend}</div></div>`;
+  }
+
+  function renderTable(rows) {
+    const tbody = document.querySelector("#ordersTable tbody");
+    const sorted = [...rows].sort((a,b) => {
+      const av = a[state.sortKey], bv = b[state.sortKey];
+      let result = typeof av === "number" && typeof bv === "number" ? av - bv : String(av).localeCompare(String(bv));
+      return state.sortDir === "asc" ? result : -result;
+    });
+    document.getElementById("tableSummary").textContent = `${number.format(sorted.length)} rows shown`;
+    tbody.innerHTML = sorted.map(row => `<tr>
+      <td>${escapeHtml(row.order_date)}</td>
+      <td>${escapeHtml(row.order_id)}</td>
+      <td>${escapeHtml(row.product_name)}</td>
+      <td>${escapeHtml(row.product_category)}</td>
+      <td>${escapeHtml(row.region)}</td>
+      <td>${escapeHtml(row.sales_channel)}</td>
+      <td>${escapeHtml(row.customer_segment)}</td>
+      <td>${number.format(row.units_sold)}</td>
+      <td>${money2.format(row.net_sales)}</td>
+      <td>${pct(row.discount_pct)}</td>
+      <td>${escapeHtml(row.sales_rep)}</td>
+      <td><span class="status ${escapeHtml(row.fulfillment_status)}">${escapeHtml(row.fulfillment_status)}</span></td>
+    </tr>`).join("");
+  }
+
+  function exportCSV(rows) {
+    const headers = ["order_id","order_date","customer_segment","region","sales_channel","product_category","sku","product_name","units_sold","unit_price","discount_pct","gross_sales","discount_amount","net_sales","payment_method","sales_rep","fulfillment_status"];
+    const csv = [headers.join(",")].concat(rows.map(row => headers.map(h => csvCell(row[h])).join(","))).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "filtered_sales_data.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function csvCell(value) {
+    const text = String(value ?? "");
+    return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  }
+
+  function attachTooltips(scope) {
+    scope.querySelectorAll("[data-label]").forEach(node => {
+      node.addEventListener("mousemove", e => {
+        tooltip.style.opacity = 1;
+        tooltip.style.left = `${e.clientX}px`;
+        tooltip.style.top = `${e.clientY}px`;
+        tooltip.innerHTML = `<strong>${escapeHtml(node.dataset.label)}</strong><br>${escapeHtml(node.dataset.value || "")}`;
+      });
+      node.addEventListener("mouseleave", () => tooltip.style.opacity = 0);
+    });
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>'"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[ch]));
+  }
+  function truncate(value, max) { return String(value).length > max ? String(value).slice(0, max - 1) + "…" : String(value); }
+
+  setupFilters();
+  update();
+  </script>
+</body>
+</html>

@@ -1,5 +1,13 @@
-bash
-npx create-next-app@latest rss-aggregator --ts --app
-cd rss-aggregator
-npm install rss-parser
-npm run dev
+ts
+const FEEDS = [
+  {
+    name: "HN Front Page",
+    url: "https://hnrss.org/frontpage",
+    tags: ["hacker-news", "frontpage", "tech"],
+  },
+  {
+    name: "HN Newest",
+    url: "https://hnrss.org/newest",
+    tags: ["hacker-news", "newest", "tech"],
+  },
+];

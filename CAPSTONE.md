@@ -19,7 +19,7 @@ underspecified prompt.
 1. **Input** — Accept a single string: the user's app idea (e.g. *"a habit tracker with streaks"*).
 
 2. **Researcher agent**
-   - Model: `gpt-5.5`. Tool: hosted `web_search`.
+   - Model: `gpt-5.6-sol` (or bare `gpt-5.6` alias). Tool: hosted `web_search`.
    - Instructions: identify a sensible, current tech stack for the idea (framework or
      vanilla, CDN libraries for charts/state/animation, accessibility/UX notes).
    - Output: a short, structured tech-stack brief (3–6 bullets). Keep it factual and current.
@@ -28,7 +28,7 @@ underspecified prompt.
    Use the SDK's handoff primitive (a triage/coordinator agent that routes is also acceptable).
 
 4. **Builder agent**
-   - Model: `gpt-5.5`. No tools required.
+   - Model: `gpt-5.6-sol` (or bare `gpt-5.6` alias). No tools required.
    - Instructions: produce **one complete `index.html`** — semantic HTML, inline CSS, inline
      JS, CDN deps only, no build step — that honors the Researcher's brief and renders standalone.
    - Reuse the frontend notebook's helper pattern to render/preview the generated HTML.

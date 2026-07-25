@@ -25,3 +25,8 @@ venv/
 .idea/
 .vscode/
 .claude/worktrees/
+
+# Course process artifacts (not student-facing content)
+Plans/
+research/
+walkthrough.md

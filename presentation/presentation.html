@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>GPT-5.5: The Complete Guide to OpenAI's Latest Model</title>
+  <title>GPT-5.6: The Complete Guide to OpenAI's Latest Model</title>
   <meta charset="utf-8">
 
   <style>
@@ -50,10 +50,10 @@
 
     class: inverse, center, middle
 
-    # GPT-5.5: The Complete Guide
+    # GPT-5.6: The Complete Guide
     ## OpenAI's Latest Model Deep Dive
     ### Lucas Soares
-    #### June 2026
+    #### July 2026
 
     ---
 
@@ -94,9 +94,9 @@
 
     ---
 
-    # GPT-5 → GPT-5.5 Release Timeline
+    # GPT-5 → GPT-5.6 Release Timeline
 
-    ## Version History (Aug 2025 → June 2026)
+    ## Version History (Aug 2025 → Jul 2026)
 
     --
 
@@ -122,9 +122,13 @@
 
     - **GPT-5.5-instant** — May 2026 (ChatGPT default)
 
+    --
+
+    - **GPT-5.6** — Jul 2026 (Sol/Terra/Luna tiers; `reasoning.mode` replaces separate `-pro` model; Programmatic Tool Calling added to Responses API)
+
     ---
 
-    # GPT-5.5 Core Innovations
+    # GPT-5.6 Core Innovations
 
     --
 
@@ -132,11 +136,11 @@
 
     --
 
-    - **Explicit Model Selection** — `gpt-5.5`, `gpt-5.4-mini`, `gpt-5.4-nano`
+    - **Explicit Model Selection** — `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`
 
     --
 
-    - **Tunable Reasoning** — `none` → `low` → `medium` → `high` → `xhigh`
+    - **Tunable Reasoning** — `none` → `low` → `medium` → `high` → `xhigh` → `max`
 
     --
 
@@ -157,23 +161,23 @@
 
     ---
 
-    # GPT-5.5 — The Current Frontier Model
+    # GPT-5.6 Sol — The Current Frontier Model
 
     --
 
-    OpenAI positions `gpt-5.5` as **"a new class of intelligence for coding and professional work"** — the current frontier model for complex professional tasks.
+    OpenAI positions `gpt-5.6-sol` as **"a new class of intelligence for coding and professional work"** — the current frontier model for complex professional tasks, absorbing the dedicated-coding role `gpt-5.3-codex` used to hold.
 
     --
 
     - **1,050,000-token** context window; **128,000** max output tokens
-    - Default `reasoning_effort` is `medium`; supports `none`, `low`, `medium`, `high`, `xhigh`
-    - `gpt-5.5-pro` available for the hardest problems needing extended reasoning
+    - Default `reasoning.effort` is `medium`; supports `none`, `low`, `medium`, `high`, `xhigh`, `max`
+    - Hardest problems: same model, `reasoning: {"mode": "pro"}` — no separate `-pro` model anymore
 
-    .footnote[Source: https://developers.openai.com/api/docs/models/gpt-5.5]
+    .footnote[Source: research/07-gpt-5.6-model-line.md · https://developers.openai.com/api/docs/models/gpt-5.6-sol]
 
     ---
 
-    # GPT-5.5 Model Line (Current Variants)
+    # GPT-5.6 Model Line (Current Variants)
 
     ## Per 1M tokens, standard tier
 
@@ -181,14 +185,11 @@
 
     | Model | Input | Output | Context |
     |---|---|---|---|
-    | `gpt-5.5` | $5.00 | $30.00 | 1,050,000 |
-    | `gpt-5.5-pro` | $30.00 | $180.00 | 1,050,000 |
-    | `gpt-5.5-instant` | $5.00 | $30.00 | ~1M |
-    | `gpt-5.4-mini` | $0.75 | $4.50 | 400,000 |
-    | `gpt-5.4-nano` | $0.20 | $1.25 | 400,000 |
-    | `gpt-5.3-codex` | $1.75 | $14.00 | 400,000 |
+    | `gpt-5.6-sol` (alias `gpt-5.6`) | $5.00 | $30.00 | 1,050,000 |
+    | `gpt-5.6-terra` | $2.50 | $15.00 | 1,050,000 |
+    | `gpt-5.6-luna` | $1.00 | $6.00 | 1,050,000 |
 
-    .footnote[Source: https://developers.openai.com/api/docs/models/gpt-5.5]
+    .footnote[Source: research/07-gpt-5.6-model-line.md · https://developers.openai.com/api/docs/models/gpt-5.6-sol]
 
     ---
 
@@ -215,7 +216,11 @@
     --
 
     > **As of 2026, the router is historical architecture.**
-    > `gpt-5.5-instant` is the new routing default for ChatGPT, and **API users pick their model explicitly** (`gpt-5.5`, `gpt-5.4-mini`, ...).
+    > `gpt-5.5-instant` is the new routing default for ChatGPT, and **API users pick their model explicitly** (`gpt-5.6-sol`, `gpt-5.6-terra`, ...).
+
+    --
+
+    - Since Jul 2026, `gpt-5.6-sol` is also reachable in the same ChatGPT interface — as an **opt-in reasoning-effort setting** on paid plans, not a default-routing swap.
 
     ---
     
@@ -227,19 +232,19 @@
 
     <div style="justify-content: center; align-items: center; height: 70vh;">
       <img src="../assets/speed-output-token-speed.png" width="100%" style="margin-top: 70px;">
-      <p style="font-size: 14px; color: gray;">GPT-5.4-mini: 155 tok/s · GPT-5.5: 63 tok/s (xhigh reasoning)</p>
+      <p style="font-size: 14px; color: gray;">GPT-5.6 Terra: 119 tok/s · GPT-5.6 Sol: 59 tok/s (high reasoning)</p>
     </div>
 
-    .footnote[Source: https://artificialanalysis.ai/]
+    .footnote[Source: https://artificialanalysis.ai/, fetched 2026-07-25]
 
     ---
 
     <div style="justify-content: center; align-items: center; height: 70vh;">
       <img src="../assets/speed-end-to-end-highlighted.png" width="100%" style="margin-top: 70px;">
-      <p style="font-size: 14px; color: gray;">GPT-5.4-mini: 17.1s · GPT-5.5: 95.1s end-to-end (incl. thinking time, 500 tokens)</p>
+      <p style="font-size: 14px; color: gray;">GPT-5.6 Terra: 8.89s · GPT-5.6 Sol: 35.3s end-to-end (incl. thinking time, 500 tokens)</p>
     </div>
 
-    .footnote[Source: https://artificialanalysis.ai/]
+    .footnote[Source: https://artificialanalysis.ai/, fetched 2026-07-25]
 
     ---
 
@@ -348,7 +353,7 @@
     ---
     class: center, middle
 
-    # Building with GPT-5.5: API & Integration
+    # Building with GPT-5.6: API & Integration
 
     ---
 
@@ -366,9 +371,9 @@
     **Before (legacy):** manual `previous_response_id` chaining
 
     ```python
-    r1 = client.responses.create(model="gpt-5.5", input="tell me a joke")
+    r1 = client.responses.create(model="gpt-5.6-sol", input="tell me a joke")
     r2 = client.responses.create(
-        model="gpt-5.5",
+        model="gpt-5.6-sol",
         previous_response_id=r1.id,
         input="explain why this is funny",
     )
@@ -379,7 +384,7 @@
     ```python
     convo = client.conversations.create()
     client.responses.create(
-        model="gpt-5.5", conversation=convo.id, store=True,
+        model="gpt-5.6-sol", conversation=convo.id, store=True,
         input="tell me a joke",
     )
     ```
@@ -432,7 +437,7 @@
 
     <h1>
     <span style="background-color: lightgreen">
-      Demo: Getting Started with GPT-5.5
+      Demo: Getting Started with GPT-5.6
     </span>
     </h1>
 
@@ -486,7 +491,7 @@
 
     agent = Agent(
         name="Assistant",
-        model="gpt-5.5",
+        model="gpt-5.6-sol",
         instructions="Help users with their tasks",
     )
 
@@ -508,13 +513,13 @@
 
     refunds = Agent(
         name="Refunds Specialist",
-        model="gpt-5.5",
+        model="gpt-5.6-sol",
         instructions="Handle refund requests end to end.",
     )
 
     triage = Agent(
         name="Triage",
-        model="gpt-5.4-mini",
+        model="gpt-5.6-terra",
         instructions="Route the user. Hand off refund issues to the specialist.",
         handoffs=[refunds],            # explicit delegation
     )
@@ -963,7 +968,7 @@
 
     --
 
-    - **Explicit model selection** — `gpt-5.5`, `gpt-5.4-mini`, `gpt-5.4-nano` for every use case
+    - **Explicit model selection** — `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` for every use case
 
     --
 
@@ -971,7 +976,7 @@
 
     --
 
-    - **Frontier coding** — `gpt-5.5` and `gpt-5.3-codex` for professional development work
+    - **Frontier coding** — `gpt-5.6-sol` for professional development work (absorbs the old dedicated-coding-model role)
 
     --
 

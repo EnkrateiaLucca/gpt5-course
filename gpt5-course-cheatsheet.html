@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPT-5 Course Cheatsheet — O'Reilly Live Training</title>
+    <title>GPT-5.6 Course Cheatsheet — O'Reilly Live Training</title>
     <style>
         /* ========================================
            MODULAR GRID/CARD LAYOUT TEMPLATE
@@ -313,44 +313,44 @@
 <body>
 
     <div class="page-header">
-        <h1>GPT-5 Course Cheatsheet</h1>
-        <div class="subtitle">O'Reilly Live Training — Getting Started with GPT-5</div>
-        <div class="meta">Instructor: Lucas | Responses API · Parameters · Tools · Prompting · Agents | 2025</div>
+        <h1>GPT-5.6 Course Cheatsheet</h1>
+        <div class="subtitle">O'Reilly Live Training — Getting Started with GPT-5.6</div>
+        <div class="meta">Instructor: Lucas | Responses API · Parameters · Tools · Prompting · Agents | 2026</div>
     </div>
 
     <!-- SECTION 1: Model Variants -->
-    <div class="section-title">1. Model Variants</div>
+    <div class="section-title">1. Model Variants (Sol / Terra / Luna, released 2026-07-09)</div>
 
     <div class="grid-3 mb-small">
         <div class="card">
-            <div class="card-title">gpt-5 <span class="badge">FLAGSHIP</span></div>
+            <div class="card-title">gpt-5.6-sol <span class="badge">FLAGSHIP</span></div>
             <div class="card-content">
                 <ul>
-                    <li>Complex reasoning &amp; multi-step</li>
-                    <li>Code generation &amp; refactoring</li>
-                    <li>Long context + tool calling</li>
-                    <li>Highest capability, higher latency</li>
+                    <li>$5.00 / $30.00 per 1M tokens (in/out)</li>
+                    <li>Frontier coding, agentic &amp; professional reasoning</li>
+                    <li>Absorbs the old dedicated-coding role (gpt-5.3-codex)</li>
+                    <li>Alias: bare <code>gpt-5.6</code> routes here</li>
                 </ul>
             </div>
         </div>
         <div class="card">
-            <div class="card-title">gpt-5-mini</div>
+            <div class="card-title">gpt-5.6-terra</div>
             <div class="card-content">
                 <ul>
-                    <li>Cost-optimised reasoning &amp; chat</li>
-                    <li>Balanced speed, cost, capability</li>
-                    <li>General chat, moderate tasks</li>
+                    <li>$2.50 / $15.00 per 1M tokens (in/out)</li>
+                    <li>~GPT-5.5-class quality at ~half the price</li>
+                    <li>General business/agentic tasks</li>
                     <li>Replace: o4-mini</li>
                 </ul>
             </div>
         </div>
         <div class="card">
-            <div class="card-title">gpt-5-nano</div>
+            <div class="card-title">gpt-5.6-luna</div>
             <div class="card-content">
                 <ul>
-                    <li>High-throughput simple tasks</li>
-                    <li>Fastest, most cost-effective</li>
-                    <li>Extraction, formatting, classify</li>
+                    <li>$1.00 / $6.00 per 1M tokens (in/out)</li>
+                    <li>Cheapest, fastest tier</li>
+                    <li>High-volume chat, extraction, classify</li>
                     <li>Replace: gpt-4.1-nano</li>
                 </ul>
             </div>
@@ -358,8 +358,8 @@
     </div>
 
     <div class="info-box mb-small">
-        <div class="info-box-title">⚠ System Card vs API Names</div>
-        <p>System card uses different names than the API. Check <strong>platform.openai.com/docs/guides/latest-model</strong> for the official mapping table.</p>
+        <div class="info-box-title">⚠ Context / Pricing Notes (all three tiers)</div>
+        <p>Context window <strong>1,050,000</strong> tokens, max output <strong>128,000</strong> tokens. Prompts over 272K input tokens incur a long-context surcharge (~2x input / ~1.5x output rate). System-card names differ from API identifiers — check <strong>developers.openai.com/api/docs/guides/latest-model</strong> for the official mapping table.</p>
     </div>
 
     <!-- SECTION 2: Responses API -->
@@ -372,7 +372,7 @@
 client = OpenAI()
 
 response = client.responses.create(
-    model="gpt-5",
+    model="gpt-5.6-sol",
     input="Your prompt here",
     reasoning={"effort": "medium"},
     text={"verbosity": "medium"}
@@ -380,20 +380,23 @@ response = client.responses.create(
 print(response.output_text)</code></pre>
         </div>
         <div class="code-card">
-            <div class="code-card-header">Multi-turn with CoT Persistence</div>
-            <pre><code># First turn
+            <div class="code-card-header">Multi-turn via Conversations API (current pattern)</div>
+            <pre><code>conversation = client.conversations.create()
+
 first = client.responses.create(
-    model="gpt-5",
+    model="gpt-5.6-sol",
+    conversation=conversation.id,
     input="Design an LRU cache in Python",
     reasoning={"effort": "high"}
 )
 
-# Follow-up — reuses prior reasoning
+# Follow-up — shares context via conversation id
 follow_up = client.responses.create(
-    model="gpt-5",
-    input="Add thread-safety.",
-    previous_response_id=first.id
-)</code></pre>
+    model="gpt-5.6-sol",
+    conversation=conversation.id,
+    input="Add thread-safety."
+)
+# Legacy chaining (still works): previous_response_id=first.id</code></pre>
         </div>
     </div>
 
@@ -402,16 +405,16 @@ follow_up = client.responses.create(
             <div class="card-title">Why Responses API over Chat Completions?</div>
             <div class="card-content">
                 <ul>
-                    <li><strong>CoT persistence</strong> via <code>previous_response_id</code></li>
+                    <li><strong>CoT persistence</strong> via <code>conversation=</code> id (or legacy <code>previous_response_id</code>)</li>
                     <li>Fewer reasoning tokens re-generated</li>
                     <li>Higher cache hit rates</li>
                     <li>Lower latency on follow-ups</li>
-                    <li>Improved cross-turn coherence</li>
+                    <li>Conversation-attached responses persist indefinitely (no 30-day TTL)</li>
                 </ul>
             </div>
         </div>
         <div class="card-light">
-            <div class="card-title">❌ Unsupported in GPT-5</div>
+            <div class="card-title">❌ Unsupported in GPT-5.6</div>
             <div class="card-content">
                 <ul>
                     <li><code>temperature</code> — not supported</li>
@@ -432,7 +435,7 @@ follow_up = client.responses.create(
     <div class="section-title">3. Reasoning Effort Parameter</div>
 
     <div class="table-card mb-small">
-        <div class="table-card-header">reasoning=&#123;"effort": "..."&#125; — Default: "medium"</div>
+        <div class="table-card-header">reasoning=&#123;"effort": "..."&#125; — Default: "medium" (all 3 tiers: Sol/Terra/Luna)</div>
         <table>
             <thead>
                 <tr>
@@ -444,10 +447,10 @@ follow_up = client.responses.create(
             </thead>
             <tbody>
                 <tr>
-                    <td><code>"minimal"</code> <span class="badge">NEW</span></td>
+                    <td><code>"none"</code></td>
                     <td>Fastest TTFT</td>
-                    <td>None / very few</td>
-                    <td>Extraction, formatting, simple classification, real-time UX</td>
+                    <td>None</td>
+                    <td>Latency-critical: voice turns, fast retrieval, simple classification</td>
                 </tr>
                 <tr>
                     <td><code>"low"</code></td>
@@ -459,16 +462,33 @@ follow_up = client.responses.create(
                     <td><code>"medium"</code></td>
                     <td>Balanced</td>
                     <td>Moderate</td>
-                    <td>Default — general tasks, similar to o3</td>
+                    <td>Default — general tasks</td>
                 </tr>
                 <tr>
                     <td><code>"high"</code></td>
-                    <td>Slowest</td>
+                    <td>Slow</td>
                     <td>Most</td>
                     <td>Complex math, multi-step planning, difficult code</td>
                 </tr>
+                <tr>
+                    <td><code>"xhigh"</code></td>
+                    <td>Slower</td>
+                    <td>Very high</td>
+                    <td>Hardest async/agentic tasks (top tier added in GPT-5.5)</td>
+                </tr>
+                <tr>
+                    <td><code>"max"</code></td>
+                    <td>Slowest</td>
+                    <td>Highest</td>
+                    <td>Hardest problems — often paired with <code>reasoning.mode:"pro"</code></td>
+                </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="info-box mb-small">
+        <div class="info-box-title">💡 reasoning.mode: "pro" (replaces the old gpt-5.5-pro model)</div>
+        <p>GPT-5.6 drops the separate <code>-pro</code> model. Instead, set <code>reasoning: &#123;"effort": "high", "mode": "pro"&#125;</code> on <code>gpt-5.6-sol</code> — <code>mode</code> and <code>effort</code> are independent axes, and pro-mode tokens bill at Sol's standard per-token rates (no separate pricing row). Documented across all three tiers, but foregrounded for Sol. Reserve for one hardest-reasoning demo, not a default. <strong>Note:</strong> <code>"minimal"</code> is no longer a supported value on any GPT-5.6 tier — use <code>"none"</code> or <code>"low"</code> instead.</p>
     </div>
 
     <!-- SECTION 4: Verbosity -->
@@ -480,24 +500,24 @@ follow_up = client.responses.create(
             <thead>
                 <tr>
                     <th>Value</th>
-                    <th>Approx. Tokens</th>
+                    <th>Output Length</th>
                     <th>Best For</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td><code>"low"</code></td>
-                    <td>~560</td>
+                    <td>Lowest of the three</td>
                     <td>Terse UX, SQL queries, concise code, minimal prose</td>
                 </tr>
                 <tr>
                     <td><code>"medium"</code></td>
-                    <td>~849</td>
+                    <td>Baseline</td>
                     <td>Balanced explanations (default)</td>
                 </tr>
                 <tr>
                     <td><code>"high"</code></td>
-                    <td>~1288</td>
+                    <td>Highest of the three</td>
                     <td>Audits, teaching, hand-offs, detailed documentation</td>
                 </tr>
             </tbody>
@@ -505,8 +525,8 @@ follow_up = client.responses.create(
     </div>
 
     <div class="info-box mb-small">
-        <div class="info-box-title">💡 Mixed Verbosity Strategy (Cursor pattern)</div>
-        <p>Set global <code>verbosity="low"</code> for prose, but instruct "use high verbosity for code tools" in the system prompt. Get concise explanations + detailed, well-commented code.</p>
+        <div class="info-box-title">💡 Measure, Don't Assume — and Mixed Verbosity Strategy</div>
+        <p>Exact token counts per verbosity level vary by prompt and model generation — benchmark live against your own prompts rather than relying on fixed numbers. The trend (low &lt; medium &lt; high) is stable across the GPT-5.x line. Cursor-style pattern: set global <code>verbosity="low"</code> for prose, but instruct "use high verbosity for code tools" in the system prompt to get concise explanations + detailed, well-commented code.</p>
     </div>
 
     <!-- SECTION 5: New Tool Features -->
@@ -517,7 +537,7 @@ follow_up = client.responses.create(
             <div class="code-card-header">Freeform / Custom Tool Calling (NEW)</div>
             <pre><code># Raw text payloads — no JSON wrapping
 response = client.responses.create(
-    model="gpt-5",
+    model="gpt-5.6-sol",
     input="Use code_exec to find factorial of 10.",
     tools=[{
         "type": "custom",
@@ -622,22 +642,22 @@ SP: " "
             <tbody>
                 <tr>
                     <td><code>o3</code></td>
-                    <td><code>gpt-5</code></td>
+                    <td><code>gpt-5.6-sol</code></td>
                     <td><code>reasoning.effort: "medium"</code> or <code>"high"</code></td>
                 </tr>
                 <tr>
                     <td><code>gpt-4.1</code></td>
-                    <td><code>gpt-5</code></td>
-                    <td><code>reasoning.effort: "minimal"</code> or <code>"low"</code></td>
+                    <td><code>gpt-5.6-sol</code></td>
+                    <td><code>reasoning.effort: "low"</code> (<code>"minimal"</code> was retired — map to <code>"none"</code> or <code>"low"</code>)</td>
                 </tr>
                 <tr>
                     <td><code>o4-mini</code></td>
-                    <td><code>gpt-5-mini</code></td>
+                    <td><code>gpt-5.6-terra</code></td>
                     <td>Default settings + prompt tuning</td>
                 </tr>
                 <tr>
                     <td><code>gpt-4.1-nano</code></td>
-                    <td><code>gpt-5-nano</code></td>
+                    <td><code>gpt-5.6-luna</code></td>
                     <td>Default settings + prompt tuning</td>
                 </tr>
             </tbody>
@@ -715,15 +735,15 @@ SP: " "
         <div class="code-card">
             <div class="code-card-header">Web Search Tool</div>
             <pre><code>response = client.responses.create(
-    model="gpt-5",
+    model="gpt-5.6-sol",
     tools=[{"type": "web_search"}],
-    input="Latest AI tool releases in September 2025?"
+    input="Latest AI tool releases this quarter?"
 )
 print(response.output_text)
 
-# Chain: Markdown table from results
+# Chain: Markdown table from results (cost-optimized follow-up)
 table_response = client.responses.create(
-    model="gpt-5-mini",
+    model="gpt-5.6-terra",
     previous_response_id=response.id,
     input=[{"role": "user",
             "content": "Put results in a markdown table."}]
@@ -733,7 +753,7 @@ table_response = client.responses.create(
             <div class="code-card-header">Multi-turn Agentic Loop</div>
             <pre><code>def run_conversation(messages, prev_id=None):
     response = client.responses.create(
-        model="gpt-5",
+        model="gpt-5.6-sol",
         input=messages,
         tools=TOOLS,
         previous_response_id=prev_id
@@ -761,7 +781,7 @@ table_response = client.responses.create(
                     <li>Authenticate user (email or name+zip)</li>
                     <li>Retrieve relevant data</li>
                     <li>Confirm before consequential actions</li>
-                    <li>Execute with <code>reasoning: "minimal"</code></li>
+                    <li>Execute with <code>reasoning: "none"</code></li>
                     <li>One tool call at a time</li>
                 </ol>
             </div>
@@ -800,24 +820,25 @@ table_response = client.responses.create(
             <div class="key-points-title">✅ Do This</div>
             <ul>
                 <li>Use <strong>Responses API</strong> (<code>client.responses.create</code>), not Chat Completions</li>
-                <li>Pass <strong><code>previous_response_id</code></strong> for multi-turn to save tokens + latency</li>
-                <li>Set <strong><code>reasoning.effort: "minimal"</code></strong> explicitly for speed-critical paths</li>
+                <li>Use <strong><code>client.conversations.create()</code></strong> for multi-turn (legacy <code>previous_response_id</code> still works)</li>
+                <li>Set <strong><code>reasoning.effort: "none"</code></strong> explicitly for speed-critical paths</li>
                 <li>Use <strong><code>text.verbosity: "high"</code></strong> for thorough code docs/audits</li>
                 <li>Keep CFG grammars <strong>simple</strong> — complex ones get API-rejected</li>
                 <li>Set <strong><code>parallel_tool_calls=False</code></strong> with custom tools</li>
-                <li>Use <strong><code>gpt-5-mini</code></strong> for follow-up processing of gpt-5 outputs</li>
+                <li>Use <strong><code>gpt-5.6-terra</code></strong> or <strong><code>gpt-5.6-luna</code></strong> for cost-sensitive follow-up processing of Sol outputs</li>
             </ul>
         </div>
         <div class="key-points" style="background:#fff0f0">
             <div class="key-points-title">❌ Avoid This</div>
             <ul>
-                <li>Using <code>temperature</code>, <code>top_p</code>, <code>logprobs</code> — not supported in GPT-5</li>
+                <li>Using <code>temperature</code>, <code>top_p</code>, <code>logprobs</code> — not supported in GPT-5.6</li>
+                <li>Using <code>reasoning.effort: "minimal"</code> — retired; not supported on any GPT-5.6 tier</li>
                 <li>Parallel tool calling with custom/freeform tools — not supported</li>
                 <li>Splitting free-text across multiple CFG terminals — use one bounded terminal</li>
                 <li>Contradictory instructions in the same system prompt</li>
                 <li>Complex CFG grammars without testing at high reasoning effort first</li>
-                <li>Re-generating full CoT on every turn — use <code>previous_response_id</code></li>
-                <li>Using Chat Completions for GPT-5 — missing CoT persistence</li>
+                <li>Re-generating full CoT on every turn — use <code>conversation=</code> or <code>previous_response_id</code></li>
+                <li>Using Chat Completions for GPT-5.6 — missing CoT persistence</li>
             </ul>
         </div>
     </div>
@@ -827,13 +848,14 @@ table_response = client.responses.create(
         <p>
             System Card: <strong>openai.com/index/gpt-5-system-card/</strong> &nbsp;|&nbsp;
             Prompting Guide: <strong>cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide</strong> &nbsp;|&nbsp;
-            API Docs: <strong>platform.openai.com/docs/guides/latest-model</strong> &nbsp;|&nbsp;
-            Lark IDE: <strong>lark-parser.org/ide/</strong>
+            API Docs: <strong>developers.openai.com/api/docs/guides/latest-model</strong> &nbsp;|&nbsp;
+            Model Line: <strong>developers.openai.com/api/docs/models/gpt-5.6-sol</strong> &nbsp;|&nbsp;
+            Lark IDE: <strong>www.lark-parser.org/ide/</strong>
         </p>
     </div>
 
     <footer>
-        <p>© 2025 Automata Learning Lab | O'Reilly Live Training: Getting Started with GPT-5 | Professional educational materials crafted with care</p>
+        <p>© 2026 Automata Learning Lab | O'Reilly Live Training: Getting Started with GPT-5.6 | Professional educational materials crafted with care</p>
     </footer>
 
 </body>

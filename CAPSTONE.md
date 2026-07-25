@@ -1,17 +1,17 @@
 # Capstone — The "Idea → App" Mini Agent
 
 **Combines:** `notebooks/gpt5-agentic-capabilities.ipynb` (Agents SDK: agents, tools, handoffs)
-and `notebooks/4.0-gpt5-frontend-dev-experiments.ipynb` (one-shot frontend generation with GPT-5.5).
+and `notebooks/4.0-gpt5-frontend-dev-experiments.ipynb` (one-shot frontend generation with GPT-5.6).
 
 ## Brief
 
 Build a small two-agent system that turns a one-line app idea into a working, single-file
 frontend. A **Researcher** agent gathers current tech-stack context with a hosted `web_search`
 tool, then **hands off** to a **Builder** agent that generates a complete, self-contained
-HTML/CSS/JS app with GPT-5.5. You own the orchestration; the SDK runs the agent loop.
+HTML/CSS/JS app with GPT-5.6. You own the orchestration; the SDK runs the agent loop.
 
 You'll practice the two skills the course builds toward: composing agents (config + tools +
-handoffs) and steering GPT-5.5 to produce production-grade frontend output from an
+handoffs) and steering GPT-5.6 to produce production-grade frontend output from an
 underspecified prompt.
 
 ## Spec

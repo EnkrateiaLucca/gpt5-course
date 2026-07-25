@@ -1,4 +1,7 @@
 ipykernel
+jupyter
+nbconvert
+nbformat
 openai
 pandas
 jinja2

@@ -36,11 +36,43 @@
       text-align: center;
     }
 
-    
+
 
     .remark-code,
     .remark-inline-code {
       font-family: 'Ubuntu Mono';
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 26px;
+    }
+
+    table th,
+    table td {
+      padding: 10px 24px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      white-space: nowrap;
+    }
+
+    table th {
+      background-color: #272822;
+      color: #f8f8f2;
+      font-family: 'Yanone Kaffeesatz';
+      font-weight: normal;
+      font-size: 30px;
+      letter-spacing: 0.5px;
+    }
+
+    table td:not(:first-child),
+    table th:not(:first-child) {
+      text-align: right;
+    }
+
+    table tr:nth-child(even) td {
+      background-color: #f7f7f7;
     }
   </style>
 
@@ -51,7 +83,7 @@
     class: inverse, center, middle
 
     # GPT-5.6: The Complete Guide
-    ## OpenAI's Latest Model Deep Dive
+    ## From GPT-5's Launch Leap to GPT-5.6 Today
     ### Lucas Soares
     #### July 2026
 
@@ -61,42 +93,349 @@
 
     --
 
-    **1. GPT-5 Overview & Timeline**
+    **Act I — GPT-5: The Original Leap (Aug 2025)**
+    - Launch timeline & core innovations
+    - Why it was a big deal: the benchmarks
+    - System Card: router, safety, honest problems
 
     --
 
-    **2. Model Comparison & Performance**
+    **Bridge — One Year Later: GPT-5 → GPT-5.6**
 
     --
 
-    **3. Ok, great the model does well on a lot of benchmarks, but what is new about it?**
-
-    --
-
-    **4. GPT-5 System Card**
-
-    --
-
-    **5. Building with GPT-5: API & Integration**
-
-    --
-
-    **6. GPT-5 Prompting Guide Complete Breakdown**
-
-    --
-
-
+    **Act II — GPT-5.6: Where We Are Today (Jul 2026)**
+    - What actually changed, and what didn't
+    - Honest assessment of today's model
+    - Building with GPT-5.6: API, Agents SDK, prompting
 
     ---
     class: center, middle
 
-    # GPT-5 Overview & Timeline
+    # Act I
+    ## GPT-5: The Original Leap
+    ### August 2025
 
     ---
 
-    # GPT-5 → GPT-5.6 Release Timeline
+    # GPT-5 Launch Timeline
 
-    ## Version History (Aug 2025 → Jul 2026)
+    --
+
+    - **Launch Date**: August 7, 2025
+
+    --
+
+    - **Major Breakthrough**: first unified system combining reasoning, multimodal input, and task execution — replacing the old pick-a-model-yourself menu (GPT-4o, GPT-4.5, o3, o3-pro, o4-mini, GPT-4.1...) with one model, `GPT-5`
+
+    --
+
+    - **Availability**: ChatGPT Free/Plus/Pro/Team at launch, API same day, Enterprise/Edu shortly after
+
+    ---
+
+    # GPT-5 Core Innovations (At Launch)
+
+    --
+
+    - **Unified Architecture** — one system, multiple specialized components, instead of a model-picker menu
+
+    --
+
+    - **Smart Router** — automatically selects the best internal model for each task
+
+    --
+
+    - **Reduced Hallucinations** — 45% fewer factual errors than GPT-4o
+
+    --
+
+    - **Enhanced Tool Use** — reliably chains dozens of tool calls
+
+    --
+
+    - **Multimodal Excellence** — native text, image, audio, and video support
+
+    ---
+
+    <div style="display: flex; justify-content: center; align-items: flex-start; padding-top: 8vh; gap: 60px;">
+      <div style="text-align: center;">
+        <img src="../assets/2025-09-25-16-30-21.png" width="260px">
+        <p style="font-size: 16px; color: gray; margin-top: 12px;">Before: pick from 8 models</p>
+      </div>
+      <div style="text-align: center; font-size: 40px; margin-top: 40px;">→</div>
+      <div style="text-align: center;">
+        <img src="../assets/2025-09-25-16-30-38.png" width="260px">
+        <p style="font-size: 16px; color: gray; margin-top: 12px;">After: just "GPT-5"</p>
+      </div>
+    </div>
+
+    .footnote[Source: ChatGPT model picker, Aug 2025]
+
+    ---
+    class: center, middle
+
+    # Why GPT-5 Was a Big Deal: The Benchmarks
+
+    ---
+
+    # GPT-5: SOTA on the Artificial Analysis Intelligence Index
+
+    <div style="text-align: center;">
+      <img src="../assets/legacy/gpt-5-top-intelligence-index-benchmark.png" width="100%">
+    </div>
+
+    .footnote[Source: https://openai.com/index/introducing-gpt-5/]
+
+    ---
+
+    # Across the Board: Frontier Results at Launch
+
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; height: 55vh;">
+      <img src="../assets/legacy/swe-bench-verified-software-engineering-results.png" style="width: 30%; margin: 0 12px;">
+      <img src="../assets/legacy/aime-2025-competition-math-results.png" style="width: 30%; margin: 0 12px;">
+      <img src="../assets/legacy/gpqa-diamond-phd-science-questions-results.png" style="width: 30%; margin: 0 12px;">
+    </div>
+
+    --
+
+    Also SOTA at launch on: FrontierMath (expert math), Aider Polyglot (multilang code editing), Humanity's Last Exam, tau2-bench (function calling), and multimodal visual/video reasoning.
+
+    .footnote[Source: https://openai.com/index/introducing-gpt-5/]
+
+    ---
+
+    # Overall Performance Summary
+
+    --
+
+    **Mathematics**: 94.6% on AIME 2025 (without tools)
+
+    --
+
+    **Coding**: 74.9% on SWE-bench Verified, 88% on Aider Polyglot
+
+    --
+
+    **Multimodal**: 84.2% on MMMU understanding
+
+    --
+
+    **Healthcare**: 46.2% on HealthBench Hard (vs 31.6% for OpenAI o3)
+
+    --
+
+    **Reduced errors, not just raw scores**: 45% fewer factual errors than GPT-4o, 80% fewer with thinking mode vs OpenAI o3 — and matched/beat o3 quality while spending less time thinking per answer
+
+    .footnote[Source: https://openai.com/index/introducing-gpt-5/]
+
+    ---
+    class: center, middle
+
+    # Ok, great the model does well on a lot of benchmarks, but what is new about it?
+
+    ---
+    class: center, middle
+
+    # GPT-5 System Card
+    ## Historical Architecture
+
+    ---
+
+    # Notes on GPT-5's System Card
+
+    --
+
+    **Real-time Router**
+    - Intelligently decided which model to use
+    - Based on conversation type, complexity, and tools needed
+
+    --
+
+    **Smart and Fast Model (`gpt-5-main`)**
+    - Handled most everyday questions efficiently
+    - Optimized for speed and general capability
+
+    --
+
+    **Deeper Reasoning Model (`gpt-5-thinking`)**
+    - Tackled complex problems requiring deep thought
+    - Produced long internal chains of reasoning, could refine strategy mid-answer
+
+    ---
+
+    # Naming It: System Card vs. API vs. What It Replaced
+
+    <div style="display: flex; justify-content: center; gap: 40px; align-items: flex-start;">
+      <img src="../assets/map-api-system-names.png" width="46%">
+      <img src="../assets/gpt5-system-card-table.png" width="46%">
+    </div>
+
+    .footnote[Source: OpenAI GPT-5 System Card · https://openai.com/index/gpt-5-system-card/]
+
+    ---
+
+    <div style="justify-content: center; align-items: center; height: 70vh;">
+      <img src="../assets/speed-output-token-speed.png" width="100%" style="margin-top: 70px;">
+      <p style="font-size: 14px; color: gray;">GPT-5.6 Terra: 119 tok/s · GPT-5.6 Sol: 59 tok/s (high reasoning) — the same speed/quality trade-off already existed at launch, just with fewer named tiers</p>
+    </div>
+
+    .footnote[Source: https://artificialanalysis.ai/, fetched 2026-07-25]
+
+    ---
+
+    # Safety Approach
+
+    --
+
+    ## Traditional Safety Approach
+    - Binary refusal (allow/deny)
+    - Overly cautious, often blocks helpful answers
+    - Lacks nuance for complex or dual-use queries
+
+    --
+
+    ## GPT-5 Safety-Helpfulness ("Safe Completions")
+    - Nuanced, context-aware responses
+    - Balances safety with helpfulness
+    - Enables more informative answers while respecting policy
+
+    .footnote[Source: https://cdn.openai.com/pdf/be60c07b-6bc2-4f54-bcee-4141e1d6c69a/gpt-5-safe_completions.pdf]
+
+    ---
+
+    # Safety vs. Helpfulness, Measured
+
+    <div style="text-align: center; margin-top: 20px;">
+      <img src="../assets/legacy/safety-helpfulness-comparison-gpt-5-vs-openai-o3.png" width="85%">
+    </div>
+
+    .footnote[Source: https://cdn.openai.com/pdf/be60c07b-6bc2-4f54-bcee-4141e1d6c69a/gpt-5-safe_completions.pdf]
+
+    ---
+
+    # Key Benefits of Safe-Completions
+
+    --
+
+    - **Maximizes helpfulness** while maintaining safety policy constraints
+
+    --
+
+    - **Particularly effective** for dual-use cases (biology, cybersecurity)
+
+    --
+
+    - **Nuanced responses** instead of blanket refusals
+
+    --
+
+    - **Still the industry standard today** — GPT-5.6 ships on the same safe-completions training approach
+
+    .footnote[Source: https://cdn.openai.com/pdf/be60c07b-6bc2-4f54-bcee-4141e1d6c69a/gpt-5-safe_completions.pdf]
+
+    ---
+    class: center, middle
+
+    # Honest Assessment: GPT-5 at Launch
+
+    ---
+
+    # The Rollout Was Rockier Than the Benchmarks Suggest
+
+    --
+
+    - OpenAI had spent over a year hyping GPT-5 as a possible AGI-adjacent leap — Sam Altman compared it to the jump to Retina-display iPhones
+
+    --
+
+    - Press verdict after launch: "incremental improvement rather than the revolutionary leap they were promised" — an expectation gap, not a capability failure
+
+    --
+
+    - OpenAI's own head of ChatGPT later admitted: *"In retrospect, not continuing to offer 4o, at least in the interim, was a miss"* — the sudden retirement of GPT-4o drew real user backlash
+
+    .footnote[Source: builtin.com/artificial-intelligence/openai-chatgpt-5-hype · interconnects.ai/p/gpt-5-and-bending-the-arc-of-progress]
+
+    ---
+
+    # The Router Was the Biggest Complaint
+
+    <div style="text-align: center;">
+      <img src="../assets/router-system-bad.png" width="72%">
+    </div>
+
+    .footnote[Source: r/singularity, r/LocalLLaMA, r/OpenAI — Aug/Sep 2025]
+
+    ---
+
+    # And Hands-On, the Cracks Showed Too
+
+    ## Honest Assessment: Intelligence Gaps
+
+    --
+
+    - [**Logic Problem Example**](https://chatgpt.com/share/6895186f-33c0-8004-82b6-d61fdc45d5f3) - Basic reasoning failure
+
+    --
+
+    - [**Melting App Fail**](https://chatgpt.com/share/68953808-7b00-8004-8a0f-557ceb889375) - Physical simulation errors
+
+    --
+
+    > Takeaway: GPT-5 genuinely moved the frontier on benchmarks — but the router, the abrupt GPT-4o retirement, and real reasoning gaps meant the launch experience didn't match the pitch. Keep both things true at once.
+
+    ---
+    class: center, middle
+
+    <h1>
+    <span style="background-color: lightgreen">
+     Demo: My Initial Experiments with GPT-5
+    </span>
+    </h1>
+
+    ---
+    # Interactive Learning Applications
+
+    ## Real GPT-5 Projects (Aug 2025)
+
+    --
+
+    ### **Educational Tools Built**:
+    - [**Transformers Learning App**](https://chatgpt.com/canvas/shared/68950ffbb9f08191b4ed73a86e123119) - Interactive transformer architecture visualization
+    - [**Embeddings Learning App**](https://chatgpt.com/canvas/shared/689512f7e6e4819199e1536602992bf5) - Hands-on embedding exploration
+    - [**Basketball Coach App**](https://chatgpt.com/s/t_68951bd734b08191ae3b9002cd304413) - AI-powered sports coaching
+    - [**iPad Drawing App**](https://chatgpt.com/canvas/shared/68953560217c8191a6360ebde7c1d693) - Touch-optimized creative tool
+
+    ---
+
+    # Advanced Web Applications
+
+    ## Cutting-Edge Implementations
+
+    --
+
+    ### **Interactive Experiences**:
+    - [**Context Rot Paper → Interactive Experience**](https://chatgpt.com/canvas/shared/689527fc5eac8191ae7b0e1170e3bbb1) - Academic paper transformation
+    - [**MediaPipe Music App**](https://chatgpt.com/share/6895403c-87b0-8004-a2b1-8a4fa09eab38) - Hand tracking music interface
+
+    --
+
+    ### **Research Tools**:
+    - [**Prompt Experiments**](https://chatgpt.com/share/68951e12-1d88-8004-8f36-3ef9965c43f8) - Python scripting and analysis
+    - [**Semantic Reader App**](https://claude.ai/public/artifacts/ac58dc2c-1a4b-46db-93fc-3b282e61b045) - Claude comparison project
+
+    ---
+    class: center, middle
+
+    # Bridge
+    ## One Year Later: GPT-5 → GPT-5.6
+
+    ---
+
+    # Version History (Aug 2025 → Jul 2026)
+
+    ## Mostly minor-version iteration — until now?
 
     --
 
@@ -116,7 +455,7 @@
 
     --
 
-    - **GPT-5.5** — Apr 2026 (current; default `reasoning_effort` reverts to `medium`)
+    - **GPT-5.5** — Apr 2026 (default `reasoning_effort` reverts to `medium`)
 
     --
 
@@ -127,8 +466,17 @@
     - **GPT-5.6** — Jul 2026 (Sol/Terra/Luna tiers; `reasoning.mode` replaces separate `-pro` model; Programmatic Tool Calling added to Responses API)
 
     ---
+    class: center, middle
+
+    # Act II
+    ## GPT-5.6: Where We Are Today
+    ### July 2026
+
+    ---
 
     # GPT-5.6 Core Innovations
+
+    ## Same DNA as GPT-5, evolved knobs
 
     --
 
@@ -136,7 +484,7 @@
 
     --
 
-    - **Explicit Model Selection** — `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`
+    - **Explicit Model Selection** — `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` (you choose, instead of a router guessing)
 
     --
 
@@ -151,11 +499,31 @@
     - **Multimodal** — text, image, audio, video
 
     ---
-    class: center, middle
 
-    <!-- ============================================= -->
-    <!-- MODEL COMPARISON AND PERFORMANCE -->
-    <!-- ============================================= -->
+    # What Actually Changed Since GPT-5?
+
+    --
+
+    **Model selection**: router guessing main/thinking (and a bad reputation for it, see Act I) → you explicitly pick `sol`/`terra`/`luna`
+
+    --
+
+    **Reasoning control**: coarse tiers → 6-level tunable `reasoning.effort`, incl. `pro` mode on Sol (no separate `-pro` model)
+
+    --
+
+    **Conversation state**: manual `previous_response_id` chaining → durable `conversations.create()` object + server-side compaction
+
+    --
+
+    **New in the API**: Programmatic Tool Calling added to the Responses API
+
+    --
+
+    > This is cumulative refinement, not another leap. The honest question for students: is that a problem?
+
+    ---
+    class: center, middle
 
     # Model Comparison & Performance
 
@@ -193,52 +561,6 @@
 
     ---
 
-    class: center, middle
-
-    # Ok, great the model does well on a lot of benchmarks, but what is new about it?
-
-    ---
-
-    class: center, middle
-
-    # GPT-5 System Card
-
-    ---
-
-    # Notes on GPT-5's System Card
-
-    --
-
-    **Real-time Router** *(historical architecture)*
-    - Intelligently decided which model to use
-    - Based on conversation type, complexity, and tools needed
-
-    --
-
-    > **As of 2026, the router is historical architecture.**
-    > `gpt-5.5-instant` is the new routing default for ChatGPT, and **API users pick their model explicitly** (`gpt-5.6-sol`, `gpt-5.6-terra`, ...).
-
-    --
-
-    - Since Jul 2026, `gpt-5.6-sol` is also reachable in the same ChatGPT interface — as an **opt-in reasoning-effort setting** on paid plans, not a default-routing swap.
-
-    ---
-    
-    <div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
-      <img src="../assets/router-system-bad.png" width="60%">
-    </div>
-
-    ---
-
-    <div style="justify-content: center; align-items: center; height: 70vh;">
-      <img src="../assets/speed-output-token-speed.png" width="100%" style="margin-top: 70px;">
-      <p style="font-size: 14px; color: gray;">GPT-5.6 Terra: 119 tok/s · GPT-5.6 Sol: 59 tok/s (high reasoning)</p>
-    </div>
-
-    .footnote[Source: https://artificialanalysis.ai/, fetched 2026-07-25]
-
-    ---
-
     <div style="justify-content: center; align-items: center; height: 70vh;">
       <img src="../assets/speed-end-to-end-highlighted.png" width="100%" style="margin-top: 70px;">
       <p style="font-size: 14px; color: gray;">GPT-5.6 Terra: 8.89s · GPT-5.6 Sol: 35.3s end-to-end (incl. thinking time, 500 tokens)</p>
@@ -247,108 +569,60 @@
     .footnote[Source: https://artificialanalysis.ai/, fetched 2026-07-25]
 
     ---
+    class: center, middle
 
-    # Safety Approach
-
-    --
-
-    
-    ## Traditional Safety Approach
-    - Binary refusal (allow/deny)
-    - Overly cautious, often blocks helpful answers
-    - Lacks nuance for complex or dual-use queries
-
-    --
-
-    ## GPT-5 Safety-Helpfulness
-    - Nuanced, context-aware responses
-    - Balances safety with helpfulness
-    - Enables more informative answers while respecting policy
-
-    .footnote[Source: https://cdn.openai.com/pdf/be60c07b-6bc2-4f54-bcee-4141e1d6c69a/gpt-5-safe_completions.pdf]
+    # Honest Assessment: GPT-5.6 Today
 
     ---
 
-    # Key Benefits
+    # Fixed Since GPT-5
 
     --
 
-    - **Maximizes helpfulness** while maintaining safety policy constraints
+    - **Router distrust** — gone, because there's no router. You pick the model explicitly.
 
     --
 
-    - **Particularly effective** for dual-use cases (biology, cybersecurity)
+    - **Coarse reasoning control** — 6 tunable levels instead of a hidden switch
 
     --
 
-    - **Nuanced responses** instead of blanket refusals
+    - **Abrupt deprecations** — GPT-5.6's own deprecation notices (Agent Builder, Evals, `v1/prompts`) shipped with a 6-month notice window, unlike the GPT-4o retirement backlash
 
     --
 
-    - **Demonstrated improvements** in both safety and helpfulness
-
-    .footnote[Source: https://cdn.openai.com/pdf/be60c07b-6bc2-4f54-bcee-4141e1d6c69a/gpt-5-safe_completions.pdf]
+    - **Safety approach** — safe-completions matured, same framework, no regression
 
     ---
 
-    <div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
-        <img src="../assets/safety-helpfulness-comparison-gpt-5-vs-openai-o3.png" width="90%">
-    </div>
+    # Still True (or New) Today
 
+    --
 
-    .footnote[Source: https://openai.com/index/gpt-5-system-card/#:~:text=The%20safety-helpfulness%20optimization%20technique,are%20tuned%20to%20the%20system.]
+    - **Simon Willison**, on the three-tier lineup: *"One of the most confusing aspects of GPT-5.6 is figuring out which model to use at which reasoning effort."*
+
+    --
+
+    - **Sol's weakness: fuzzy judgment** — for open-ended architecture or product-tradeoff questions with several defensible answers, still worth running multiple models in parallel
+
+    --
+
+    - **Luna's weakness: shallow reasoning** — weaker on long-context retention and nuance; don't reach for it on complex multi-step analysis
+
+    --
+
+    - **Terra is the sweet spot for most work** — roughly GPT-5.5-class quality at about half the price
+
+    .footnote[Source: simonw.substack.com/p/the-new-gpt-56-family-luna-terra · coderabbit.ai/blog/gpt-5-6-sol-and-terra-benchmark · vellum.ai/blog/gpt-5-6-benchmarks-explained]
 
     ---
     class: center, middle
 
     <h1>
     <span style="background-color: lightgreen">
-     Demo: My Initial Experiments with GPT-5
+      Demo: Getting Started with GPT-5.6
     </span>
     </h1>
-
-    ---
-    # Interactive Learning Applications
-
-    ## Real GPT-5 Projects
-
-    --
-
-    ### **Educational Tools Built**:
-    - [**Transformers Learning App**](https://chatgpt.com/canvas/shared/68950ffbb9f08191b4ed73a86e123119) - Interactive transformer architecture visualization
-    - [**Embeddings Learning App**](https://chatgpt.com/canvas/shared/689512f7e6e4819199e1536602992bf5) - Hands-on embedding exploration
-    - [**Basketball Coach App**](https://chatgpt.com/s/t_68951bd734b08191ae3b9002cd304413) - AI-powered sports coaching
-    - [**iPad Drawing App**](https://chatgpt.com/canvas/shared/68953560217c8191a6360ebde7c1d693) - Touch-optimized creative tool
-
-    ---
-
-    # Advanced Web Applications
-
-    ## Cutting-Edge Implementations
-
-    --
-
-    ### **Interactive Experiences**:
-    - [**Context Rot Paper → Interactive Experience**](https://chatgpt.com/canvas/shared/689527fc5eac8191ae7b0e1170e3bbb1) - Academic paper transformation
-    - [**MediaPipe Music App**](https://chatgpt.com/share/6895403c-87b0-8004-a2b1-8a4fa09eab38) - Hand tracking music interface
-
-    --
-
-    ### **Research Tools**:
-    - [**Prompt Experiments**](https://chatgpt.com/share/68951e12-1d88-8004-8f36-3ef9965c43f8) - Python scripting and analysis
-    - [**Semantic Reader App**](https://claude.ai/public/artifacts/ac58dc2c-1a4b-46db-93fc-3b282e61b045) - Claude comparison project
-
-    ---
-
-    # Observations: GPT-5 Limitations
-
-    ## Honest Assessment
-
-    --
-
-    ### **Intelligence Gaps Identified**:
-    - [**Logic Problem Example**](https://chatgpt.com/share/6895186f-33c0-8004-82b6-d61fdc45d5f3) - Basic reasoning failure
-    - [**Melting App Fail**](https://chatgpt.com/share/68953808-7b00-8004-8a0f-557ceb889375) - Physical simulation errors
 
     ---
     class: center, middle
@@ -431,15 +705,6 @@
         <a href="https://openai.com/api/" target="_blank" style="color: gray; text-decoration: underline;">Batch API</a>
       </p>
     </div>
-
-    ---
-    class: center, middle
-
-    <h1>
-    <span style="background-color: lightgreen">
-      Demo: Getting Started with GPT-5.6
-    </span>
-    </h1>
 
     ---
     class: inverse, center, middle
@@ -538,7 +803,7 @@
     ---
     class: center, middle
 
-    # GPT-5 Prompting Guide Complete Breakdown
+    # GPT-5.6 Prompting Guide Complete Breakdown
 
     ---
 
@@ -546,7 +811,7 @@
       <img src="../assets/agentic-workflow-spectrum.png" width="80%">
     </div>
 
-    .footnote[Source: [GPT-5 Prompting Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide)]
+    .footnote[Source: [GPT-5 Prompting Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide) — the guidance below evolved twice since 2025; watch for the "Historical" notes]
 
     ---
 
@@ -569,6 +834,10 @@
       Avoid long narrative paragraphs.
     </output_verbosity_spec>
     ```
+
+    --
+
+    > **Historical (GPT-5.2, Dec 2025).** GPT-5.6's guide replaces prompt-level blocks like this with a single global `text.verbosity` parameter — see the closing slide of this section.
 
     .footnote[Source: [GPT-5.2 Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)]
 
@@ -593,6 +862,10 @@
     </scope_discipline>
     ```
 
+    --
+
+    > **Historical (GPT-5.2, Dec 2025).** GPT-5.6's guide flags repeated rule-blocks like this as noise to trim if they aren't changing behavior — keep the *constraint* ("only what's requested"), drop the ceremony around it.
+
     .footnote[Source: [GPT-5.2 Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)]
 
     ---
@@ -614,6 +887,10 @@
     - Unstated assumptions
     - Specific numbers or claims not grounded in the input
     - Overly strong language
+
+    --
+
+    > **Historical (GPT-5.2, Dec 2025).** The goal (grounded, accurate answers) still matters — but GPT-5.6's guide treats explicit step-by-step process narration like this as something the model now handles reliably without being told.
 
     .footnote[Source: [GPT-5.2 Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)]
 
@@ -651,6 +928,10 @@
     - More predictable behavior
     - Lower token usage
 
+    --
+
+    > **Historical (GPT-5, 2025).** GPT-5.6's guide explicitly names context-gathering templates like this as something to trim — `reasoning_effort` and clear stopping conditions still work, the surrounding XML scaffolding usually doesn't add anything.
+
     ---
 
     # Controlling Agentic Eagerness
@@ -684,6 +965,10 @@
     - Continuous user updates on task progress
     - Detailed explanations of decision-making
 
+    --
+
+    > **Historical (GPT-5, 2025).** GPT-5.6's guide names `<persistence>` blocks like this directly as a pattern to trim — the model persists through a task reliably now without the reminder. Keep `reasoning_effort` as a real lever; drop the XML nudge.
+
     ---
 
     # Performance Optimization Techniques
@@ -708,7 +993,7 @@
     ---
 
     # The Hidden Cost of Bad Prompts
-    
+
     - GPT-5's stricter instruction following amplifies poor prompts
 
     --
@@ -716,7 +1001,7 @@
     - Contradictory instructions lead to inefficient Reasoning
 
     --
-    
+
     - Always resolve instruction hierarchy conflicts
 
     --
@@ -724,7 +1009,7 @@
     ### **Example: Resolving Conflicts**
     ```
     ❌ "Be concise but provide detailed explanations"
-    
+
     ✅ "Provide a 2-sentence summary, then detailed bullet points"
     ```
 
@@ -732,7 +1017,7 @@
 
     ---
 
-    # GPT-5 Coding Excellence
+    # GPT-5.6 Coding Excellence
 
     ## Optimal Framework Stack
 
@@ -788,6 +1073,10 @@
     </self-reflection>
     ```
 
+    --
+
+    > **Historical (GPT-5, 2025).** Same category of scaffolding GPT-5.6's guide recommends trimming — this kind of self-graded checklist is process narration the model now does reliably without being asked to narrate it.
+
     .footnote[Source: [GPT-5 Prompting Guide - Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design)]
 
     ---
@@ -800,12 +1089,16 @@
     ```xml
       <ui_ux_best_practices>
       - Visual Hierarchy: Limit typography to 4–5 font sizes and weights for consistent hierarchy; use `text-xs` for captions and annotations; avoid `text-xl` unless for hero or major headings.
-      - Color Usage: Use 1 neutral base (e.g., `zinc`) and up to 2 accent colors. 
+      - Color Usage: Use 1 neutral base (e.g., `zinc`) and up to 2 accent colors.
       - Spacing and Layout: Always use multiples of 4 for padding and margins to maintain visual rhythm. Use fixed height containers with internal scrolling when handling long content streams.
       - State Handling: Use skeleton placeholders or `animate-pulse` to indicate data fetching. Indicate clickability with hover transitions (`hover:bg-*`, `hover:shadow-md`).
       - Accessibility: Use semantic HTML and ARIA roles where appropriate. Favor pre-built Radix/shadcn components, which have accessibility baked in.
       </ui_ux_best_practices>
     ```
+
+    --
+
+    > **Partially historical.** Concrete, measurable rules (spacing multiples, 1 neutral base color) are exactly what GPT-5.6's guide says to *keep* — those are hard constraints. But absolute words like "Always use multiples of 4" are the kind of directive the guide now flags as friction: prefer stating the constraint once, plainly, over "always"/"never" framing.
 
     .footnote[Source: [GPT-5 Prompting Guide - Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design)]
 
@@ -813,9 +1106,9 @@
 
     # Ecosystem Support
 
-    
+
     - **GitHub Copilot**:
-      
+
       - Available across all paid plans
       - VS Code, GitHub.com, GitHub Mobile
       - Enhanced multi-file changes/refactors
@@ -825,18 +1118,18 @@
     - **Cursor Feedback**:
       - "Smartest coding model we've used"
       - Optimized for interactive development
-    
+
     --
-    
+
     - **Third-Party Tools**:
       - Windsurf integration Codex CLI optimization
       - Fine-tuned for agentic coding
-    
+
     --
-    
-    - **GPT-5 Codex**:
-      - Specialized for software engineering.
-      - Real-world task training.
+
+    - **`gpt-5.6-sol`**:
+      - Absorbed the dedicated-coding-model role `gpt-5.3-codex` used to hold
+      - Real-world task training
       - Complex independent task handling
 
     ---
@@ -853,7 +1146,7 @@
 
     --
 
-    **2. Thorough Tool-Calling Preambles**
+    **2. Tool-Calling Preambles** *(historical — GPT-5.6's guide says trim this to a brief one-liner, not a running narration)*
     ```markdown
     "Before each tool use, explain: what you're doing,
     why, and what you expect to find"
@@ -899,7 +1192,7 @@
 
     # Metaprompting Techniques
 
-    ## Teaching GPT-5 to Optimize Itself
+    ## Teaching GPT-5.6 to Optimize Itself
 
     --
 
@@ -926,9 +1219,49 @@
     ---
     class: center, middle
 
+    # GPT-5.6 Prompting Guide: The Philosophy Flips
+
+    ---
+
+    # Current Best Practice: Trim, Don't Scaffold
+
+    --
+
+    Everything scored **"Historical"** in this section was genuine, correct guidance for GPT-5 (2025) and GPT-5.2. GPT-5.6's own prompting guide reverses the advice: outcome-first prompting — define success criteria, set boundaries, then step back.
+
+    --
+
+    **Trim:**
+    - XML persistence blocks, repeated style rules that don't change behavior
+    - Context-gathering templates, self-graded checklists, process narration
+    - Absolute directives ("always" / "never")
+
+    --
+
+    **Keep:**
+    - Outcome statements, success criteria, stopping conditions
+    - Hard, concrete constraints (specific numbers, specific formats)
+
+    --
+
+    **Measured impact of trimming:** +10–15% eval scores, −41–66% tokens, −33–67% cost
+
+    --
+
+    **New tools instead of prompt scaffolding:** a global `text.verbosity` parameter, and Programmatic Tool Calling (offload filtering/batching to code, not model judgment)
+
+    --
+
+    > **Why the reversal happened:** GPT-5.6 "follows prompt contracts closely" — conflicting or redundant rules now cause instability (the model burns reasoning tokens reconciling contradictions) rather than adding safety margin the way they did on less-steerable 2025-era models.
+
+    .footnote[Source: OpenAI GPT-5.6 prompting guide, via decrypt.co/373439/openai-new-gpt-5-6-prompt-guide-chatgpt, Jul 2026]
+
+    ---
+    class: center, middle
+
     <h1>
       <span style="background-color: lightgreen">
-        Demo: Prompting Guide for GPT-5 - Hands-on
+        Demo: Prompting Guide for GPT-5.6 - Hands-on
       </span>
     </h1>
 
@@ -953,7 +1286,7 @@
 
     <h1>
       <span style="background-color: lightgreen">
-        Demo: Building GPT-5 Powered Apps
+        Demo: Building GPT-5.6 Powered Apps
       </span>
     </h1>
 
@@ -966,31 +1299,23 @@
 
     # Key Takeaways
 
-    --
-
-    - **Explicit model selection** — `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` for every use case
+    ## Closing the Two-Act Arc
 
     --
 
-    - **Preparedness Framework** and safe-completions training set new industry standards
+    - **GPT-5 proved the leap**: a unified model, frontier benchmarks across math/coding/multimodal, and safe-completions as the new safety standard — with real rollout scars (router backlash, abrupt GPT-4o retirement)
 
     --
 
-    - **Frontier coding** — `gpt-5.6-sol` for professional development work (absorbs the old dedicated-coding-model role)
+    - **GPT-5.6 refined it**: the router became explicit model selection (`sol`/`terra`/`luna`), reasoning went from a hidden switch to 6 tunable levels, and durable Conversations replaced manual chaining — cumulative, not revolutionary
 
     --
 
-    - **New parameters** (verbosity, reasoning effort) provide unprecedented control
-
-    --
-    
-    - **Native support** across text, image, audio, and video modalities
+    - **What's still hard**: picking the right tier/effort combo, Sol's fuzzy judgment on open-ended tradeoffs, Luna's shallow reasoning on complex tasks
 
     --
 
-    - **Comprehensive API ecosystem** with built-in tools and MCP integration
-
-    --
+    - **Comprehensive API ecosystem** with built-in tools, Agents SDK, and MCP integration ties both eras together
 
     ---
 
@@ -1021,7 +1346,7 @@
 
     # Next Steps & Resources
 
-    ## Continue Your GPT-5 Journey
+    ## Continue Your GPT-5.6 Journey
 
     ### **Official Documentation**
     - [GPT-5 System Card](https://openai.com/index/gpt-5-system-card/)
@@ -1036,7 +1361,7 @@
     ---
 
     # Connect With Me
-    
+
     ## 📚 [Course materials](https://github.com/EnkrateiaLucca/gpt5-course.git)
     ## 🔗 [LinkedIn](https://www.linkedin.com/in/lucas-soares-969044167/)
     ## 🐦 [Twitter/X - @LucasEnkrateia](https://x.com/LucasEnkrateia)
@@ -1051,7 +1376,7 @@
   <script>
     var slideshow = remark.create();
   </script>
-  
+
 </body>
 
 </html>

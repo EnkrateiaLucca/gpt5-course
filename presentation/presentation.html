@@ -33,6 +33,8 @@
       bottom: 30px;
       left: 0;
       width: 100%;
+      box-sizing: border-box;
+      padding: 0 110px;
       text-align: center;
     }
 
@@ -74,6 +76,24 @@
     table tr:nth-child(even) td {
       background-color: #f7f7f7;
     }
+
+    .previously {
+      border-left: 4px solid #b58900;
+      background-color: #fdf6e3;
+      padding: 4px 24px;
+      margin: 16px 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .previously p {
+      margin: 12px 0;
+    }
+
+    .previously blockquote {
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
   </style>
 
 </head>
@@ -85,7 +105,7 @@
     # GPT-5.6: The Complete Guide
     ## From GPT-5's Launch Leap to GPT-5.6 Today
     ### Lucas Soares
-    #### July 2026
+    #### August 2026
 
     ---
 
@@ -191,10 +211,16 @@
 
     # Across the Board: Frontier Results at Launch
 
-    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; height: 55vh;">
-      <img src="../assets/legacy/swe-bench-verified-software-engineering-results.png" style="width: 30%; margin: 0 12px;">
-      <img src="../assets/legacy/aime-2025-competition-math-results.png" style="width: 30%; margin: 0 12px;">
-      <img src="../assets/legacy/gpqa-diamond-phd-science-questions-results.png" style="width: 30%; margin: 0 12px;">
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+      <div style="height: 340px; display: flex; align-items: center; justify-content: center; margin: 0 12px;">
+        <img src="../assets/legacy/swe-bench-verified-software-engineering-results.png" style="max-height: 100%; max-width: 100%; width: auto; height: auto;">
+      </div>
+      <div style="height: 340px; display: flex; align-items: center; justify-content: center; margin: 0 12px;">
+        <img src="../assets/legacy/aime-2025-competition-math-results.png" style="max-height: 100%; max-width: 100%; width: auto; height: auto;">
+      </div>
+      <div style="height: 340px; display: flex; align-items: center; justify-content: center; margin: 0 12px;">
+        <img src="../assets/legacy/gpqa-diamond-phd-science-questions-results.png" style="max-height: 100%; max-width: 100%; width: auto; height: auto;">
+      </div>
     </div>
 
     --
@@ -272,15 +298,6 @@
     </div>
 
     .footnote[Source: OpenAI GPT-5 System Card · https://openai.com/index/gpt-5-system-card/]
-
-    ---
-
-    <div style="justify-content: center; align-items: center; height: 70vh;">
-      <img src="../assets/speed-output-token-speed.png" width="100%" style="margin-top: 70px;">
-      <p style="font-size: 14px; color: gray;">GPT-5.6 Terra: 119 tok/s · GPT-5.6 Sol: 59 tok/s (high reasoning) — the same speed/quality trade-off already existed at launch, just with fewer named tiers</p>
-    </div>
-
-    .footnote[Source: https://artificialanalysis.ai/, fetched 2026-07-25]
 
     ---
 
@@ -362,7 +379,7 @@
     # The Router Was the Biggest Complaint
 
     <div style="text-align: center;">
-      <img src="../assets/router-system-bad.png" width="72%">
+      <img src="../assets/router-system-bad.png" style="max-height: 480px; max-width: 90%;">
     </div>
 
     .footnote[Source: r/singularity, r/LocalLLaMA, r/OpenAI — Aug/Sep 2025]
@@ -561,6 +578,62 @@
 
     ---
 
+    # GPT-5 → GPT-5.6: What Changed in the Price Tag
+
+    ## Same context-window ballpark, a very different sticker price
+
+    --
+
+    | | GPT-5 | Sol | Terra | Luna |
+    |---|---|---|---|---|
+    | Input /1M | $1.25 | $5.00 | $2.50 | $1.00 |
+    | Output /1M | $10.00 | $30.00 | $15.00 | $6.00 |
+
+    --
+
+    The flagship reasoning tier now costs **roughly 4x more** than GPT-5's single launch price — but a new budget tier (`luna`) undercuts it. Pricing didn't get cheaper across the board; it split into a spectrum.
+
+    .footnote[GPT-5 = single launch model, Aug 2025 · Sol/Terra/Luna = GPT-5.6 tiers, Jul 2026 · Source: openai.com/index/introducing-gpt-5/ · research/07-gpt-5.6-model-line.md]
+
+    ---
+
+    # GPT-5 → GPT-5.6: The Quality Jump, Measured
+
+    <div style="text-align: center;">
+      <img src="../assets/artificial-analysis-intelligence-index-gpt5-to-gpt56.png" style="max-height: 320px; max-width: 95%;">
+    </div>
+
+    --
+
+    Same benchmark suite, same scale, one model generation apart: **GPT-5 (high): 35 → GPT-5.6 Sol (xhigh): 58** on the Artificial Analysis Intelligence Index.
+
+    .footnote[Source: artificialanalysis.ai, Intelligence Index v4.1, checked Jul 2026]
+
+    ---
+
+    # ...But at a Real Cost
+
+    <div style="text-align: center;">
+      <img src="../assets/artificial-analysis-cost-per-task-gpt5-to-gpt56.png" style="max-height: 380px; max-width: 95%;">
+    </div>
+
+    --
+
+    **GPT-5 (high): $0.24 → GPT-5.6 Sol (xhigh): $0.68** per Intelligence Index task — roughly 3x. The budget tier tells a different story: **Luna (xhigh) is $0.14**, cheaper than GPT-5 despite being the newer model.
+
+    .footnote[Source: artificialanalysis.ai, Cost per Intelligence Index Task, checked Jul 2026]
+
+    ---
+
+    <div style="justify-content: center; align-items: center; height: 70vh;">
+      <img src="../assets/speed-output-token-speed.png" width="100%" style="margin-top: 70px;">
+      <p style="font-size: 14px; color: gray;">GPT-5.6 Luna: 155 tok/s · Terra: 119 tok/s · Sol: 59 tok/s (high reasoning) — the classic speed/quality trade-off, now split across three named tiers instead of one router guess</p>
+    </div>
+
+    .footnote[Source: https://artificialanalysis.ai/ (GPT-5.6 Sol/Terra/Luna, high reasoning effort), fetched 2026-07-25]
+
+    ---
+
     <div style="justify-content: center; align-items: center; height: 70vh;">
       <img src="../assets/speed-end-to-end-highlighted.png" width="100%" style="margin-top: 70px;">
       <p style="font-size: 14px; color: gray;">GPT-5.6 Terra: 8.89s · GPT-5.6 Sol: 35.3s end-to-end (incl. thinking time, 500 tokens)</p>
@@ -681,12 +754,15 @@
 
     ---
 
-    <div style="text-align: center;margin-top: 70px;">
-      <img src="../assets/openai-chat-completions-api-code-example.png" width="800">
+    <div style="text-align: center;margin-top: 20px;">
+      <img src="../assets/openai-chat-completions-api-code-example.png" width="620">
       <p style="font-size: 14px; color: gray;">
-        <a href="https://openai.com/api/" target="_blank" style="color: gray; text-decoration: underline;">Chat Completions API</a>
+        <a href="https://openai.com/api/" target="_blank" style="color: gray; text-decoration: underline;">Chat Completions API</a> — legacy, still supported for GPT-5.6<br>
+        <strong>Current recommendation:</strong> build new work on the Responses API (previous slide) — keep Chat Completions only for existing integrations
       </p>
     </div>
+
+    .footnote[Source: https://developers.openai.com/api/docs/deprecations, checked Jul 2026]
 
     ---
 
@@ -807,167 +883,151 @@
 
     ---
 
-    <div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
-      <img src="../assets/agentic-workflow-spectrum.png" width="80%">
+    <div style="text-align: center;">
+      <img src="../assets/agentic-workflow-spectrum.png" width="65%">
     </div>
 
-    .footnote[Source: [GPT-5 Prompting Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide) — the guidance below evolved twice since 2025; watch for the "Historical" notes]
+    --
+
+    > Prompting guidance changes almost every model generation. The next few slides lead with **current GPT-5.6 practice** — older patterns are noted only as a small "previously" aside, so you can spot and unlearn outdated mental models instead of carrying them forward.
+
+    .footnote[Source: [GPT-5 Prompting Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide)]
 
     ---
 
-    # What's New: GPT-5.2 Prompting Deltas (1/3)
-
-    ## `output_verbosity_spec`
+    # Current Practice: Verbosity Is a Global Parameter
 
     --
 
-    **What it is:** the original guide had a single coarse `verbosity` API knob (low/medium/high). GPT-5.2 replaces it with an explicit, **in-prompt verbosity contract**.
-
-    --
-
-    **Example:**
-
-    ```text
-    <output_verbosity_spec>
-      Default: 3–6 sentences OR ≤5 bullets for typical answers.
-      Break responses into digestible chunks.
-      Avoid long narrative paragraphs.
-    </output_verbosity_spec>
-    ```
-
-    --
-
-    > **Historical (GPT-5.2, Dec 2025).** GPT-5.6's guide replaces prompt-level blocks like this with a single global `text.verbosity` parameter — see the closing slide of this section.
-
-    .footnote[Source: [GPT-5.2 Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)]
-
-    ---
-
-    # What's New: GPT-5.2 Prompting Deltas (2/3)
-
-    ## Scope Discipline
-
-    --
-
-    **What it is:** a dedicated guardrail that counters GPT-5.2's tendency to produce **more** code/features than the minimal spec.
-
-    --
-
-    **Example:**
-
-    ```text
-    <scope_discipline>
-      Implement EXACTLY and ONLY what the user requests.
-      No extra features, no added components, no UX embellishments.
-    </scope_discipline>
-    ```
-
-    --
-
-    > **Historical (GPT-5.2, Dec 2025).** GPT-5.6's guide flags repeated rule-blocks like this as noise to trim if they aren't changing behavior — keep the *constraint* ("only what's requested"), drop the ceremony around it.
-
-    .footnote[Source: [GPT-5.2 Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)]
-
-    ---
-
-    # What's New: GPT-5.2 Prompting Deltas (3/3)
-
-    ## Long-context Re-grounding + Uncertainty Self-checks
-
-    --
-
-    **Long-context re-grounding** — for inputs >~10k tokens:
-    - Produce a short internal outline
-    - Re-state the user's constraints explicitly before answering
-    - Anchor claims to specific sections
-
-    --
-
-    **Uncertainty self-checks** — in high-risk domains, prompt the model to flag, before finalizing:
-    - Unstated assumptions
-    - Specific numbers or claims not grounded in the input
-    - Overly strong language
-
-    --
-
-    > **Historical (GPT-5.2, Dec 2025).** The goal (grounded, accurate answers) still matters — but GPT-5.6's guide treats explicit step-by-step process narration like this as something the model now handles reliably without being told.
-
-    .footnote[Source: [GPT-5.2 Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)]
-
-    ---
-
-    # Controlling Agentic Eagerness
-
-    ## Less Agentic Eagerness
-
-    --
-
-    **Reduce Context Gathering & Exploration:**
+    **GPT-5.6 today:** control output length with the API-level `text.verbosity` parameter (`low`/`medium`/`high`) — a single global switch, not something you write into the prompt.
 
     ```python
-    # Set reasoning_effort to lower
-    reasoning_effort = "none"  # Improves efficiency, reduces latency
+    response = client.responses.create(
+        model="gpt-5.6-sol",
+        text={"verbosity": "low"},
+        input="Summarize this incident report.",
+    )
     ```
 
     --
 
-    **Specify Clear Exploration Criteria:**
-
-    ```xml
-    <context_gathering>
-      Goal: Find the specific function definition
-      Method: Search only in src/ directory
-      Stop: When function is found or after 2 searches
-    </context_gathering>
-    ```
+    **Why:** set once, applies consistently — it doesn't compete with your actual task instructions for the model's attention inside the prompt.
 
     --
 
-    **Benefits:**
-    - Faster response times
-    - More predictable behavior
-    - Lower token usage
+    .previously[
+    > *Previously:* this needed an in-prompt `<output_verbosity_spec>` block spelling out sentence/bullet counts. If that's the mental model you learned, drop it — the guide moved this back to the API layer.
+    ]
 
-    --
-
-    > **Historical (GPT-5, 2025).** GPT-5.6's guide explicitly names context-gathering templates like this as something to trim — `reasoning_effort` and clear stopping conditions still work, the surrounding XML scaffolding usually doesn't add anything.
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5.2 guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide) (historical)]
 
     ---
 
-    # Controlling Agentic Eagerness
-
-    ## More Agentic Eagerness
+    # Current Practice: State the Constraint, Skip the Ceremony
 
     --
 
-    **Encourage Persistence:**
+    **GPT-5.6 today:** one plain sentence carries the same weight a whole fenced block used to need — the model follows prompt contracts closely, so ceremony doesn't add safety margin anymore.
 
-    ```xml
-    <persistence>
-      Continue exploring until the task is fully complete.
-      Do not stop at partial solutions.
-      Verify all edge cases before concluding.
-    </persistence>
+    ```text
+    Implement only what's requested — no extra features, components, or UX embellishments.
     ```
 
     --
 
-    **Increase Reasoning Depth:**
+    **Why it's enough now:** GPT-5.6 treats this as a real constraint to satisfy, not a suggestion to weigh against other instructions.
+
+    --
+
+    .previously[
+    > *Previously:* the same guidance needed a dedicated `<scope_discipline>` XML block to fight over-coding. The constraint was always correct — only the packaging is obsolete.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5.2 guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide) (historical)]
+
+    ---
+
+    # Current Practice: Trust the Default Grounding
+
+    --
+
+    **GPT-5.6 today:** re-grounding on long inputs and flagging unstated assumptions or ungrounded claims are things the model now does reliably on its own — you generally don't need to instruct it to outline, re-state constraints, or self-check before answering.
+
+    --
+
+    **Reserve explicit instructions for genuinely unusual cases:** adversarial or contradictory source material, or domains where a wrong answer is costly enough that you want the check made visible in the output.
+
+    --
+
+    .previously[
+    > *Previously:* this needed explicit step-by-step re-grounding and uncertainty-self-check instructions written into every long-context or high-risk prompt. GPT-5.6 does this by default — verify occasionally, don't over-prompt for it.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5.2 guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide) (historical)]
+
+    ---
+
+    # Controlling Agentic Eagerness — Less
+
+    --
+
+    **GPT-5.6 today:** `reasoning.effort` is still the real lever — set it low for fast, narrow, low-latency tasks.
 
     ```python
-    reasoning_effort = "high"  # Default is "medium"
+    response = client.responses.create(
+        model="gpt-5.6-sol",
+        reasoning={"effort": "none"},
+        input="Find the definition of `parse_config` in src/.",
+    )
     ```
 
     --
 
-    **Tool Preambles for Progress Updates:**
-    - Thorough descriptions of each step
-    - Continuous user updates on task progress
-    - Detailed explanations of decision-making
+    **Stopping conditions still matter — say them once, plainly:**
+
+    ```text
+    Search only in src/. Stop once you find the function or after 2 searches.
+    ```
 
     --
 
-    > **Historical (GPT-5, 2025).** GPT-5.6's guide names `<persistence>` blocks like this directly as a pattern to trim — the model persists through a task reliably now without the reminder. Keep `reasoning_effort` as a real lever; drop the XML nudge.
+    **Benefits:** faster responses, more predictable behavior, lower token usage.
+
+    --
+
+    .previously[
+    > *Previously:* this same goal needed a full `<context_gathering>` XML template. GPT-5.6's guide names templates like that as trim-worthy — the plain sentence above does the same job.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5 guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide) (historical)]
+
+    ---
+
+    # Controlling Agentic Eagerness — More
+
+    --
+
+    **GPT-5.6 today:** raise `reasoning.effort` for tasks that need real persistence through to completion.
+
+    ```python
+    reasoning={"effort": "high"}  # default is "medium"
+    ```
+
+    --
+
+    **The model persists on its own now** — it keeps working through a task and verifies edge cases without being told to, so a reminder block isn't doing any work anymore.
+
+    --
+
+    **Tool-calling updates:** a brief one-liner when starting a new phase or changing plan is enough — not a running narration of every step.
+
+    --
+
+    .previously[
+    > *Previously:* this needed an explicit `<persistence>` block plus instructions for thorough step-by-step progress narration. GPT-5.6's guide flags both as things to trim; keep `reasoning.effort` as the real lever.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5 guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide) (historical)]
 
     ---
 
@@ -982,13 +1042,20 @@
     - Reuse context across turns instead of rebuilding history by hand
     - **Current best practice:** durable conversation objects (`conversations.create()` + `store=True`) over manual `previous_response_id` chaining
 
-    --
+    .footnote[Source: [OpenAI Responses API — Conversation State](https://developers.openai.com/api/docs/guides/conversation-state)]
 
-    ### Live demo → `notebooks/00-introduction-openai-responses-api.ipynb`
+    ---
+    class: center, middle
+
+    <h1>
+      <span style="background-color: lightgreen">
+        Demo: Context Reuse & Efficiency
+      </span>
+    </h1>
 
     Run the Responses API context-reuse and conversation-state examples hands-on.
 
-    .footnote[Source: [OpenAI Responses API — Conversation State](https://developers.openai.com/api/docs/guides/conversation-state)]
+    `notebooks/00-introduction-openai-responses-api.ipynb`
 
     ---
 
@@ -1056,51 +1123,51 @@
 
     ---
 
-    # Enhanced Code Generation Techniques
-
-    ## Self-Reflection & Structured Guidance
+    # Current Practice: Ask for the Outcome, Not the Self-Review
 
     --
 
-    ### **Improve 0-1 Shot App Generation:**
-    ```xml
-    <self-reflection>
-      Review the generated code for:
-      - Component reusability
-      - Error handling completeness
-      - Performance optimizations
-      Score each aspect 1-10 and explain improvements
-    </self-reflection>
+    **GPT-5.6 today:** state the quality bar once, as an outcome — the model already applies this kind of review internally without being asked to narrate a score.
+
+    ```text
+    Make sure components are reusable, errors are handled, and the
+    implementation is reasonably performant before finishing.
     ```
 
     --
 
-    > **Historical (GPT-5, 2025).** Same category of scaffolding GPT-5.6's guide recommends trimming — this kind of self-graded checklist is process narration the model now does reliably without being asked to narrate it.
+    .previously[
+    > *Previously:* this needed a `<self-reflection>` block asking the model to score itself 1–10 on each dimension and explain improvements. That scored checklist is exactly the kind of process narration GPT-5.6's guide says to trim.
+    ]
 
-    .footnote[Source: [GPT-5 Prompting Guide - Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design)]
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5 guide — Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design) (historical)]
 
     ---
 
-    # Enhanced Code Generation Techniques
+    # Current Practice: Concrete Constraints, Not Absolute Words
 
-    ## Self-Reflection & Structured Guidance
+    --
 
-    ### **Strict Design Standards Adherence:**
-    ```xml
-      <ui_ux_best_practices>
-      - Visual Hierarchy: Limit typography to 4–5 font sizes and weights for consistent hierarchy; use `text-xs` for captions and annotations; avoid `text-xl` unless for hero or major headings.
-      - Color Usage: Use 1 neutral base (e.g., `zinc`) and up to 2 accent colors.
-      - Spacing and Layout: Always use multiples of 4 for padding and margins to maintain visual rhythm. Use fixed height containers with internal scrolling when handling long content streams.
-      - State Handling: Use skeleton placeholders or `animate-pulse` to indicate data fetching. Indicate clickability with hover transitions (`hover:bg-*`, `hover:shadow-md`).
-      - Accessibility: Use semantic HTML and ARIA roles where appropriate. Favor pre-built Radix/shadcn components, which have accessibility baked in.
-      </ui_ux_best_practices>
+    **GPT-5.6 today:** keep the specific, measurable rules — drop the "always"/"never" framing around them.
+
+    ```text
+    Typography: 4-5 sizes max. Spacing: multiples of 4.
+    Color: 1 neutral base + up to 2 accents.
+    Loading state: skeleton placeholders. Prefer Radix/shadcn
+    for built-in accessibility.
     ```
 
     --
 
-    > **Partially historical.** Concrete, measurable rules (spacing multiples, 1 neutral base color) are exactly what GPT-5.6's guide says to *keep* — those are hard constraints. But absolute words like "Always use multiples of 4" are the kind of directive the guide now flags as friction: prefer stating the constraint once, plainly, over "always"/"never" framing.
+    **Why:** GPT-5.6 follows prompt contracts closely enough that hard numbers and named defaults do real work on their own — wrapping them in "Always..."/"Never..." adds friction without adding compliance.
 
-    .footnote[Source: [GPT-5 Prompting Guide - Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design)]
+    --
+
+    .previously[
+    > *Previously:* the same rules were framed inside a `<ui_ux_best_practices>` block full of "Always" directives. The constraints were correct then and still are — only the absolute-word packaging is what GPT-5.6's guide flags as historical.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5 guide — Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design) (historical)]
 
     ---
 
@@ -1189,34 +1256,6 @@
     .footnote[Source: [GPT-5 Prompting Guide - Markdown](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#markdown-formatting)]
 
     ---
-
-    # Metaprompting Techniques
-
-    ## Teaching GPT-5.6 to Optimize Itself
-
-    --
-
-    ### **The Metaprompt Pattern:**
-
-    ```text
-    When asked to optimize prompts, give answers from your own
-    perspective - explain what specific phrases could be added to,
-    or deleted from, this prompt to more consistently elicit the
-    desired behavior or prevent the undesired behavior.
-
-    Here's a prompt: [PROMPT]
-
-    The desired behavior is: [DO DESIRED BEHAVIOR]
-    But instead it: [DOES UNDESIRED BEHAVIOR]
-
-    While keeping the existing prompt intact as much as possible,
-    what minimal edits/additions would you make to encourage
-    more consistent desired behavior?
-    ```
-
-    .footnote[Source: [GPT-5 Prompting Guide - Metaprompting](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#metaprompting)]
-
-    ---
     class: center, middle
 
     # GPT-5.6 Prompting Guide: The Philosophy Flips
@@ -1227,7 +1266,7 @@
 
     --
 
-    Everything scored **"Historical"** in this section was genuine, correct guidance for GPT-5 (2025) and GPT-5.2. GPT-5.6's own prompting guide reverses the advice: outcome-first prompting — define success criteria, set boundaries, then step back.
+    GPT-5.6's prompting guide reverses earlier advice: outcome-first, not scaffolding-first.
 
     --
 
@@ -1242,6 +1281,12 @@
     - Outcome statements, success criteria, stopping conditions
     - Hard, concrete constraints (specific numbers, specific formats)
 
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6), Jul 2026]
+
+    ---
+
+    # Why the Shift: Measured Impact
+
     --
 
     **Measured impact of trimming:** +10–15% eval scores, −41–66% tokens, −33–67% cost
@@ -1254,7 +1299,7 @@
 
     > **Why the reversal happened:** GPT-5.6 "follows prompt contracts closely" — conflicting or redundant rules now cause instability (the model burns reasoning tokens reconciling contradictions) rather than adding safety margin the way they did on less-steerable 2025-era models.
 
-    .footnote[Source: OpenAI GPT-5.6 prompting guide, via decrypt.co/373439/openai-new-gpt-5-6-prompt-guide-chatgpt, Jul 2026]
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6), Jul 2026]
 
     ---
     class: center, middle
@@ -1349,14 +1394,14 @@
     ## Continue Your GPT-5.6 Journey
 
     ### **Official Documentation**
-    - [GPT-5 System Card](https://openai.com/index/gpt-5-system-card/)
-    - [GPT-5 Prompting Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide)
+    - [GPT-5.6 System Card](https://deploymentsafety.openai.com/gpt-5-6) (Jul 9, 2026)
+    - [GPT-5.6 Model Guidance & Prompting Guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6)
     - [OpenAI API Documentation](https://platform.openai.com/docs/overview)
 
     ### **Hands-on Practice**
-    - [Prompt Optimizer Tool](https://platform.openai.com/chat/edit?models=gpt-5&optimize=true)
-    - [GPT-5 Frontend Examples](https://cookbook.openai.com/examples/gpt-5/gpt-5_frontend)
-    - [New Parameters Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_new_params_and_tools)
+    - [Prompt Optimizer (Playground)](https://platform.openai.com/chat/edit?optimize=true)
+    - [Programmatic Tool Calling Guide](https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling)
+    - [GPT-5.6 Sol Model Reference](https://developers.openai.com/api/docs/models/gpt-5.6-sol)
 
     ---
 

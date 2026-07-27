@@ -94,6 +94,24 @@
       padding: 0;
       border: none;
     }
+
+    .now-then {
+      display: flex;
+      gap: 48px;
+      margin-top: 24px;
+      align-items: flex-start;
+    }
+
+    .now-then>div {
+      flex: 1;
+    }
+
+    .now-then .then {
+      color: gray;
+      font-size: 0.8em;
+      border-left: 3px solid #ddd;
+      padding-left: 20px;
+    }
   </style>
 
 </head>
@@ -362,17 +380,20 @@
 
     --
 
-    - OpenAI had spent over a year hyping GPT-5 as a possible AGI-adjacent leap — Sam Altman compared it to the jump to Retina-display iPhones
+    - **Hype vs. reality** — pitched as a possible AGI-adjacent leap (Altman: like the jump to Retina-display iPhones)
 
     --
 
-    - Press verdict after launch: "incremental improvement rather than the revolutionary leap they were promised" — an expectation gap, not a capability failure
+    - **Press verdict** — "incremental, not revolutionary": an expectations gap, not a capability failure
 
     --
 
-    - OpenAI's own head of ChatGPT later admitted: *"In retrospect, not continuing to offer 4o, at least in the interim, was a miss"* — the sudden retirement of GPT-4o drew real user backlash
+    - **GPT-4o backlash** — sudden retirement of the old model drew real user pushback; OpenAI later called it "a miss"
 
     .footnote[Source: builtin.com/artificial-intelligence/openai-chatgpt-5-hype · interconnects.ai/p/gpt-5-and-bending-the-arc-of-progress]
+
+    ???
+    OpenAI had spent over a year hyping GPT-5 as a possible AGI-adjacent leap — Sam Altman compared it to the jump to Retina-display iPhones. Press verdict after launch: "incremental improvement rather than the revolutionary leap they were promised" — an expectation gap, not a capability failure. OpenAI's own head of ChatGPT later admitted: "In retrospect, not continuing to offer 4o, at least in the interim, was a miss" — the sudden retirement of GPT-4o drew real user backlash.
 
     ---
 
@@ -550,7 +571,7 @@
 
     --
 
-    OpenAI positions `gpt-5.6-sol` as **"a new class of intelligence for coding and professional work"** — the current frontier model for complex professional tasks, absorbing the dedicated-coding role `gpt-5.3-codex` used to hold.
+    > "A new class of intelligence for coding and professional work" — OpenAI
 
     --
 
@@ -559,6 +580,9 @@
     - Hardest problems: same model, `reasoning: {"mode": "pro"}` — no separate `-pro` model anymore
 
     .footnote[Source: research/07-gpt-5.6-model-line.md · https://developers.openai.com/api/docs/models/gpt-5.6-sol]
+
+    ???
+    OpenAI positions gpt-5.6-sol as the current frontier model for complex professional tasks, absorbing the dedicated-coding role gpt-5.3-codex used to hold.
 
     ---
 
@@ -895,18 +919,14 @@
 
     ---
 
-    # Current Practice: Verbosity Is a Global Parameter
+    # Verbosity Is a Global Parameter
 
     --
 
-    **GPT-5.6 today:** control output length with the API-level `text.verbosity` parameter (`low`/`medium`/`high`) — a single global switch, not something you write into the prompt.
+    **Now:** control output length with the API-level `text.verbosity` parameter (`low`/`medium`/`high`) — a single global switch, not something you write into the prompt.
 
     ```python
-    response = client.responses.create(
-        model="gpt-5.6-sol",
-        text={"verbosity": "low"},
-        input="Summarize this incident report.",
-    )
+    text={"verbosity": "low"}
     ```
 
     --
@@ -923,11 +943,11 @@
 
     ---
 
-    # Current Practice: State the Constraint, Skip the Ceremony
+    # State the Constraint, Skip the Ceremony
 
     --
 
-    **GPT-5.6 today:** one plain sentence carries the same weight a whole fenced block used to need — the model follows prompt contracts closely, so ceremony doesn't add safety margin anymore.
+    **Now:** one plain sentence carries the same weight a whole fenced block used to need — the model follows prompt contracts closely, so ceremony doesn't add safety margin anymore.
 
     ```text
     Implement only what's requested — no extra features, components, or UX embellishments.
@@ -947,11 +967,11 @@
 
     ---
 
-    # Current Practice: Trust the Default Grounding
+    # Trust the Default Grounding
 
     --
 
-    **GPT-5.6 today:** re-grounding on long inputs and flagging unstated assumptions or ungrounded claims are things the model now does reliably on its own — you generally don't need to instruct it to outline, re-state constraints, or self-check before answering.
+    **Now:** re-grounding on long inputs and flagging unstated assumptions or ungrounded claims are things the model now does reliably on its own — you generally don't need to instruct it to outline, re-state constraints, or self-check before answering.
 
     --
 
@@ -967,18 +987,14 @@
 
     ---
 
-    # Controlling Agentic Eagerness — Less
+    # Agentic Eagerness — Turning It Down
 
     --
 
-    **GPT-5.6 today:** `reasoning.effort` is still the real lever — set it low for fast, narrow, low-latency tasks.
+    **Now:** `reasoning.effort` is still the real lever — set it low for fast, narrow, low-latency tasks.
 
     ```python
-    response = client.responses.create(
-        model="gpt-5.6-sol",
-        reasoning={"effort": "none"},
-        input="Find the definition of `parse_config` in src/.",
-    )
+    reasoning={"effort": "none"}
     ```
 
     --
@@ -1003,11 +1019,11 @@
 
     ---
 
-    # Controlling Agentic Eagerness — More
+    # Agentic Eagerness — Turning It Up
 
     --
 
-    **GPT-5.6 today:** raise `reasoning.effort` for tasks that need real persistence through to completion.
+    **Now:** raise `reasoning.effort` for tasks that need real persistence through to completion.
 
     ```python
     reasoning={"effort": "high"}  # default is "medium"
@@ -1123,11 +1139,11 @@
 
     ---
 
-    # Current Practice: Ask for the Outcome, Not the Self-Review
+    # Ask for the Outcome, Not the Self-Review
 
     --
 
-    **GPT-5.6 today:** state the quality bar once, as an outcome — the model already applies this kind of review internally without being asked to narrate a score.
+    **Now:** state the quality bar once, as an outcome — the model already applies this kind of review internally without being asked to narrate a score.
 
     ```text
     Make sure components are reusable, errors are handled, and the
@@ -1144,11 +1160,11 @@
 
     ---
 
-    # Current Practice: Concrete Constraints, Not Absolute Words
+    # Concrete Constraints, Not Absolute Words
 
     --
 
-    **GPT-5.6 today:** keep the specific, measurable rules — drop the "always"/"never" framing around them.
+    **Now:** keep the specific, measurable rules — drop the "always"/"never" framing around them.
 
     ```text
     Typography: 4-5 sizes max. Spacing: multiples of 4.

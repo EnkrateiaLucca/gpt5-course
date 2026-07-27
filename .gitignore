@@ -30,3 +30,6 @@ venv/
 Plans/
 research/
 walkthrough.md
+
+# Notebook demo outputs (regenerated live by running notebooks/4.0-*.ipynb)
+notebooks/outputs/

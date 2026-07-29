@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>GPT-5.5: The Complete Guide to OpenAI's Latest Model</title>
+  <title>GPT-5.6: The Complete Guide to OpenAI's Latest Model</title>
   <meta charset="utf-8">
 
   <style>
@@ -33,14 +33,84 @@
       bottom: 30px;
       left: 0;
       width: 100%;
+      box-sizing: border-box;
+      padding: 0 110px;
       text-align: center;
     }
 
-    
+
 
     .remark-code,
     .remark-inline-code {
       font-family: 'Ubuntu Mono';
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 26px;
+    }
+
+    table th,
+    table td {
+      padding: 10px 24px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      white-space: nowrap;
+    }
+
+    table th {
+      background-color: #272822;
+      color: #f8f8f2;
+      font-family: 'Yanone Kaffeesatz';
+      font-weight: normal;
+      font-size: 30px;
+      letter-spacing: 0.5px;
+    }
+
+    table td:not(:first-child),
+    table th:not(:first-child) {
+      text-align: right;
+    }
+
+    table tr:nth-child(even) td {
+      background-color: #f7f7f7;
+    }
+
+    .previously {
+      border-left: 4px solid #b58900;
+      background-color: #fdf6e3;
+      padding: 4px 24px;
+      margin: 16px 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .previously p {
+      margin: 12px 0;
+    }
+
+    .previously blockquote {
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+
+    .now-then {
+      display: flex;
+      gap: 48px;
+      margin-top: 24px;
+      align-items: flex-start;
+    }
+
+    .now-then>div {
+      flex: 1;
+    }
+
+    .now-then .then {
+      color: gray;
+      font-size: 0.8em;
+      border-left: 3px solid #ddd;
+      padding-left: 20px;
     }
   </style>
 
@@ -50,10 +120,10 @@
 
     class: inverse, center, middle
 
-    # GPT-5.5: The Complete Guide
-    ## OpenAI's Latest Model Deep Dive
+    # GPT-5.6: The Complete Guide
+    ## From GPT-5's Launch Leap to GPT-5.6 Today
     ### Lucas Soares
-    #### June 2026
+    #### August 2026
 
     ---
 
@@ -61,146 +131,158 @@
 
     --
 
-    **1. GPT-5 Overview & Timeline**
+    **Act I — GPT-5: The Original Leap (Aug 2025)**
+    - Launch timeline & core innovations
+    - Why it was a big deal: the benchmarks
+    - System Card: router, safety, honest problems
 
     --
 
-    **2. Model Comparison & Performance**
+    **Bridge — One Year Later: GPT-5 → GPT-5.6**
 
     --
 
-    **3. Ok, great the model does well on a lot of benchmarks, but what is new about it?**
-
-    --
-
-    **4. GPT-5 System Card**
-
-    --
-
-    **5. Building with GPT-5: API & Integration**
-
-    --
-
-    **6. GPT-5 Prompting Guide Complete Breakdown**
-
-    --
-
-
+    **Act II — GPT-5.6: Where We Are Today (Jul 2026)**
+    - What actually changed, and what didn't
+    - Honest assessment of today's model
+    - Building with GPT-5.6: API, Agents SDK, prompting
 
     ---
     class: center, middle
 
-    # GPT-5 Overview & Timeline
+    # Act I
+    ## GPT-5: The Original Leap
+    ### August 2025
 
     ---
 
-    # GPT-5 → GPT-5.5 Release Timeline
-
-    ## Version History (Aug 2025 → June 2026)
+    # GPT-5 Launch Timeline
 
     --
 
-    - **GPT-5** — Aug 2025 (original launch)
+    - **Launch Date**: August 7, 2025
 
     --
 
-    - **GPT-5.1** — Nov 2025
+    - **Major Breakthrough**: first unified system combining reasoning, multimodal input, and task execution — replacing the old pick-a-model-yourself menu (GPT-4o, GPT-4.5, o3, o3-pro, o4-mini, GPT-4.1...) with one model, `GPT-5`
 
     --
 
-    - **GPT-5.2** — Dec 2025 (`reasoning_effort` default → `none`; prompting guide deltas)
-
-    --
-
-    - **GPT-5.4** — Mar 2026 (mini + nano variants)
-
-    --
-
-    - **GPT-5.5** — Apr 2026 (current; default `reasoning_effort` reverts to `medium`)
-
-    --
-
-    - **GPT-5.5-instant** — May 2026 (ChatGPT default)
+    - **Availability**: ChatGPT Free/Plus/Pro/Team at launch, API same day, Enterprise/Edu shortly after
 
     ---
 
-    # GPT-5.5 Core Innovations
+    # GPT-5 Core Innovations (At Launch)
 
     --
 
-    - **Frontier Intelligence** — "a new class of intelligence for coding and professional work"
+    - **Unified Architecture** — one system, multiple specialized components, instead of a model-picker menu
 
     --
 
-    - **Explicit Model Selection** — `gpt-5.5`, `gpt-5.4-mini`, `gpt-5.4-nano`
+    - **Smart Router** — automatically selects the best internal model for each task
 
     --
 
-    - **Tunable Reasoning** — `none` → `low` → `medium` → `high` → `xhigh`
+    - **Reduced Hallucinations** — 45% fewer factual errors than GPT-4o
 
     --
 
-    - **Enhanced Tool Use** — shell, Skills, Connectors
+    - **Enhanced Tool Use** — reliably chains dozens of tool calls
 
     --
 
-    - **Multimodal** — text, image, audio, video
+    - **Multimodal Excellence** — native text, image, audio, and video support
+
+    ---
+
+    <div style="display: flex; justify-content: center; align-items: flex-start; padding-top: 8vh; gap: 60px;">
+      <div style="text-align: center;">
+        <img src="../assets/2025-09-25-16-30-21.png" width="260px">
+        <p style="font-size: 16px; color: gray; margin-top: 12px;">Before: pick from 8 models</p>
+      </div>
+      <div style="text-align: center; font-size: 40px; margin-top: 40px;">→</div>
+      <div style="text-align: center;">
+        <img src="../assets/2025-09-25-16-30-38.png" width="260px">
+        <p style="font-size: 16px; color: gray; margin-top: 12px;">After: just "GPT-5"</p>
+      </div>
+    </div>
+
+    .footnote[Source: ChatGPT model picker, Aug 2025]
 
     ---
     class: center, middle
 
-    <!-- ============================================= -->
-    <!-- MODEL COMPARISON AND PERFORMANCE -->
-    <!-- ============================================= -->
-
-    # Model Comparison & Performance
+    # Why GPT-5 Was a Big Deal: The Benchmarks
 
     ---
 
-    # GPT-5.5 — The Current Frontier Model
+    # GPT-5: SOTA on the Artificial Analysis Intelligence Index
 
-    --
+    <div style="text-align: center;">
+      <img src="../assets/legacy/gpt-5-top-intelligence-index-benchmark.png" width="100%">
+    </div>
 
-    OpenAI positions `gpt-5.5` as **"a new class of intelligence for coding and professional work"** — the current frontier model for complex professional tasks.
-
-    --
-
-    - **1,050,000-token** context window; **128,000** max output tokens
-    - Default `reasoning_effort` is `medium`; supports `none`, `low`, `medium`, `high`, `xhigh`
-    - `gpt-5.5-pro` available for the hardest problems needing extended reasoning
-
-    .footnote[Source: https://developers.openai.com/api/docs/models/gpt-5.5]
+    .footnote[Source: https://openai.com/index/introducing-gpt-5/]
 
     ---
 
-    # GPT-5.5 Model Line (Current Variants)
+    # Across the Board: Frontier Results at Launch
 
-    ## Per 1M tokens, standard tier
+    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+      <div style="height: 340px; display: flex; align-items: center; justify-content: center; margin: 0 12px;">
+        <img src="../assets/legacy/swe-bench-verified-software-engineering-results.png" style="max-height: 100%; max-width: 100%; width: auto; height: auto;">
+      </div>
+      <div style="height: 340px; display: flex; align-items: center; justify-content: center; margin: 0 12px;">
+        <img src="../assets/legacy/aime-2025-competition-math-results.png" style="max-height: 100%; max-width: 100%; width: auto; height: auto;">
+      </div>
+      <div style="height: 340px; display: flex; align-items: center; justify-content: center; margin: 0 12px;">
+        <img src="../assets/legacy/gpqa-diamond-phd-science-questions-results.png" style="max-height: 100%; max-width: 100%; width: auto; height: auto;">
+      </div>
+    </div>
 
     --
 
-    | Model | Input | Output | Context |
-    |---|---|---|---|
-    | `gpt-5.5` | $5.00 | $30.00 | 1,050,000 |
-    | `gpt-5.5-pro` | $30.00 | $180.00 | 1,050,000 |
-    | `gpt-5.5-instant` | $5.00 | $30.00 | ~1M |
-    | `gpt-5.4-mini` | $0.75 | $4.50 | 400,000 |
-    | `gpt-5.4-nano` | $0.20 | $1.25 | 400,000 |
-    | `gpt-5.3-codex` | $1.75 | $14.00 | 400,000 |
+    Also SOTA at launch on: FrontierMath (expert math), Aider Polyglot (multilang code editing), Humanity's Last Exam, tau2-bench (function calling), and multimodal visual/video reasoning.
 
-    .footnote[Source: https://developers.openai.com/api/docs/models/gpt-5.5]
+    .footnote[Source: https://openai.com/index/introducing-gpt-5/]
 
     ---
 
+    # Overall Performance Summary
+
+    --
+
+    **Mathematics**: 94.6% on AIME 2025 (without tools)
+
+    --
+
+    **Coding**: 74.9% on SWE-bench Verified, 88% on Aider Polyglot
+
+    --
+
+    **Multimodal**: 84.2% on MMMU understanding
+
+    --
+
+    **Healthcare**: 46.2% on HealthBench Hard (vs 31.6% for OpenAI o3)
+
+    --
+
+    **Reduced errors, not just raw scores**: 45% fewer factual errors than GPT-4o, 80% fewer with thinking mode vs OpenAI o3 — and matched/beat o3 quality while spending less time thinking per answer
+
+    .footnote[Source: https://openai.com/index/introducing-gpt-5/]
+
+    ---
     class: center, middle
 
     # Ok, great the model does well on a lot of benchmarks, but what is new about it?
 
     ---
-
     class: center, middle
 
     # GPT-5 System Card
+    ## Historical Architecture
 
     ---
 
@@ -208,38 +290,32 @@
 
     --
 
-    **Real-time Router** *(historical architecture)*
+    **Real-time Router**
     - Intelligently decided which model to use
     - Based on conversation type, complexity, and tools needed
 
     --
 
-    > **As of 2026, the router is historical architecture.**
-    > `gpt-5.5-instant` is the new routing default for ChatGPT, and **API users pick their model explicitly** (`gpt-5.5`, `gpt-5.4-mini`, ...).
+    **Smart and Fast Model (`gpt-5-main`)**
+    - Handled most everyday questions efficiently
+    - Optimized for speed and general capability
 
-    ---
-    
-    <div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
-      <img src="../assets/router-system-bad.png" width="60%">
-    </div>
+    --
 
-    ---
-
-    <div style="justify-content: center; align-items: center; height: 70vh;">
-      <img src="../assets/speed-output-token-speed.png" width="100%" style="margin-top: 70px;">
-      <p style="font-size: 14px; color: gray;">GPT-5.4-mini: 155 tok/s · GPT-5.5: 63 tok/s (xhigh reasoning)</p>
-    </div>
-
-    .footnote[Source: https://artificialanalysis.ai/]
+    **Deeper Reasoning Model (`gpt-5-thinking`)**
+    - Tackled complex problems requiring deep thought
+    - Produced long internal chains of reasoning, could refine strategy mid-answer
 
     ---
 
-    <div style="justify-content: center; align-items: center; height: 70vh;">
-      <img src="../assets/speed-end-to-end-highlighted.png" width="100%" style="margin-top: 70px;">
-      <p style="font-size: 14px; color: gray;">GPT-5.4-mini: 17.1s · GPT-5.5: 95.1s end-to-end (incl. thinking time, 500 tokens)</p>
+    # Naming It: System Card vs. API vs. What It Replaced
+
+    <div style="display: flex; justify-content: center; gap: 40px; align-items: flex-start;">
+      <img src="../assets/map-api-system-names.png" width="46%">
+      <img src="../assets/gpt5-system-card-table.png" width="46%">
     </div>
 
-    .footnote[Source: https://artificialanalysis.ai/]
+    .footnote[Source: OpenAI GPT-5 System Card · https://openai.com/index/gpt-5-system-card/]
 
     ---
 
@@ -247,7 +323,6 @@
 
     --
 
-    
     ## Traditional Safety Approach
     - Binary refusal (allow/deny)
     - Overly cautious, often blocks helpful answers
@@ -255,7 +330,7 @@
 
     --
 
-    ## GPT-5 Safety-Helpfulness
+    ## GPT-5 Safety-Helpfulness ("Safe Completions")
     - Nuanced, context-aware responses
     - Balances safety with helpfulness
     - Enables more informative answers while respecting policy
@@ -264,7 +339,17 @@
 
     ---
 
-    # Key Benefits
+    # Safety vs. Helpfulness, Measured
+
+    <div style="text-align: center; margin-top: 20px;">
+      <img src="../assets/legacy/safety-helpfulness-comparison-gpt-5-vs-openai-o3.png" width="85%">
+    </div>
+
+    .footnote[Source: https://cdn.openai.com/pdf/be60c07b-6bc2-4f54-bcee-4141e1d6c69a/gpt-5-safe_completions.pdf]
+
+    ---
+
+    # Key Benefits of Safe-Completions
 
     --
 
@@ -280,18 +365,63 @@
 
     --
 
-    - **Demonstrated improvements** in both safety and helpfulness
+    - **Still the industry standard today** — GPT-5.6 ships on the same safe-completions training approach
 
     .footnote[Source: https://cdn.openai.com/pdf/be60c07b-6bc2-4f54-bcee-4141e1d6c69a/gpt-5-safe_completions.pdf]
 
     ---
+    class: center, middle
 
-    <div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
-        <img src="../assets/safety-helpfulness-comparison-gpt-5-vs-openai-o3.png" width="90%">
+    # Honest Assessment: GPT-5 at Launch
+
+    ---
+
+    # The Rollout Was Rockier Than the Benchmarks Suggest
+
+    --
+
+    - **Hype vs. reality** — pitched as a possible AGI-adjacent leap (Altman: like the jump to Retina-display iPhones)
+
+    --
+
+    - **Press verdict** — "incremental, not revolutionary": an expectations gap, not a capability failure
+
+    --
+
+    - **GPT-4o backlash** — sudden retirement of the old model drew real user pushback; OpenAI later called it "a miss"
+
+    .footnote[Source: builtin.com/artificial-intelligence/openai-chatgpt-5-hype · interconnects.ai/p/gpt-5-and-bending-the-arc-of-progress]
+
+    ???
+    OpenAI had spent over a year hyping GPT-5 as a possible AGI-adjacent leap — Sam Altman compared it to the jump to Retina-display iPhones. Press verdict after launch: "incremental improvement rather than the revolutionary leap they were promised" — an expectation gap, not a capability failure. OpenAI's own head of ChatGPT later admitted: "In retrospect, not continuing to offer 4o, at least in the interim, was a miss" — the sudden retirement of GPT-4o drew real user backlash.
+
+    ---
+
+    # The Router Was the Biggest Complaint
+
+    <div style="text-align: center;">
+      <img src="../assets/router-system-bad.png" style="max-height: 480px; max-width: 90%;">
     </div>
 
+    .footnote[Source: r/singularity, r/LocalLLaMA, r/OpenAI — Aug/Sep 2025]
 
-    .footnote[Source: https://openai.com/index/gpt-5-system-card/#:~:text=The%20safety-helpfulness%20optimization%20technique,are%20tuned%20to%20the%20system.]
+    ---
+
+    # And Hands-On, the Cracks Showed Too
+
+    ## Honest Assessment: Intelligence Gaps
+
+    --
+
+    - [**Logic Problem Example**](https://chatgpt.com/share/6895186f-33c0-8004-82b6-d61fdc45d5f3) - Basic reasoning failure
+
+    --
+
+    - [**Melting App Fail**](https://chatgpt.com/share/68953808-7b00-8004-8a0f-557ceb889375) - Physical simulation errors
+
+    --
+
+    > Takeaway: GPT-5 genuinely moved the frontier on benchmarks — but the router, the abrupt GPT-4o retirement, and real reasoning gaps meant the launch experience didn't match the pitch. Keep both things true at once.
 
     ---
     class: center, middle
@@ -305,7 +435,7 @@
     ---
     # Interactive Learning Applications
 
-    ## Real GPT-5 Projects
+    ## Real GPT-5 Projects (Aug 2025)
 
     --
 
@@ -334,21 +464,267 @@
     - [**Semantic Reader App**](https://claude.ai/public/artifacts/ac58dc2c-1a4b-46db-93fc-3b282e61b045) - Claude comparison project
 
     ---
+    class: center, middle
 
-    # Observations: GPT-5 Limitations
+    # Bridge
+    ## One Year Later: GPT-5 → GPT-5.6
 
-    ## Honest Assessment
+    ---
+
+    # Version History (Aug 2025 → Jul 2026)
+
+    ## Mostly minor-version iteration — until now?
 
     --
 
-    ### **Intelligence Gaps Identified**:
-    - [**Logic Problem Example**](https://chatgpt.com/share/6895186f-33c0-8004-82b6-d61fdc45d5f3) - Basic reasoning failure
-    - [**Melting App Fail**](https://chatgpt.com/share/68953808-7b00-8004-8a0f-557ceb889375) - Physical simulation errors
+    - **GPT-5** — Aug 2025 (original launch)
+
+    --
+
+    - **GPT-5.1** — Nov 2025
+
+    --
+
+    - **GPT-5.2** — Dec 2025 (`reasoning_effort` default → `none`; prompting guide deltas)
+
+    --
+
+    - **GPT-5.4** — Mar 2026 (mini + nano variants)
+
+    --
+
+    - **GPT-5.5** — Apr 2026 (default `reasoning_effort` reverts to `medium`)
+
+    --
+
+    - **GPT-5.5-instant** — May 2026 (ChatGPT default)
+
+    --
+
+    - **GPT-5.6** — Jul 2026 (Sol/Terra/Luna tiers; `reasoning.mode` replaces separate `-pro` model; Programmatic Tool Calling added to Responses API)
 
     ---
     class: center, middle
 
-    # Building with GPT-5.5: API & Integration
+    # Act II
+    ## GPT-5.6: Where We Are Today
+    ### July 2026
+
+    ---
+
+    # GPT-5.6 Core Innovations
+
+    ## Same DNA as GPT-5, evolved knobs
+
+    --
+
+    - **Frontier Intelligence** — "a new class of intelligence for coding and professional work"
+
+    --
+
+    - **Explicit Model Selection** — `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna` (you choose, instead of a router guessing)
+
+    --
+
+    - **Tunable Reasoning** — `none` → `low` → `medium` → `high` → `xhigh` → `max`
+
+    --
+
+    - **Enhanced Tool Use** — shell, Skills, Connectors
+
+    --
+
+    - **Multimodal** — text, image, audio, video
+
+    ---
+
+    # What Actually Changed Since GPT-5?
+
+    --
+
+    **Model selection**: router guessing main/thinking (and a bad reputation for it, see Act I) → you explicitly pick `sol`/`terra`/`luna`
+
+    --
+
+    **Reasoning control**: coarse tiers → 6-level tunable `reasoning.effort`, incl. `pro` mode on Sol (no separate `-pro` model)
+
+    --
+
+    **Conversation state**: manual `previous_response_id` chaining → durable `conversations.create()` object + server-side compaction
+
+    --
+
+    **New in the API**: Programmatic Tool Calling added to the Responses API
+
+    --
+
+    > This is cumulative refinement, not another leap. The honest question for students: is that a problem?
+
+    ---
+    class: center, middle
+
+    # Model Comparison & Performance
+
+    ---
+
+    # GPT-5.6 Sol — The Current Frontier Model
+
+    --
+
+    > "A new class of intelligence for coding and professional work" — OpenAI
+
+    --
+
+    - **1,050,000-token** context window; **128,000** max output tokens
+    - Default `reasoning.effort` is `medium`; supports `none`, `low`, `medium`, `high`, `xhigh`, `max`
+    - Hardest problems: same model, `reasoning: {"mode": "pro"}` — no separate `-pro` model anymore
+
+    .footnote[Source: research/07-gpt-5.6-model-line.md · https://developers.openai.com/api/docs/models/gpt-5.6-sol]
+
+    ???
+    OpenAI positions gpt-5.6-sol as the current frontier model for complex professional tasks, absorbing the dedicated-coding role gpt-5.3-codex used to hold.
+
+    ---
+
+    # GPT-5.6 Model Line (Current Variants)
+
+    ## Per 1M tokens, standard tier
+
+    --
+
+    | Model | Input | Output | Context |
+    |---|---|---|---|
+    | `gpt-5.6-sol` (alias `gpt-5.6`) | $5.00 | $30.00 | 1,050,000 |
+    | `gpt-5.6-terra` | $2.50 | $15.00 | 1,050,000 |
+    | `gpt-5.6-luna` | $1.00 | $6.00 | 1,050,000 |
+
+    .footnote[Source: research/07-gpt-5.6-model-line.md · https://developers.openai.com/api/docs/models/gpt-5.6-sol]
+
+    ---
+
+    # GPT-5 → GPT-5.6: What Changed in the Price Tag
+
+    ## Same context-window ballpark, a very different sticker price
+
+    --
+
+    | | GPT-5 | Sol | Terra | Luna |
+    |---|---|---|---|---|
+    | Input /1M | $1.25 | $5.00 | $2.50 | $1.00 |
+    | Output /1M | $10.00 | $30.00 | $15.00 | $6.00 |
+
+    --
+
+    The flagship reasoning tier now costs **roughly 4x more** than GPT-5's single launch price — but a new budget tier (`luna`) undercuts it. Pricing didn't get cheaper across the board; it split into a spectrum.
+
+    .footnote[GPT-5 = single launch model, Aug 2025 · Sol/Terra/Luna = GPT-5.6 tiers, Jul 2026 · Source: openai.com/index/introducing-gpt-5/ · research/07-gpt-5.6-model-line.md]
+
+    ---
+
+    # GPT-5 → GPT-5.6: The Quality Jump, Measured
+
+    <div style="text-align: center;">
+      <img src="../assets/artificial-analysis-intelligence-index-gpt5-to-gpt56.png" style="max-height: 320px; max-width: 95%;">
+    </div>
+
+    --
+
+    Same benchmark suite, same scale, one model generation apart: **GPT-5 (high): 35 → GPT-5.6 Sol (xhigh): 58** on the Artificial Analysis Intelligence Index.
+
+    .footnote[Source: artificialanalysis.ai, Intelligence Index v4.1, checked Jul 2026]
+
+    ---
+
+    # ...But at a Real Cost
+
+    <div style="text-align: center;">
+      <img src="../assets/artificial-analysis-cost-per-task-gpt5-to-gpt56.png" style="max-height: 380px; max-width: 95%;">
+    </div>
+
+    --
+
+    **GPT-5 (high): $0.24 → GPT-5.6 Sol (xhigh): $0.68** per Intelligence Index task — roughly 3x. The budget tier tells a different story: **Luna (xhigh) is $0.14**, cheaper than GPT-5 despite being the newer model.
+
+    .footnote[Source: artificialanalysis.ai, Cost per Intelligence Index Task, checked Jul 2026]
+
+    ---
+
+    <div style="justify-content: center; align-items: center; height: 70vh;">
+      <img src="../assets/speed-output-token-speed.png" width="100%" style="margin-top: 70px;">
+      <p style="font-size: 14px; color: gray;">GPT-5.6 Luna: 155 tok/s · Terra: 119 tok/s · Sol: 59 tok/s (high reasoning) — the classic speed/quality trade-off, now split across three named tiers instead of one router guess</p>
+    </div>
+
+    .footnote[Source: https://artificialanalysis.ai/ (GPT-5.6 Sol/Terra/Luna, high reasoning effort), fetched 2026-07-25]
+
+    ---
+
+    <div style="justify-content: center; align-items: center; height: 70vh;">
+      <img src="../assets/speed-end-to-end-highlighted.png" width="100%" style="margin-top: 70px;">
+      <p style="font-size: 14px; color: gray;">GPT-5.6 Terra: 8.89s · GPT-5.6 Sol: 35.3s end-to-end (incl. thinking time, 500 tokens)</p>
+    </div>
+
+    .footnote[Source: https://artificialanalysis.ai/, fetched 2026-07-25]
+
+    ---
+    class: center, middle
+
+    # Honest Assessment: GPT-5.6 Today
+
+    ---
+
+    # Fixed Since GPT-5
+
+    --
+
+    - **Router distrust** — gone, because there's no router. You pick the model explicitly.
+
+    --
+
+    - **Coarse reasoning control** — 6 tunable levels instead of a hidden switch
+
+    --
+
+    - **Abrupt deprecations** — GPT-5.6's own deprecation notices (Agent Builder, Evals, `v1/prompts`) shipped with a 6-month notice window, unlike the GPT-4o retirement backlash
+
+    --
+
+    - **Safety approach** — safe-completions matured, same framework, no regression
+
+    ---
+
+    # Still True (or New) Today
+
+    --
+
+    - **Simon Willison**, on the three-tier lineup: *"One of the most confusing aspects of GPT-5.6 is figuring out which model to use at which reasoning effort."*
+
+    --
+
+    - **Sol's weakness: fuzzy judgment** — for open-ended architecture or product-tradeoff questions with several defensible answers, still worth running multiple models in parallel
+
+    --
+
+    - **Luna's weakness: shallow reasoning** — weaker on long-context retention and nuance; don't reach for it on complex multi-step analysis
+
+    --
+
+    - **Terra is the sweet spot for most work** — roughly GPT-5.5-class quality at about half the price
+
+    .footnote[Source: simonw.substack.com/p/the-new-gpt-56-family-luna-terra · coderabbit.ai/blog/gpt-5-6-sol-and-terra-benchmark · vellum.ai/blog/gpt-5-6-benchmarks-explained]
+
+    ---
+    class: center, middle
+
+    <h1>
+    <span style="background-color: lightgreen">
+      Demo: Getting Started with GPT-5.6
+    </span>
+    </h1>
+
+    ---
+    class: center, middle
+
+    # Building with GPT-5.6: API & Integration
 
     ---
 
@@ -366,9 +742,9 @@
     **Before (legacy):** manual `previous_response_id` chaining
 
     ```python
-    r1 = client.responses.create(model="gpt-5.5", input="tell me a joke")
+    r1 = client.responses.create(model="gpt-5.6-sol", input="tell me a joke")
     r2 = client.responses.create(
-        model="gpt-5.5",
+        model="gpt-5.6-sol",
         previous_response_id=r1.id,
         input="explain why this is funny",
     )
@@ -379,7 +755,7 @@
     ```python
     convo = client.conversations.create()
     client.responses.create(
-        model="gpt-5.5", conversation=convo.id, store=True,
+        model="gpt-5.6-sol", conversation=convo.id, store=True,
         input="tell me a joke",
     )
     ```
@@ -402,12 +778,15 @@
 
     ---
 
-    <div style="text-align: center;margin-top: 70px;">
-      <img src="../assets/openai-chat-completions-api-code-example.png" width="800">
+    <div style="text-align: center;margin-top: 20px;">
+      <img src="../assets/openai-chat-completions-api-code-example.png" width="620">
       <p style="font-size: 14px; color: gray;">
-        <a href="https://openai.com/api/" target="_blank" style="color: gray; text-decoration: underline;">Chat Completions API</a>
+        <a href="https://openai.com/api/" target="_blank" style="color: gray; text-decoration: underline;">Chat Completions API</a> — legacy, still supported for GPT-5.6<br>
+        <strong>Current recommendation:</strong> build new work on the Responses API (previous slide) — keep Chat Completions only for existing integrations
       </p>
     </div>
+
+    .footnote[Source: https://developers.openai.com/api/docs/deprecations, checked Jul 2026]
 
     ---
 
@@ -426,15 +805,6 @@
         <a href="https://openai.com/api/" target="_blank" style="color: gray; text-decoration: underline;">Batch API</a>
       </p>
     </div>
-
-    ---
-    class: center, middle
-
-    <h1>
-    <span style="background-color: lightgreen">
-      Demo: Getting Started with GPT-5.5
-    </span>
-    </h1>
 
     ---
     class: inverse, center, middle
@@ -486,7 +856,7 @@
 
     agent = Agent(
         name="Assistant",
-        model="gpt-5.5",
+        model="gpt-5.6-sol",
         instructions="Help users with their tasks",
     )
 
@@ -508,13 +878,13 @@
 
     refunds = Agent(
         name="Refunds Specialist",
-        model="gpt-5.5",
+        model="gpt-5.6-sol",
         instructions="Handle refund requests end to end.",
     )
 
     triage = Agent(
         name="Triage",
-        model="gpt-5.4-mini",
+        model="gpt-5.6-terra",
         instructions="Route the user. Hand off refund issues to the specialist.",
         handoffs=[refunds],            # explicit delegation
     )
@@ -533,151 +903,147 @@
     ---
     class: center, middle
 
-    # GPT-5 Prompting Guide Complete Breakdown
+    # GPT-5.6 Prompting Guide Complete Breakdown
 
     ---
 
-    <div style="display: flex; justify-content: center; align-items: center; height: 70vh;">
-      <img src="../assets/agentic-workflow-spectrum.png" width="80%">
+    <div style="text-align: center;">
+      <img src="../assets/agentic-workflow-spectrum.png" width="65%">
     </div>
+
+    --
+
+    > Prompting guidance changes almost every model generation. The next few slides lead with **current GPT-5.6 practice** — older patterns are noted only as a small "previously" aside, so you can spot and unlearn outdated mental models instead of carrying them forward.
 
     .footnote[Source: [GPT-5 Prompting Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide)]
 
     ---
 
-    # What's New: GPT-5.2 Prompting Deltas (1/3)
-
-    ## `output_verbosity_spec`
+    # Verbosity Is a Global Parameter
 
     --
 
-    **What it is:** the original guide had a single coarse `verbosity` API knob (low/medium/high). GPT-5.2 replaces it with an explicit, **in-prompt verbosity contract**.
-
-    --
-
-    **Example:**
-
-    ```text
-    <output_verbosity_spec>
-      Default: 3–6 sentences OR ≤5 bullets for typical answers.
-      Break responses into digestible chunks.
-      Avoid long narrative paragraphs.
-    </output_verbosity_spec>
-    ```
-
-    .footnote[Source: [GPT-5.2 Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)]
-
-    ---
-
-    # What's New: GPT-5.2 Prompting Deltas (2/3)
-
-    ## Scope Discipline
-
-    --
-
-    **What it is:** a dedicated guardrail that counters GPT-5.2's tendency to produce **more** code/features than the minimal spec.
-
-    --
-
-    **Example:**
-
-    ```text
-    <scope_discipline>
-      Implement EXACTLY and ONLY what the user requests.
-      No extra features, no added components, no UX embellishments.
-    </scope_discipline>
-    ```
-
-    .footnote[Source: [GPT-5.2 Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)]
-
-    ---
-
-    # What's New: GPT-5.2 Prompting Deltas (3/3)
-
-    ## Long-context Re-grounding + Uncertainty Self-checks
-
-    --
-
-    **Long-context re-grounding** — for inputs >~10k tokens:
-    - Produce a short internal outline
-    - Re-state the user's constraints explicitly before answering
-    - Anchor claims to specific sections
-
-    --
-
-    **Uncertainty self-checks** — in high-risk domains, prompt the model to flag, before finalizing:
-    - Unstated assumptions
-    - Specific numbers or claims not grounded in the input
-    - Overly strong language
-
-    .footnote[Source: [GPT-5.2 Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide)]
-
-    ---
-
-    # Controlling Agentic Eagerness
-
-    ## Less Agentic Eagerness
-
-    --
-
-    **Reduce Context Gathering & Exploration:**
+    **Now:** control output length with the API-level `text.verbosity` parameter (`low`/`medium`/`high`) — a single global switch, not something you write into the prompt.
 
     ```python
-    # Set reasoning_effort to lower
-    reasoning_effort = "none"  # Improves efficiency, reduces latency
+    text={"verbosity": "low"}
     ```
 
     --
 
-    **Specify Clear Exploration Criteria:**
-
-    ```xml
-    <context_gathering>
-      Goal: Find the specific function definition
-      Method: Search only in src/ directory
-      Stop: When function is found or after 2 searches
-    </context_gathering>
-    ```
+    **Why:** set once, applies consistently — it doesn't compete with your actual task instructions for the model's attention inside the prompt.
 
     --
 
-    **Benefits:**
-    - Faster response times
-    - More predictable behavior
-    - Lower token usage
+    .previously[
+    > *Previously:* this needed an in-prompt `<output_verbosity_spec>` block spelling out sentence/bullet counts. If that's the mental model you learned, drop it — the guide moved this back to the API layer.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5.2 guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide) (historical)]
 
     ---
 
-    # Controlling Agentic Eagerness
-
-    ## More Agentic Eagerness
+    # State the Constraint, Skip the Ceremony
 
     --
 
-    **Encourage Persistence:**
+    **Now:** one plain sentence carries the same weight a whole fenced block used to need — the model follows prompt contracts closely, so ceremony doesn't add safety margin anymore.
 
-    ```xml
-    <persistence>
-      Continue exploring until the task is fully complete.
-      Do not stop at partial solutions.
-      Verify all edge cases before concluding.
-    </persistence>
+    ```text
+    Implement only what's requested — no extra features, components, or UX embellishments.
     ```
 
     --
 
-    **Increase Reasoning Depth:**
+    **Why it's enough now:** GPT-5.6 treats this as a real constraint to satisfy, not a suggestion to weigh against other instructions.
+
+    --
+
+    .previously[
+    > *Previously:* the same guidance needed a dedicated `<scope_discipline>` XML block to fight over-coding. The constraint was always correct — only the packaging is obsolete.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5.2 guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide) (historical)]
+
+    ---
+
+    # Trust the Default Grounding
+
+    --
+
+    **Now:** re-grounding on long inputs and flagging unstated assumptions or ungrounded claims are things the model now does reliably on its own — you generally don't need to instruct it to outline, re-state constraints, or self-check before answering.
+
+    --
+
+    **Reserve explicit instructions for genuinely unusual cases:** adversarial or contradictory source material, or domains where a wrong answer is costly enough that you want the check made visible in the output.
+
+    --
+
+    .previously[
+    > *Previously:* this needed explicit step-by-step re-grounding and uncertainty-self-check instructions written into every long-context or high-risk prompt. GPT-5.6 does this by default — verify occasionally, don't over-prompt for it.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5.2 guide](https://developers.openai.com/cookbook/examples/gpt-5/gpt-5-2_prompting_guide) (historical)]
+
+    ---
+
+    # Agentic Eagerness — Turning It Down
+
+    --
+
+    **Now:** `reasoning.effort` is still the real lever — set it low for fast, narrow, low-latency tasks.
 
     ```python
-    reasoning_effort = "high"  # Default is "medium"
+    reasoning={"effort": "none"}
     ```
 
     --
 
-    **Tool Preambles for Progress Updates:**
-    - Thorough descriptions of each step
-    - Continuous user updates on task progress
-    - Detailed explanations of decision-making
+    **Stopping conditions still matter — say them once, plainly:**
+
+    ```text
+    Search only in src/. Stop once you find the function or after 2 searches.
+    ```
+
+    --
+
+    **Benefits:** faster responses, more predictable behavior, lower token usage.
+
+    --
+
+    .previously[
+    > *Previously:* this same goal needed a full `<context_gathering>` XML template. GPT-5.6's guide names templates like that as trim-worthy — the plain sentence above does the same job.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5 guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide) (historical)]
+
+    ---
+
+    # Agentic Eagerness — Turning It Up
+
+    --
+
+    **Now:** raise `reasoning.effort` for tasks that need real persistence through to completion.
+
+    ```python
+    reasoning={"effort": "high"}  # default is "medium"
+    ```
+
+    --
+
+    **The model persists on its own now** — it keeps working through a task and verifies edge cases without being told to, so a reminder block isn't doing any work anymore.
+
+    --
+
+    **Tool-calling updates:** a brief one-liner when starting a new phase or changing plan is enough — not a running narration of every step.
+
+    --
+
+    .previously[
+    > *Previously:* this needed an explicit `<persistence>` block plus instructions for thorough step-by-step progress narration. GPT-5.6's guide flags both as things to trim; keep `reasoning.effort` as the real lever.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5 guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide) (historical)]
 
     ---
 
@@ -692,18 +1058,25 @@
     - Reuse context across turns instead of rebuilding history by hand
     - **Current best practice:** durable conversation objects (`conversations.create()` + `store=True`) over manual `previous_response_id` chaining
 
-    --
+    .footnote[Source: [OpenAI Responses API — Conversation State](https://developers.openai.com/api/docs/guides/conversation-state)]
 
-    ### Live demo → `notebooks/00-introduction-openai-responses-api.ipynb`
+    ---
+    class: center, middle
+
+    <h1>
+      <span style="background-color: lightgreen">
+        Demo: Context Reuse & Efficiency
+      </span>
+    </h1>
 
     Run the Responses API context-reuse and conversation-state examples hands-on.
 
-    .footnote[Source: [OpenAI Responses API — Conversation State](https://developers.openai.com/api/docs/guides/conversation-state)]
+    `notebooks/0.0-introduction-openai-responses-api.ipynb`
 
     ---
 
     # The Hidden Cost of Bad Prompts
-    
+
     - GPT-5's stricter instruction following amplifies poor prompts
 
     --
@@ -711,7 +1084,7 @@
     - Contradictory instructions lead to inefficient Reasoning
 
     --
-    
+
     - Always resolve instruction hierarchy conflicts
 
     --
@@ -719,7 +1092,7 @@
     ### **Example: Resolving Conflicts**
     ```
     ❌ "Be concise but provide detailed explanations"
-    
+
     ✅ "Provide a 2-sentence summary, then detailed bullet points"
     ```
 
@@ -727,7 +1100,7 @@
 
     ---
 
-    # GPT-5 Coding Excellence
+    # GPT-5.6 Coding Excellence
 
     ## Optimal Framework Stack
 
@@ -766,51 +1139,59 @@
 
     ---
 
-    # Enhanced Code Generation Techniques
-
-    ## Self-Reflection & Structured Guidance
+    # Ask for the Outcome, Not the Self-Review
 
     --
 
-    ### **Improve 0-1 Shot App Generation:**
-    ```xml
-    <self-reflection>
-      Review the generated code for:
-      - Component reusability
-      - Error handling completeness
-      - Performance optimizations
-      Score each aspect 1-10 and explain improvements
-    </self-reflection>
+    **Now:** state the quality bar once, as an outcome — the model already applies this kind of review internally without being asked to narrate a score.
+
+    ```text
+    Make sure components are reusable, errors are handled, and the
+    implementation is reasonably performant before finishing.
     ```
 
-    .footnote[Source: [GPT-5 Prompting Guide - Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design)]
+    --
+
+    .previously[
+    > *Previously:* this needed a `<self-reflection>` block asking the model to score itself 1–10 on each dimension and explain improvements. That scored checklist is exactly the kind of process narration GPT-5.6's guide says to trim.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5 guide — Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design) (historical)]
 
     ---
 
-    # Enhanced Code Generation Techniques
+    # Concrete Constraints, Not Absolute Words
 
-    ## Self-Reflection & Structured Guidance
+    --
 
-    ### **Strict Design Standards Adherence:**
-    ```xml
-      <ui_ux_best_practices>
-      - Visual Hierarchy: Limit typography to 4–5 font sizes and weights for consistent hierarchy; use `text-xs` for captions and annotations; avoid `text-xl` unless for hero or major headings.
-      - Color Usage: Use 1 neutral base (e.g., `zinc`) and up to 2 accent colors. 
-      - Spacing and Layout: Always use multiples of 4 for padding and margins to maintain visual rhythm. Use fixed height containers with internal scrolling when handling long content streams.
-      - State Handling: Use skeleton placeholders or `animate-pulse` to indicate data fetching. Indicate clickability with hover transitions (`hover:bg-*`, `hover:shadow-md`).
-      - Accessibility: Use semantic HTML and ARIA roles where appropriate. Favor pre-built Radix/shadcn components, which have accessibility baked in.
-      </ui_ux_best_practices>
+    **Now:** keep the specific, measurable rules — drop the "always"/"never" framing around them.
+
+    ```text
+    Typography: 4-5 sizes max. Spacing: multiples of 4.
+    Color: 1 neutral base + up to 2 accents.
+    Loading state: skeleton placeholders. Prefer Radix/shadcn
+    for built-in accessibility.
     ```
 
-    .footnote[Source: [GPT-5 Prompting Guide - Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design)]
+    --
+
+    **Why:** GPT-5.6 follows prompt contracts closely enough that hard numbers and named defaults do real work on their own — wrapping them in "Always..."/"Never..." adds friction without adding compliance.
+
+    --
+
+    .previously[
+    > *Previously:* the same rules were framed inside a `<ui_ux_best_practices>` block full of "Always" directives. The constraints were correct then and still are — only the absolute-word packaging is what GPT-5.6's guide flags as historical.
+    ]
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6) · [GPT-5 guide — Codebase Design](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#matching-codebase-design) (historical)]
 
     ---
 
     # Ecosystem Support
 
-    
+
     - **GitHub Copilot**:
-      
+
       - Available across all paid plans
       - VS Code, GitHub.com, GitHub Mobile
       - Enhanced multi-file changes/refactors
@@ -820,18 +1201,18 @@
     - **Cursor Feedback**:
       - "Smartest coding model we've used"
       - Optimized for interactive development
-    
+
     --
-    
+
     - **Third-Party Tools**:
       - Windsurf integration Codex CLI optimization
       - Fine-tuned for agentic coding
-    
+
     --
-    
-    - **GPT-5 Codex**:
-      - Specialized for software engineering.
-      - Real-world task training.
+
+    - **`gpt-5.6-sol`**:
+      - Absorbed the dedicated-coding-model role `gpt-5.3-codex` used to hold
+      - Real-world task training
       - Complex independent task handling
 
     ---
@@ -848,7 +1229,7 @@
 
     --
 
-    **2. Thorough Tool-Calling Preambles**
+    **2. Tool-Calling Preambles** *(historical — GPT-5.6's guide says trim this to a brief one-liner, not a running narration)*
     ```markdown
     "Before each tool use, explain: what you're doing,
     why, and what you expect to find"
@@ -891,39 +1272,57 @@
     .footnote[Source: [GPT-5 Prompting Guide - Markdown](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#markdown-formatting)]
 
     ---
+    class: center, middle
 
-    # Metaprompting Techniques
+    # GPT-5.6 Prompting Guide: The Philosophy Flips
 
-    ## Teaching GPT-5 to Optimize Itself
+    ---
+
+    # Current Best Practice: Trim, Don't Scaffold
 
     --
 
-    ### **The Metaprompt Pattern:**
+    GPT-5.6's prompting guide reverses earlier advice: outcome-first, not scaffolding-first.
 
-    ```text
-    When asked to optimize prompts, give answers from your own
-    perspective - explain what specific phrases could be added to,
-    or deleted from, this prompt to more consistently elicit the
-    desired behavior or prevent the undesired behavior.
+    --
 
-    Here's a prompt: [PROMPT]
+    **Trim:**
+    - XML persistence blocks, repeated style rules that don't change behavior
+    - Context-gathering templates, self-graded checklists, process narration
+    - Absolute directives ("always" / "never")
 
-    The desired behavior is: [DO DESIRED BEHAVIOR]
-    But instead it: [DOES UNDESIRED BEHAVIOR]
+    --
 
-    While keeping the existing prompt intact as much as possible,
-    what minimal edits/additions would you make to encourage
-    more consistent desired behavior?
-    ```
+    **Keep:**
+    - Outcome statements, success criteria, stopping conditions
+    - Hard, concrete constraints (specific numbers, specific formats)
 
-    .footnote[Source: [GPT-5 Prompting Guide - Metaprompting](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide#metaprompting)]
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6), Jul 2026]
+
+    ---
+
+    # Why the Shift: Measured Impact
+
+    --
+
+    **Measured impact of trimming:** +10–15% eval scores, −41–66% tokens, −33–67% cost
+
+    --
+
+    **New tools instead of prompt scaffolding:** a global `text.verbosity` parameter, and Programmatic Tool Calling (offload filtering/batching to code, not model judgment)
+
+    --
+
+    > **Why the reversal happened:** GPT-5.6 "follows prompt contracts closely" — conflicting or redundant rules now cause instability (the model burns reasoning tokens reconciling contradictions) rather than adding safety margin the way they did on less-steerable 2025-era models.
+
+    .footnote[Source: [OpenAI GPT-5.6 prompting guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6), Jul 2026]
 
     ---
     class: center, middle
 
     <h1>
       <span style="background-color: lightgreen">
-        Demo: Prompting Guide for GPT-5 - Hands-on
+        Demo: Prompting Guide for GPT-5.6 - Hands-on
       </span>
     </h1>
 
@@ -948,7 +1347,7 @@
 
     <h1>
       <span style="background-color: lightgreen">
-        Demo: Building GPT-5 Powered Apps
+        Demo: Building GPT-5.6 Powered Apps
       </span>
     </h1>
 
@@ -961,31 +1360,23 @@
 
     # Key Takeaways
 
-    --
-
-    - **Explicit model selection** — `gpt-5.5`, `gpt-5.4-mini`, `gpt-5.4-nano` for every use case
+    ## Closing the Two-Act Arc
 
     --
 
-    - **Preparedness Framework** and safe-completions training set new industry standards
+    - **GPT-5 proved the leap**: a unified model, frontier benchmarks across math/coding/multimodal, and safe-completions as the new safety standard — with real rollout scars (router backlash, abrupt GPT-4o retirement)
 
     --
 
-    - **Frontier coding** — `gpt-5.5` and `gpt-5.3-codex` for professional development work
+    - **GPT-5.6 refined it**: the router became explicit model selection (`sol`/`terra`/`luna`), reasoning went from a hidden switch to 6 tunable levels, and durable Conversations replaced manual chaining — cumulative, not revolutionary
 
     --
 
-    - **New parameters** (verbosity, reasoning effort) provide unprecedented control
-
-    --
-    
-    - **Native support** across text, image, audio, and video modalities
+    - **What's still hard**: picking the right tier/effort combo, Sol's fuzzy judgment on open-ended tradeoffs, Luna's shallow reasoning on complex tasks
 
     --
 
-    - **Comprehensive API ecosystem** with built-in tools and MCP integration
-
-    --
+    - **Comprehensive API ecosystem** with built-in tools, Agents SDK, and MCP integration ties both eras together
 
     ---
 
@@ -1016,28 +1407,27 @@
 
     # Next Steps & Resources
 
-    ## Continue Your GPT-5 Journey
+    ## Continue Your GPT-5.6 Journey
 
     ### **Official Documentation**
-    - [GPT-5 System Card](https://openai.com/index/gpt-5-system-card/)
-    - [GPT-5 Prompting Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide)
+    - [GPT-5.6 System Card](https://deploymentsafety.openai.com/gpt-5-6) (Jul 9, 2026)
+    - [GPT-5.6 Model Guidance & Prompting Guide](https://developers.openai.com/api/docs/guides/prompt-guidance-gpt-5p6)
     - [OpenAI API Documentation](https://platform.openai.com/docs/overview)
 
     ### **Hands-on Practice**
-    - [Prompt Optimizer Tool](https://platform.openai.com/chat/edit?models=gpt-5&optimize=true)
-    - [GPT-5 Frontend Examples](https://cookbook.openai.com/examples/gpt-5/gpt-5_frontend)
-    - [New Parameters Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5_new_params_and_tools)
+    - [Prompt Optimizer (Playground)](https://platform.openai.com/chat/edit?optimize=true)
+    - [Programmatic Tool Calling Guide](https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling)
+    - [GPT-5.6 Sol Model Reference](https://developers.openai.com/api/docs/models/gpt-5.6-sol)
 
     ---
 
     # Connect With Me
-    
+
     ## 📚 [Course materials](https://github.com/EnkrateiaLucca/gpt5-course.git)
     ## 🔗 [LinkedIn](https://www.linkedin.com/in/lucas-soares-969044167/)
     ## 🐦 [Twitter/X - @LucasEnkrateia](https://x.com/LucasEnkrateia)
     ## 📺 [YouTube - @automatalearninglab](https://www.youtube.com/@automatalearninglab)
     ## 📧 Email: lucasenkrateia@gmail.com
-    ---
 
     </textarea>
 
@@ -1046,7 +1436,7 @@
   <script>
     var slideshow = remark.create();
   </script>
-  
+
 </body>
 
 </html>

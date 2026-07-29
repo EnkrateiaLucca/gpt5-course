@@ -1,17 +1,17 @@
 # Capstone — The "Idea → App" Mini Agent
 
 **Combines:** `notebooks/gpt5-agentic-capabilities.ipynb` (Agents SDK: agents, tools, handoffs)
-and `notebooks/4.0-gpt5-frontend-dev-experiments.ipynb` (one-shot frontend generation with GPT-5.5).
+and `notebooks/4.0-gpt5-frontend-dev-experiments.ipynb` (one-shot frontend generation with GPT-5.6).
 
 ## Brief
 
 Build a small two-agent system that turns a one-line app idea into a working, single-file
 frontend. A **Researcher** agent gathers current tech-stack context with a hosted `web_search`
 tool, then **hands off** to a **Builder** agent that generates a complete, self-contained
-HTML/CSS/JS app with GPT-5.5. You own the orchestration; the SDK runs the agent loop.
+HTML/CSS/JS app with GPT-5.6. You own the orchestration; the SDK runs the agent loop.
 
 You'll practice the two skills the course builds toward: composing agents (config + tools +
-handoffs) and steering GPT-5.5 to produce production-grade frontend output from an
+handoffs) and steering GPT-5.6 to produce production-grade frontend output from an
 underspecified prompt.
 
 ## Spec
@@ -19,7 +19,7 @@ underspecified prompt.
 1. **Input** — Accept a single string: the user's app idea (e.g. *"a habit tracker with streaks"*).
 
 2. **Researcher agent**
-   - Model: `gpt-5.5`. Tool: hosted `web_search`.
+   - Model: `gpt-5.6-sol` (or bare `gpt-5.6` alias). Tool: hosted `web_search`.
    - Instructions: identify a sensible, current tech stack for the idea (framework or
      vanilla, CDN libraries for charts/state/animation, accessibility/UX notes).
    - Output: a short, structured tech-stack brief (3–6 bullets). Keep it factual and current.
@@ -28,7 +28,7 @@ underspecified prompt.
    Use the SDK's handoff primitive (a triage/coordinator agent that routes is also acceptable).
 
 4. **Builder agent**
-   - Model: `gpt-5.5`. No tools required.
+   - Model: `gpt-5.6-sol` (or bare `gpt-5.6` alias). No tools required.
    - Instructions: produce **one complete `index.html`** — semantic HTML, inline CSS, inline
      JS, CDN deps only, no build step — that honors the Researcher's brief and renders standalone.
    - Reuse the frontend notebook's helper pattern to render/preview the generated HTML.

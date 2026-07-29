@@ -25,3 +25,11 @@ venv/
 .idea/
 .vscode/
 .claude/worktrees/
+
+# Course process artifacts (not student-facing content)
+Plans/
+research/
+walkthrough.md
+
+# Notebook demo outputs (regenerated live by running notebooks/4.0-*.ipynb)
+notebooks/outputs/

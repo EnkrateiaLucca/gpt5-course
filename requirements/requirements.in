@@ -2,7 +2,7 @@ ipykernel
 jupyter
 nbconvert
 nbformat
-openai
+openai>=3.8.0  # first release with gpt-6-astra support
 pandas
 jinja2
 pydantic

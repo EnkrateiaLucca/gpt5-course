@@ -1,8 +1,8 @@
-# Getting Started with GPT-5.6
+# Getting Started with GPT-6 Astra
 
 ## Course Overview
 
-This repository contains materials for the O'Reilly Live Training on GPT-5.6. You'll learn about the latest advancements in language models, practical implementation strategies, and hands-on experience with their new cutting edge model.
+This repository contains materials for the O'Reilly Live Training on GPT-6 Astra, OpenAI's most capable model. You'll learn how Astra compares to the GPT-5 series, how to prompt it, and how to build with it through the Responses API and the Agents SDK.
 
 ## Setup
 
@@ -90,6 +90,16 @@ pip install jupyter
 python -m ipykernel install --user --name=oreilly-gpt5
 ```
 
+## Models Used
+
+| Model | Use in this course | Price (input / output per 1M tokens) |
+|---|---|---|
+| `gpt-6-astra` | Default for demos, prompting, and frontend generation | $10 / $50 |
+| `gpt-6.1-sol` | Cheaper near-Astra option for agent loops and evals | $2 / $10 |
+| `gpt-6-luna` | High-volume tasks and the only GPT-6 model that accepts `reasoning: {"effort": "none"}` | $0.10 / $0.50 |
+
+See `research/07-gpt6-model-line.md` for context windows, reasoning effort levels, and migration notes from GPT-5.6.
+
 ## Course Content
 
 ### Notebooks
@@ -97,10 +107,10 @@ python -m ipykernel install --user --name=oreilly-gpt5
 The course materials are organized in the `notebooks/` folder:
 
 - `0.0-introduction-openai-responses-api.ipynb`: introduction to the OpenAI Responses API and the Conversations API as the primary multi-turn pattern.
-- `1.0-intro-gpt5.ipynb`: intro to GPT-5.6 and usage of basic parameters and examples.
-- `2.0-gpt5-params.ipynb`: deep dive into the newest features that come with the GPT-5.6 model.
-- `3.0-gpt5-prompting-guide.ipynb`: deep dive into prompting best practices with GPT-5.6.
-- `4.0-gpt5-frontend-dev-experiments.ipynb`: fun experiment building a web-app maker with GPT-5.6.
+- `1.0-intro-gpt5.ipynb`: intro to GPT-6 Astra and usage of basic parameters and examples.
+- `2.0-gpt5-params.ipynb`: deep dive into the newest features that come with the GPT-6 model family (async tool calling, mid-turn steering, reasoning effort levels).
+- `3.0-gpt5-prompting-guide.ipynb`: deep dive into prompting best practices with GPT-6 Astra.
+- `4.0-gpt5-frontend-dev-experiments.ipynb`: fun experiment building a web-app maker with GPT-6 Astra.
 - `5.0-gpt5-agentic-capabilities.ipynb`: building agents with the OpenAI Agents SDK (agents, runners, tools, handoffs, guardrails, tracing).
 - `6.0-live-demo-function-calling.ipynb`: end-to-end function-calling loop over the Conversations API.
 - `7.0-mini-eval.ipynb`: a small, runnable evaluation harness (uses `eval-cases.json`) for comparing model/prompt behavior.

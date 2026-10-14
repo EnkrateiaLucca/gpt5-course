@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPT-5.6 Course Cheatsheet — O'Reilly Live Training</title>
+    <title>GPT-6 Astra Course Cheatsheet — O'Reilly Live Training</title>
     <style>
         /* ========================================
            MODULAR GRID/CARD LAYOUT TEMPLATE
@@ -313,45 +313,45 @@
 <body>
 
     <div class="page-header">
-        <h1>GPT-5.6 Course Cheatsheet</h1>
-        <div class="subtitle">O'Reilly Live Training — Getting Started with GPT-5.6</div>
+        <h1>GPT-6 Astra Course Cheatsheet</h1>
+        <div class="subtitle">O'Reilly Live Training — Getting Started with GPT-6 Astra</div>
         <div class="meta">Instructor: Lucas | Responses API · Parameters · Tools · Prompting · Agents | 2026</div>
     </div>
 
     <!-- SECTION 1: Model Variants -->
-    <div class="section-title">1. Model Variants (Sol / Terra / Luna, released 2026-07-09)</div>
+    <div class="section-title">1. Model Variants (Astra / 6.1 Sol / Luna, released 2026-09-03 → 09-29)</div>
 
     <div class="grid-3 mb-small">
         <div class="card">
-            <div class="card-title">gpt-5.6-sol <span class="badge">FLAGSHIP</span></div>
+            <div class="card-title">gpt-6-astra <span class="badge">FLAGSHIP</span></div>
             <div class="card-content">
                 <ul>
-                    <li>$5.00 / $30.00 per 1M tokens (in/out)</li>
-                    <li>Frontier coding, agentic &amp; professional reasoning</li>
-                    <li>Absorbs the old dedicated-coding role (gpt-5.3-codex)</li>
-                    <li>Alias: bare <code>gpt-5.6</code> routes here</li>
+                    <li>$10.00 / $50.00 per 1M tokens (in/out); cached input $1.00</li>
+                    <li>Hardest reasoning, coding, professional &amp; agentic work</li>
+                    <li>Effort <code>low</code> → <code>max</code> — no <code>none</code></li>
+                    <li>Replace: <code>gpt-5.6-sol</code></li>
                 </ul>
             </div>
         </div>
         <div class="card">
-            <div class="card-title">gpt-5.6-terra</div>
+            <div class="card-title">gpt-6.1-sol</div>
             <div class="card-content">
                 <ul>
-                    <li>$2.50 / $15.00 per 1M tokens (in/out)</li>
-                    <li>~GPT-5.5-class quality at ~half the price</li>
-                    <li>General business/agentic tasks</li>
-                    <li>Replace: o4-mini</li>
+                    <li>$2.00 / $10.00 per 1M tokens (in/out); cached input $0.10</li>
+                    <li>Near-Astra performance at lower cost</li>
+                    <li>Replaced GPT-6 Sol as the mid tier on 2026-09-29</li>
+                    <li>Replace: <code>gpt-5.6-terra</code></li>
                 </ul>
             </div>
         </div>
         <div class="card">
-            <div class="card-title">gpt-5.6-luna</div>
+            <div class="card-title">gpt-6-luna</div>
             <div class="card-content">
                 <ul>
-                    <li>$1.00 / $6.00 per 1M tokens (in/out)</li>
-                    <li>Cheapest, fastest tier</li>
-                    <li>High-volume chat, extraction, classify</li>
-                    <li>Replace: gpt-4.1-nano</li>
+                    <li>$0.10 / $0.50 per 1M tokens (in/out); cached input $0.01</li>
+                    <li>Fast, high-volume, focused tasks</li>
+                    <li>Only GPT-6 tier that accepts effort <code>none</code></li>
+                    <li>Replace: <code>gpt-5.6-luna</code></li>
                 </ul>
             </div>
         </div>
@@ -359,7 +359,7 @@
 
     <div class="info-box mb-small">
         <div class="info-box-title">⚠ Context / Pricing Notes (all three tiers)</div>
-        <p>Context window <strong>1,050,000</strong> tokens, max output <strong>128,000</strong> tokens. Prompts over 272K input tokens incur a long-context surcharge (~2x input / ~1.5x output rate). System-card names differ from API identifiers — check <strong>developers.openai.com/api/docs/guides/latest-model</strong> for the official mapping table.</p>
+        <p>Context window <strong>1,050,000</strong> tokens (922K max input on Astra / 6.1 Sol), max output <strong>128,000</strong> tokens. Batch and Flex run at 50% of standard; Fast mode is ~2.5x speed at 2x price. Knowledge cutoff 2026-04-30 (Astra, 6.1 Sol). Endpoints: Responses, Chat Completions, Batch — not Realtime, Assistants, Embeddings, or fine-tuning. Mapping table: <strong>developers.openai.com/api/docs/guides/latest-model</strong>.</p>
     </div>
 
     <!-- SECTION 2: Responses API -->
@@ -372,7 +372,7 @@
 client = OpenAI()
 
 response = client.responses.create(
-    model="gpt-5.6-sol",
+    model="gpt-6-astra",
     input="Your prompt here",
     reasoning={"effort": "medium"},
     text={"verbosity": "medium"}
@@ -384,7 +384,7 @@ print(response.output_text)</code></pre>
             <pre><code>conversation = client.conversations.create()
 
 first = client.responses.create(
-    model="gpt-5.6-sol",
+    model="gpt-6-astra",
     conversation=conversation.id,
     input="Design an LRU cache in Python",
     reasoning={"effort": "high"}
@@ -392,7 +392,7 @@ first = client.responses.create(
 
 # Follow-up — shares context via conversation id
 follow_up = client.responses.create(
-    model="gpt-5.6-sol",
+    model="gpt-6-astra",
     conversation=conversation.id,
     input="Add thread-safety."
 )
@@ -414,12 +414,12 @@ follow_up = client.responses.create(
             </div>
         </div>
         <div class="card-light">
-            <div class="card-title">❌ Unsupported in GPT-5.6</div>
+            <div class="card-title">❌ Rejected with Reasoning (GPT-6)</div>
             <div class="card-content">
                 <ul>
-                    <li><code>temperature</code> — not supported</li>
-                    <li><code>top_p</code> — not supported</li>
-                    <li><code>logprobs</code> — not supported</li>
+                    <li><code>temperature</code> — rejected when effort ≠ <code>none</code></li>
+                    <li><code>top_p</code> — rejected when effort ≠ <code>none</code></li>
+                    <li><code>top_logprobs</code> (and <code>logprobs</code> on Chat Completions) — rejected</li>
                 </ul>
                 <p style="margin-top:6pt">Use instead:</p>
                 <ul>
@@ -435,7 +435,7 @@ follow_up = client.responses.create(
     <div class="section-title">3. Reasoning Effort Parameter</div>
 
     <div class="table-card mb-small">
-        <div class="table-card-header">reasoning=&#123;"effort": "..."&#125; — Default: "medium" (all 3 tiers: Sol/Terra/Luna)</div>
+        <div class="table-card-header">reasoning=&#123;"effort": "..."&#125; — Default: "medium" (Astra / 6.1 Sol)</div>
         <table>
             <thead>
                 <tr>
@@ -450,13 +450,13 @@ follow_up = client.responses.create(
                     <td><code>"none"</code></td>
                     <td>Fastest TTFT</td>
                     <td>None</td>
-                    <td>Latency-critical: voice turns, fast retrieval, simple classification</td>
+                    <td><strong>Luna only</strong> — latency-critical retrieval, simple classification</td>
                 </tr>
                 <tr>
                     <td><code>"low"</code></td>
                     <td>Fast</td>
                     <td>Light</td>
-                    <td>Quick responses, GPT-4.1 migrations</td>
+                    <td>Lowest on Astra / 6.1 Sol — quick responses</td>
                 </tr>
                 <tr>
                     <td><code>"medium"</code></td>
@@ -480,15 +480,15 @@ follow_up = client.responses.create(
                     <td><code>"max"</code></td>
                     <td>Slowest</td>
                     <td>Highest</td>
-                    <td>Hardest problems — often paired with <code>reasoning.mode:"pro"</code></td>
+                    <td>Hardest problems</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <div class="info-box mb-small">
-        <div class="info-box-title">💡 reasoning.mode: "pro" (replaces the old gpt-5.5-pro model)</div>
-        <p>GPT-5.6 drops the separate <code>-pro</code> model. Instead, set <code>reasoning: &#123;"effort": "high", "mode": "pro"&#125;</code> on <code>gpt-5.6-sol</code> — <code>mode</code> and <code>effort</code> are independent axes, and pro-mode tokens bill at Sol's standard per-token rates (no separate pricing row). Documented across all three tiers, but foregrounded for Sol. Reserve for one hardest-reasoning demo, not a default. <strong>Note:</strong> <code>"minimal"</code> is no longer a supported value on any GPT-5.6 tier — use <code>"none"</code> or <code>"low"</code> instead.</p>
+        <div class="info-box-title">💡 New GPT-6 API Controls (launched with Astra, 2026-09-03)</div>
+        <p><strong>Async tool calling</strong> — mark a function or custom tool with <code>async: true</code>; the model keeps working and you return the result when it is ready. <strong>Mid-turn steering</strong> — send extra user instructions while the model is still working (WebSocket mode). <strong>Change reasoning effort mid-conversation</strong> — a <code>configuration_update</code> input item adjusts settings without losing the prompt cache. Also listed: Programmatic Tool Calling, multi-agent orchestration, persisted reasoning, compaction, pro mode, Fast / Ultrafast modes. Check the per-feature guides for exact request syntax.</p>
     </div>
 
     <!-- SECTION 4: Verbosity -->
@@ -537,7 +537,7 @@ follow_up = client.responses.create(
             <div class="code-card-header">Freeform / Custom Tool Calling (NEW)</div>
             <pre><code># Raw text payloads — no JSON wrapping
 response = client.responses.create(
-    model="gpt-5.6-sol",
+    model="gpt-6-astra",
     input="Use code_exec to find factorial of 10.",
     tools=[{
         "type": "custom",
@@ -630,35 +630,35 @@ SP: " "
     <div class="section-title">6. Migration Guide</div>
 
     <div class="table-card mb-small">
-        <div class="table-card-header">Migrating From Previous Models</div>
+        <div class="table-card-header">Migrating From GPT-5.6 to GPT-6</div>
         <table>
             <thead>
                 <tr>
-                    <th>From Model</th>
-                    <th>Migrate To</th>
-                    <th>Recommended Settings</th>
+                    <th>GPT-5.6</th>
+                    <th>GPT-6</th>
+                    <th>Notes</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><code>o3</code></td>
                     <td><code>gpt-5.6-sol</code></td>
-                    <td><code>reasoning.effort: "medium"</code> or <code>"high"</code></td>
+                    <td><code>gpt-6-astra</code></td>
+                    <td><code>reasoning.effort: "none"</code> → <code>"low"</code> (only Luna accepts <code>"none"</code>)</td>
                 </tr>
                 <tr>
-                    <td><code>gpt-4.1</code></td>
-                    <td><code>gpt-5.6-sol</code></td>
-                    <td><code>reasoning.effort: "low"</code> (<code>"minimal"</code> was retired — map to <code>"none"</code> or <code>"low"</code>)</td>
-                </tr>
-                <tr>
-                    <td><code>o4-mini</code></td>
                     <td><code>gpt-5.6-terra</code></td>
-                    <td>Default settings + prompt tuning</td>
+                    <td><code>gpt-6.1-sol</code></td>
+                    <td>Same effort levels as Astra: <code>low</code> → <code>max</code>, default <code>medium</code></td>
                 </tr>
                 <tr>
-                    <td><code>gpt-4.1-nano</code></td>
                     <td><code>gpt-5.6-luna</code></td>
-                    <td>Default settings + prompt tuning</td>
+                    <td><code>gpt-6-luna</code></td>
+                    <td><code>"none"</code> still supported</td>
+                </tr>
+                <tr>
+                    <td><code>prompt_cache_retention</code></td>
+                    <td><code>prompt_cache_options.ttl</code></td>
+                    <td>Parameter renamed</td>
                 </tr>
             </tbody>
         </table>
@@ -735,7 +735,7 @@ SP: " "
         <div class="code-card">
             <div class="code-card-header">Web Search Tool</div>
             <pre><code>response = client.responses.create(
-    model="gpt-5.6-sol",
+    model="gpt-6-astra",
     tools=[{"type": "web_search"}],
     input="Latest AI tool releases this quarter?"
 )
@@ -743,7 +743,7 @@ print(response.output_text)
 
 # Chain: Markdown table from results (cost-optimized follow-up)
 table_response = client.responses.create(
-    model="gpt-5.6-terra",
+    model="gpt-6.1-sol",
     previous_response_id=response.id,
     input=[{"role": "user",
             "content": "Put results in a markdown table."}]
@@ -753,7 +753,7 @@ table_response = client.responses.create(
             <div class="code-card-header">Multi-turn Agentic Loop</div>
             <pre><code>def run_conversation(messages, prev_id=None):
     response = client.responses.create(
-        model="gpt-5.6-sol",
+        model="gpt-6-astra",
         input=messages,
         tools=TOOLS,
         previous_response_id=prev_id
@@ -781,7 +781,7 @@ table_response = client.responses.create(
                     <li>Authenticate user (email or name+zip)</li>
                     <li>Retrieve relevant data</li>
                     <li>Confirm before consequential actions</li>
-                    <li>Execute with <code>reasoning: "none"</code></li>
+                    <li>Execute with <code>reasoning: "low"</code> (<code>"none"</code> on Luna)</li>
                     <li>One tool call at a time</li>
                 </ol>
             </div>
@@ -821,24 +821,24 @@ table_response = client.responses.create(
             <ul>
                 <li>Use <strong>Responses API</strong> (<code>client.responses.create</code>), not Chat Completions</li>
                 <li>Use <strong><code>client.conversations.create()</code></strong> for multi-turn (legacy <code>previous_response_id</code> still works)</li>
-                <li>Set <strong><code>reasoning.effort: "none"</code></strong> explicitly for speed-critical paths</li>
+                <li>Use <strong><code>gpt-6-luna</code></strong> with <code>reasoning.effort: "none"</code> for speed-critical paths</li>
                 <li>Use <strong><code>text.verbosity: "high"</code></strong> for thorough code docs/audits</li>
                 <li>Keep CFG grammars <strong>simple</strong> — complex ones get API-rejected</li>
                 <li>Set <strong><code>parallel_tool_calls=False</code></strong> with custom tools</li>
-                <li>Use <strong><code>gpt-5.6-terra</code></strong> or <strong><code>gpt-5.6-luna</code></strong> for cost-sensitive follow-up processing of Sol outputs</li>
+                <li>Use <strong><code>gpt-6.1-sol</code></strong> or <strong><code>gpt-6-luna</code></strong> for cost-sensitive follow-up processing of Astra outputs</li>
             </ul>
         </div>
         <div class="key-points" style="background:#fff0f0">
             <div class="key-points-title">❌ Avoid This</div>
             <ul>
-                <li>Using <code>temperature</code>, <code>top_p</code>, <code>logprobs</code> — not supported in GPT-5.6</li>
-                <li>Using <code>reasoning.effort: "minimal"</code> — retired; not supported on any GPT-5.6 tier</li>
+                <li>Using <code>temperature</code>, <code>top_p</code>, <code>top_logprobs</code> with reasoning — rejected on GPT-6</li>
+                <li>Using <code>reasoning.effort: "none"</code> on Astra / 6.1 Sol — only Luna accepts it</li>
                 <li>Parallel tool calling with custom/freeform tools — not supported</li>
                 <li>Splitting free-text across multiple CFG terminals — use one bounded terminal</li>
                 <li>Contradictory instructions in the same system prompt</li>
                 <li>Complex CFG grammars without testing at high reasoning effort first</li>
                 <li>Re-generating full CoT on every turn — use <code>conversation=</code> or <code>previous_response_id</code></li>
-                <li>Using Chat Completions for GPT-5.6 — missing CoT persistence</li>
+                <li>Using Chat Completions for tool calling with reasoning on Astra / 6.1 Sol — use the Responses API</li>
             </ul>
         </div>
     </div>
@@ -846,16 +846,15 @@ table_response = client.responses.create(
     <div class="info-box" style="margin-top:8pt">
         <div class="info-box-title">📚 Key Resources</div>
         <p>
-            System Card: <strong>openai.com/index/gpt-5-system-card/</strong> &nbsp;|&nbsp;
-            Prompting Guide: <strong>cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide</strong> &nbsp;|&nbsp;
-            API Docs: <strong>developers.openai.com/api/docs/guides/latest-model</strong> &nbsp;|&nbsp;
-            Model Line: <strong>developers.openai.com/api/docs/models/gpt-5.6-sol</strong> &nbsp;|&nbsp;
+            Changelog: <strong>developers.openai.com/api/docs/changelog</strong> &nbsp;|&nbsp;
+            Migration &amp; Prompting Guide: <strong>developers.openai.com/api/docs/guides/latest-model</strong> &nbsp;|&nbsp;
+            Model Line: <strong>developers.openai.com/api/docs/models/gpt-6-astra</strong> &nbsp;|&nbsp;
             Lark IDE: <strong>www.lark-parser.org/ide/</strong>
         </p>
     </div>
 
     <footer>
-        <p>© 2026 Automata Learning Lab | O'Reilly Live Training: Getting Started with GPT-5.6 | Professional educational materials crafted with care</p>
+        <p>© 2026 Automata Learning Lab | O'Reilly Live Training: Getting Started with GPT-6 Astra | Professional educational materials crafted with care</p>
     </footer>
 
 </body>
